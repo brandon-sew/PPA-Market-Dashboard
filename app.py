@@ -56,12 +56,11 @@ selected_labels = st.sidebar.multiselect(
     default=[f"Germany (DE)", f"France (FR)"]
 )
 
-# 3. Data Fetching Function
+# 3. Data Fetching Function (Updated to handle multiple countries better)
 @st.cache_data(ttl=3600)
 def fetch_live_data(selected_codes, start_date, end_date):
     if not selected_codes: return pd.DataFrame()
     
-    # ENTSO-E needs localized timestamps
     start = pd.Timestamp(start_date, tz='Europe/Brussels')
     end = pd.Timestamp(end_date, tz='Europe/Brussels') + pd.Timedelta(days=1)
     
@@ -71,6 +70,8 @@ def fetch_live_data(selected_codes, start_date, end_date):
             series = client.query_day_ahead_prices(code, start=start, end=end)
             df_temp = series.to_frame(name='Price')
             df_temp['Country'] = code.replace("_", "")
+            # Ensure the index is a proper DatetimeIndex immediately
+            df_temp.index = pd.to_datetime(df_temp.index)
             all_data.append(df_temp)
         except Exception as e:
             st.sidebar.warning(f"No data for {code}: {e}")
@@ -91,21 +92,17 @@ if len(date_range) == 2:
         with st.spinner('Fetching market data...'):
             raw_df = fetch_live_data(selected_codes, start_dt, end_dt)
         
-        # --- IMPROVED SAFETY GATE ---
         if raw_df is not None and not raw_df.empty:
-            # Ensure the index is named 'Date' so we can reference it
-            raw_df.index.name = 'Date'
-            
-            # Resample data
-            # Use 'level=0' to group by the 'Country' column if it's part of the index
-            # or just groupby if it's a standard column
             try:
+                # FIX: We use groupby('Country') and then select the 'Price' column
+                # to apply resampling to the time-index within each country group.
                 plot_df = raw_df.groupby('Country')['Price'].resample(res_map[resolution]).mean().reset_index()
                 
+                # Plotly expects a column name for the X-axis
+                # Resample often names the time column 'level_1' or 'Date' after reset_index()
+                time_col = 'Date' if 'Date' in plot_df.columns else 'index' if 'index' in plot_df.columns else plot_df.columns[1]
+
                 if not plot_df.empty:
-                    # Explicitly map the resampled time column (usually named 'Date' or 'index')
-                    time_col = 'Date' if 'Date' in plot_df.columns else 'index'
-                    
                     fig = px.line(
                         plot_df, 
                         x=time_col, 
@@ -122,8 +119,10 @@ if len(date_range) == 2:
                     pivot_df = plot_df.pivot(index=time_col, columns='Country', values='Price')
                     st.dataframe(pivot_df.style.format("{:.2f}"), use_container_width=True)
                 else:
-                    st.warning("Data found, but it could not be processed for the selected resolution.")
-            except Exception as resample_error:
-                st.error(f"Error processing resolution: {resample_error}")
+                    st.warning("No data found for this selection.")
+            except Exception as e:
+                # This catches the 'DatetimeIndex' error specifically
+                st.error(f"Error processing resolution: {e}")
+                st.info("Try refreshing the page or adjusting the date range.")
         else:
-            st.warning("No data found. Note: Tomorrow's prices are usually released daily at 13:00 CET.")
+            st.warning("No data returned from the API.")
