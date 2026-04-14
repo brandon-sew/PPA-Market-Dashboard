@@ -6,11 +6,10 @@ import requests
 from datetime import datetime, timedelta
 from entsoe import EntsoePandasClient
 
-# 1. Config - SECURITY UPDATE
-# This looks for the keys in your system environment variables.
-# If they aren't found, it falls back to None to prevent crashes.
+# 1. Config 
+# We now use ELEXON_TOKEN to match your GitHub Secrets naming convention
 ENTSOE_API_KEY = os.environ.get('ENTSOE_TOKEN')
-ELEXON_KEY = os.environ.get('ELEXON_KEY') 
+ELEXON_TOKEN = os.environ.get('ELEXON_TOKEN') 
 
 client = EntsoePandasClient(api_key=ENTSOE_API_KEY)
 
@@ -51,30 +50,20 @@ def process_to_long_format(price_series, country_code):
     return res
 
 def fetch_gb_direct_csv(start_date, end_date):
-    """Special fetcher for GB using the Elexon Portal Scripting Key."""
-    if not ELEXON_KEY:
-        print("Error: ELEXON_KEY environment variable not set.")
+    """Special fetcher for GB using the Elexon Portal Scripting Token."""
+    if not ELEXON_TOKEN:
+        print("Error: ELEXON_TOKEN environment variable not set in GitHub Secrets.")
         return None
         
     try:
-        url = f"https://downloads.elexonportal.co.uk/file/download/LATEST_MID_FILE?key={ELEXON_KEY}"
+        # The key parameter in the URL now uses the ELEXON_TOKEN variable
+        url = f"https://downloads.elexonportal.co.uk/file/download/LATEST_MID_FILE?key={ELEXON_TOKEN}"
         response = requests.get(url, timeout=20)
-        if response.status_code != 200: return None
+        if response.status_code != 200: 
+            print(f"GB Fetch Failed: Status {response.status_code}")
+            return None
         
         df = pd.read_csv(io.StringIO(response.text), skipinitialspace=True)
         df.columns = df.columns.str.strip().str.replace('"', '').str.replace("'", "")
         
-        date_col = next((c for c in df.columns if 'date' in c.lower()), None)
-        price_col = next((c for c in df.columns if 'price' in c.lower()), None)
-        period_col = next((c for c in df.columns if 'period' in c.lower()), None)
-        
-        df[date_col] = pd.to_datetime(df[date_col], dayfirst=True)
-        df[price_col] = pd.to_numeric(df[price_col], errors='coerce')
-        
-        df['Time'] = df.apply(lambda x: x[date_col] + timedelta(minutes=30 * (int(x[period_col]) - 1)), axis=1)
-        df = df.set_index('Time')[price_col].sort_index()
-        
-        return df[start_date.tz_localize(None) : end_date.tz_localize(None)]
-    except Exception as e:
-        print(f"GB CSV Fetch Error: {e}")
-        return None
+        date_
