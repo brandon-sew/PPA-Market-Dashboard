@@ -2,17 +2,17 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import os
+import io
 import requests
-from requests.adapters import HTTPAdapter
-from urllib3.util.retry import Retry
 from datetime import datetime, timedelta
 from entsoe import EntsoePandasClient
 
 # 1. Setup & Config
-# Pulling both API keys from your environment secrets
-ENTSOE_API_KEY = os.environ.get('ENTSOE_TOKEN')
-ELEXON_API_KEY = os.environ.get('ELEXON_TOKEN')
-client = EntsoePandasClient(api_key=ENTSOE_API_KEY)
+API_KEY = os.environ.get('ENTSOE_TOKEN')
+client = EntsoePandasClient(api_key=API_KEY)
+
+# Your Elexon Portal Scripting Key
+ELEXON_KEY = "p5mfp3oei592l2k"
 
 ZONE_NAMES = {
     "AT": "Austria", "BE": "Belgium", "BG": "Bulgaria", "CH": "Switzerland", 
@@ -54,60 +54,59 @@ selected_labels = st.sidebar.multiselect(
     default=["Germany & Luxembourg (DELU)", "Great Britain (Elexon) (GB)"]
 )
 
-# 3. Durable Elexon Fetcher with Retries AND API Key
-def fetch_gb_elexon(start_date, end_date):
-    """Fetches Day-Ahead prices with connection retry logic and API Key auth."""
+# 3. Direct CSV Fetcher for GB
+def fetch_gb_csv(start_date, end_date):
+    """Fetches the latest Market Index Data (MID) CSV directly from the Elexon Portal."""
     try:
-        s_str = start_date.strftime('%Y-%m-%d')
-        e_str = end_date.strftime('%Y-%m-%d')
-        url = f"https://api.data.elexon.co.uk/insights/v1/market/index/prices?from={s_str}&to={e_str}"
+        url = f"https://downloads.elexonportal.co.uk/file/download/LATEST_MID_FILE?key={ELEXON_KEY}"
         
-        # Setup session with retries to handle ConnectionPool errors
-        session = requests.Session()
-        retry = Retry(connect=3, backoff_factor=0.5)
-        adapter = HTTPAdapter(max_retries=retry)
-        session.mount('https://', adapter)
-        
-        # Attach the API key safely to the headers
-        headers = {'User-Agent': 'Mozilla/5.0'}
-        if ELEXON_API_KEY:
-            headers['X-API-Key'] = ELEXON_API_KEY
-            
-        # verify=True is standard; if you still hit SSL errors, you can change to False
-        response = session.get(url, headers=headers, timeout=20, verify=True)
+        # Download the file content
+        response = requests.get(url, timeout=15)
         
         if response.status_code != 200:
-            st.sidebar.warning(f"Elexon returned status code: {response.status_code}")
+            st.sidebar.warning(f"Elexon CSV download failed: {response.status_code}")
             return pd.DataFrame()
             
-        json_data = response.json()
+        # Read the raw CSV text into a Pandas DataFrame
+        # The Elexon CSV format has specific headers, we skip rows until we hit the data
+        raw_csv = response.text
         
-        if isinstance(json_data, dict) and 'data' in json_data:
-            data_list = json_data['data']
-        elif isinstance(json_data, list):
-            data_list = json_data
-        else:
+        # Check if the file is actually a CSV and not an HTML error page
+        if "<html" in raw_csv[:50].lower():
+            st.sidebar.error("Elexon returned an HTML page instead of CSV. Check your key.")
             return pd.DataFrame()
-
-        df = pd.DataFrame(data_list)
+            
+        df = pd.read_csv(io.StringIO(raw_csv), skipinitialspace=True)
         
-        if not df.empty and 'startTime' in df.columns and 'price' in df.columns:
-            df = df[['startTime', 'price']].rename(columns={'startTime': 'Time', 'price': 'Price'})
+        # The CSV has columns like 'Settlement Date', 'Settlement Period', 'Price'
+        # We need to convert 'Settlement Date' to a real datetime object
+        if 'Settlement Date' in df.columns and 'Price' in df.columns:
+            # Convert date format (usually DD/MM/YYYY or YYYY-MM-DD in these files)
+            df['Settlement Date'] = pd.to_datetime(df['Settlement Date'], format='mixed')
+            
+            # Filter the dataframe to only include the dates the user requested
+            start_ts = pd.Timestamp(start_date)
+            end_ts = pd.Timestamp(end_date)
+            df = df[(df['Settlement Date'] >= start_ts) & (df['Settlement Date'] <= end_ts)]
+            
+            # Create a proper 'Time' column by adding the period to the date
+            # Assuming 1 period = 30 minutes
+            df['Time'] = df.apply(lambda row: row['Settlement Date'] + timedelta(minutes=30 * (row['Settlement Period'] - 1)), axis=1)
+            
+            # Clean up to match ENTSO-E format
+            df = df[['Time', 'Price']].copy()
             df['Time'] = pd.to_datetime(df['Time'], utc=True)
             df['Country'] = 'GB'
             
-            def clean_price(p):
-                try:
-                    if isinstance(p, dict): return float(p.get('value', 0))
-                    return float(p)
-                except: return 0.0
-
-            df['Price'] = df['Price'].apply(clean_price)
+            # Clean the price column just in case there are strings
+            df['Price'] = pd.to_numeric(df['Price'], errors='coerce').fillna(0.0)
+            
             return df
             
         return pd.DataFrame()
+        
     except Exception as e:
-        st.sidebar.error(f"Connection Error: {str(e)[:60]}...")
+        st.sidebar.error(f"CSV Parse Error: {str(e)[:60]}")
         return pd.DataFrame()
 
 # 4. Hybrid Fetcher
@@ -117,7 +116,8 @@ def fetch_hybrid_data(selected_codes, start_date, end_date):
     all_data = []
     for code in selected_codes:
         if code == "GB":
-            gb_df = fetch_gb_elexon(start_date, end_date)
+            # Call the new CSV fetcher here!
+            gb_df = fetch_gb_csv(start_date, end_date)
             if not gb_df.empty: all_data.append(gb_df)
         else:
             try:
@@ -141,7 +141,7 @@ if len(date_range) == 2:
     selected_codes = [display_options[lbl] for lbl in selected_labels]
     
     if selected_codes:
-        with st.spinner('Establishing connections to Market APIs...'):
+        with st.spinner('Downloading Market Data...'):
             raw_df = fetch_hybrid_data(selected_codes, start_dt, end_dt)
         
         if not raw_df.empty:
@@ -169,4 +169,4 @@ if len(date_range) == 2:
             except Exception as e:
                 st.error(f"Display Error: {e}")
         else:
-            st.warning("No data found. The connection was successful, but the market result list was empty.")
+            st.warning("No data found. Make sure the markets have cleared for these dates.")
