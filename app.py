@@ -6,17 +6,18 @@ from datetime import datetime, timedelta
 from entsoe import EntsoePandasClient
 
 # 1. Setup & Config
+# Make sure ENTSO_TOKEN is set in your GitHub Secrets or Streamlit Cloud Secrets
 API_KEY = os.environ.get('ENTSOE_TOKEN')
 client = EntsoePandasClient(api_key=API_KEY)
 
-# UPDATED: Mapping for GB and SEM
+# ZONE_NAMES handles the mapping between API codes and human-readable names
 ZONE_NAMES = {
     "AT": "Austria", "BE": "Belgium", "BG": "Bulgaria", "CH": "Switzerland", 
     "CZ": "Czech Republic", "DE_LU": "Germany & Luxembourg", "EE": "Estonia", 
     "ES": "Spain", "FI": "Finland", "FR": "France", 
-    "GB": "Great Britain", # Main GB Bidding Zone
+    "GB": "Great Britain", 
     "GR": "Greece", "HR": "Croatia", "HU": "Hungary", 
-    "IE_SEM": "Ireland & N. Ireland (SEM)", # Single Electricity Market
+    "IE_SEM": "Ireland & N. Ireland (SEM)", 
     "LT": "Lithuania", "LV": "Latvia", "NL": "Netherlands", "PL": "Poland", 
     "PT": "Portugal", "RO": "Romania", "RS": "Serbia", "SI": "Slovenia", "SK": "Slovakia",
     "DK_1": "Denmark - West", "DK_2": "Denmark - East",
@@ -41,12 +42,15 @@ date_range = st.sidebar.date_input(
 resolution = st.sidebar.selectbox("Time Resolution", ["60 min", "15 min"])
 res_map = {"60 min": "60min", "15 min": "15min"}
 
+# Prepare the selection options
 available_codes = sorted(list(ZONE_NAMES.keys()))
 display_options = {f"{ZONE_NAMES[c]} ({c.replace('_','')})": c for c in available_codes}
+
+# Default labels must exactly match the strings generated in display_options
 selected_labels = st.sidebar.multiselect(
     "Select Bidding Zones", 
     options=sorted(display_options.keys()), 
-    default=[f"Germany & Luxembourg (DELU)", f"Great Britain (GB)"]
+    default=["Germany & Luxembourg (DELU)", "Great Britain (GB)"]
 )
 
 # 3. Data Fetching Function
@@ -60,8 +64,6 @@ def fetch_live_data(selected_codes, start_date, end_date):
     all_data = []
     for code in selected_codes:
         try:
-            # For some users, ENTSO-E requires 'GB' to be explicitly handled
-            # but the standard query_day_ahead_prices usually works.
             series = client.query_day_ahead_prices(code, start=start, end=end)
             df_temp = series.to_frame(name='Price').reset_index()
             df_temp.columns = ['Time', 'Price']
@@ -69,6 +71,7 @@ def fetch_live_data(selected_codes, start_date, end_date):
             df_temp['Time'] = pd.to_datetime(df_temp['Time'], utc=True)
             all_data.append(df_temp)
         except Exception as e:
+            # error shown in sidebar so it doesn't crash the main UI
             st.sidebar.error(f"⚠️ {ZONE_NAMES.get(code, code)}: {str(e)[:50]}...")
             
     return pd.concat(all_data, ignore_index=True) if all_data else pd.DataFrame()
@@ -88,7 +91,7 @@ if len(date_range) == 2:
         
         if not raw_df.empty:
             try:
-                # Column-based resampling for stability
+                # Group and resample using the 'Time' column
                 plot_df = (
                     raw_df.groupby('Country')
                     .resample(res_map[resolution], on='Time')['Price']
@@ -97,6 +100,7 @@ if len(date_range) == 2:
                 )
 
                 if not plot_df.empty:
+                    # Convert UTC to Brussels time for display
                     plot_df['Time'] = plot_df['Time'].dt.tz_convert('Europe/Brussels')
                     
                     fig = px.line(
@@ -108,16 +112,22 @@ if len(date_range) == 2:
                         template="plotly_white",
                         markers=True if resolution == "60 min" else False
                     )
-                    fig.update_layout(hovermode="x unified", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
+                    fig.update_layout(
+                        hovermode="x unified", 
+                        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+                    )
                     st.plotly_chart(fig, use_container_width=True)
 
                     st.subheader("Market Comparison Table")
                     pivot_df = plot_df.pivot(index='Time', columns='Country', values='Price')
                     st.dataframe(pivot_df.style.format("{:.2f}"), use_container_width=True)
                 else:
-                    st.warning("Data fetched but could not be processed into the requested resolution.")
+                    st.warning("Data was fetched but couldn't be processed. Try a different resolution.")
+            
             except Exception as e:
-            # This will show the actual error (e.g., "404 No Data Found" or "Unauthorized")
-            st.sidebar.error(f"⚠️ {ZONE_NAMES.get(code, code)}: {e}")
+                # Fixed indentation: this catch is now properly aligned with the 'try'
+                st.error(f"Display Error: {e}")
         else:
-            st.warning("No data found. Ensure your API key is correct and tomorrow's prices have been published (post-13:00 CET).")
+            st.warning("No data found for the selected range. Note: Tomorrow's prices are usually released at 13:00 CET.")
+else:
+    st.info("Please select a start and end date in the sidebar.")
