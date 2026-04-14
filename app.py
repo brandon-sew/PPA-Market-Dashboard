@@ -14,7 +14,7 @@ ZONE_NAMES = {
     "AT": "Austria", "BE": "Belgium", "BG": "Bulgaria", "CH": "Switzerland", 
     "CZ": "Czech Republic", "DE_LU": "Germany & Luxembourg", "EE": "Estonia", 
     "ES": "Spain", "FI": "Finland", "FR": "France", 
-    "GB": "Great Britain", # Main GB Bidding Zone
+    "UK": "Great Britain", # Main GB Bidding Zone
     "GR": "Greece", "HR": "Croatia", "HU": "Hungary", 
     "IE_SEM": "Ireland & N. Ireland (SEM)", # Single Electricity Market
     "LT": "Lithuania", "LV": "Latvia", "NL": "Netherlands", "PL": "Poland", 
