@@ -20,9 +20,9 @@ ZONE_NAMES = {
     "LT": "Lithuania", "LV": "Latvia", "NL": "Netherlands", "PL": "Poland", 
     "PT": "Portugal", "RO": "Romania", "RS": "Serbia", "SI": "Slovenia", "SK": "Slovakia",
     "DK_1": "Denmark - West", "DK_2": "Denmark - East",
-    "NO_1": "Norway East", "NO_2": "Norway South", "NO_3": "Norway Central", 
-    "NO_4": "Norway North", "NO_5": "Norway West",
-    "SE_1": "Sweden North", "SE_2": "Sweden Central", "SE_3": "Sweden East", "SE_4": "Sweden South",
+    "NO_1": "Eastern Norway", "NO_2": "Southern Norway", "NO_3": "Central Norway", 
+    "NO_4": "Northern Norway", "NO_5": "Western Norway",
+    "SE_1": "Northern Sweden", "SE_2": "Central Sweden", "SE_3": "Eastern Sweden", "SE_4": "Southern Sweden",
     "IT_NORD": "Italy - North", "IT_CNOR": "Italy - Central North", "IT_CSUD": "Italy - Central South", 
     "IT_SUD": "Italy - South", "IT_SICI": "Italy - Sicily", "IT_SARD": "Italy - Sardinia"
 }
@@ -54,38 +54,45 @@ selected_labels = st.sidebar.multiselect(
 def fetch_gb_elexon(start_date, end_date):
     """Fetches Day-Ahead prices directly from Elexon Insights API."""
     try:
-        # Elexon requires YYYY-MM-DD
         s_str = start_date.strftime('%Y-%m-%d')
         e_str = end_date.strftime('%Y-%m-%d')
         
         url = f"https://api.data.elexon.co.uk/insights/v1/market/index/prices?from={s_str}&to={e_str}"
-        
-        # Headers help prevent 403/500 errors from API gateways
         headers = {'User-Agent': 'Mozilla/5.0'}
         response = requests.get(url, headers=headers, timeout=15)
         
         if response.status_code != 200:
-            st.sidebar.warning(f"Elexon API returned status: {response.status_code}")
             return pd.DataFrame()
             
-        data = response.json()
-        if not data or len(data) == 0:
-            return pd.DataFrame()
+        json_data = response.json()
         
-        df = pd.DataFrame(data)
-        # We need startTime and price
-        if 'startTime' in df.columns and 'price' in df.columns:
+        # --- IMPROVED JSON HANDLING ---
+        # If response is a dict containing a list, get the list. Otherwise, assume it's the list itself.
+        if isinstance(json_data, dict) and 'data' in json_data:
+            data_list = json_data['data']
+        elif isinstance(json_data, list):
+            data_list = json_data
+        else:
+            return pd.DataFrame()
+
+        df = pd.DataFrame(data_list)
+        
+        if not df.empty and 'startTime' in df.columns and 'price' in df.columns:
             df = df[['startTime', 'price']].rename(columns={'startTime': 'Time', 'price': 'Price'})
             df['Time'] = pd.to_datetime(df['Time'], utc=True)
             df['Country'] = 'GB'
             
-            # --- THE FIX: Unpack dictionary values or convert strings to pure floats ---
-            df['Price'] = df['Price'].apply(lambda x: x.get('value', 0) if isinstance(x, dict) else float(x))
-            
+            # Extract number if price is a dict/object, otherwise convert to float
+            def clean_price(p):
+                if isinstance(p, dict): return float(p.get('value', 0))
+                try: return float(p)
+                except: return 0.0
+
+            df['Price'] = df['Price'].apply(clean_price)
             return df
         return pd.DataFrame()
     except Exception as e:
-        st.sidebar.error(f"Elexon Fetch Error: {e}")
+        st.sidebar.error(f"Elexon Error: {str(e)[:50]}")
         return pd.DataFrame()
 
 # 4. Hybrid Fetcher
@@ -97,8 +104,7 @@ def fetch_hybrid_data(selected_codes, start_date, end_date):
     for code in selected_codes:
         if code == "GB":
             gb_df = fetch_gb_elexon(start_date, end_date)
-            if not gb_df.empty:
-                all_data.append(gb_df)
+            if not gb_df.empty: all_data.append(gb_df)
         else:
             try:
                 start_ts = pd.Timestamp(start_date, tz='Europe/Brussels')
@@ -122,7 +128,7 @@ if len(date_range) == 2:
     selected_codes = [display_options[lbl] for lbl in selected_labels]
     
     if selected_codes:
-        with st.spinner('Syncing with ENTSO-E and Elexon...'):
+        with st.spinner('Accessing Hybrid Market APIs...'):
             raw_df = fetch_hybrid_data(selected_codes, start_dt, end_dt)
         
         if not raw_df.empty:
@@ -146,8 +152,9 @@ if len(date_range) == 2:
                     st.plotly_chart(fig, use_container_width=True)
                     
                     st.subheader("Raw Market Data")
-                    st.dataframe(plot_df.pivot(index='Time', columns='Country', values='Price').style.format("{:.2f}"))
+                    pivot = plot_df.pivot(index='Time', columns='Country', values='Price')
+                    st.dataframe(pivot.style.format("{:.2f}"))
             except Exception as e:
-                st.error(f"Processing Error: {e}")
+                st.error(f"Display Error: {e}")
         else:
-            st.warning("No data found. Check if the markets have cleared yet today.")
+            st.warning("No data found for the selected range.")
