@@ -91,29 +91,39 @@ if len(date_range) == 2:
         with st.spinner('Fetching market data...'):
             raw_df = fetch_live_data(selected_codes, start_dt, end_dt)
         
-        # --- THE SAFETY GATE ---
+        # --- IMPROVED SAFETY GATE ---
         if raw_df is not None and not raw_df.empty:
+            # Ensure the index is named 'Date' so we can reference it
+            raw_df.index.name = 'Date'
+            
             # Resample data
-            plot_df = raw_df.groupby('Country')['Price'].resample(res_map[resolution]).mean().reset_index()
+            # Use 'level=0' to group by the 'Country' column if it's part of the index
+            # or just groupby if it's a standard column
+            try:
+                plot_df = raw_df.groupby('Country')['Price'].resample(res_map[resolution]).mean().reset_index()
+                
+                if not plot_df.empty:
+                    # Explicitly map the resampled time column (usually named 'Date' or 'index')
+                    time_col = 'Date' if 'Date' in plot_df.columns else 'index'
+                    
+                    fig = px.line(
+                        plot_df, 
+                        x=time_col, 
+                        y='Price', 
+                        color='Country',
+                        labels={time_col: 'Time (CET)', 'Price': 'Price (EUR/MWh)'},
+                        template="plotly_white",
+                        markers=True if resolution == "60 min" else False
+                    )
+                    fig.update_layout(hovermode="x unified", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
+                    st.plotly_chart(fig, use_container_width=True)
 
-            # Only plot if plot_df actually has rows
-            if not plot_df.empty:
-                fig = px.line(
-                    plot_df, 
-                    x='index', 
-                    y='Price', 
-                    color='Country',
-                    labels={'index': 'Time (CET)', 'Price': 'Price (EUR/MWh)'},
-                    template="plotly_white",
-                    markers=True if resolution == "60 min" else False
-                )
-                fig.update_layout(hovermode="x unified", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
-                st.plotly_chart(fig, use_container_width=True)
-
-                st.subheader("Raw Data Export")
-                pivot_df = plot_df.pivot(index='index', columns='Country', values='Price')
-                st.dataframe(pivot_df.style.format("{:.2f}"), use_container_width=True)
-            else:
-                st.warning("Data found, but it could not be processed for this resolution.")
+                    st.subheader("Raw Data Export")
+                    pivot_df = plot_df.pivot(index=time_col, columns='Country', values='Price')
+                    st.dataframe(pivot_df.style.format("{:.2f}"), use_container_width=True)
+                else:
+                    st.warning("Data found, but it could not be processed for the selected resolution.")
+            except Exception as resample_error:
+                st.error(f"Error processing resolution: {resample_error}")
         else:
-            st.warning("No data returned from the API for this selection. This can happen if Day-Ahead prices haven't been published yet for the selected dates.")
+            st.warning("No data found. Note: Tomorrow's prices are usually released daily at 13:00 CET.")
