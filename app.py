@@ -28,7 +28,6 @@ st.set_page_config(page_title="Day-Ahead Market Explorer", layout="wide", page_i
 
 # 2. Sidebar Filters
 st.sidebar.header("Data Settings")
-
 today = datetime.now().date()
 date_range = st.sidebar.date_input(
     "Select Date Range", 
@@ -47,7 +46,7 @@ selected_labels = st.sidebar.multiselect(
     default=[f"Germany (DE)", f"France (FR)"]
 )
 
-# 3. Data Fetching Function
+# 3. Data Fetching Function (Explicitly setting Time column)
 @st.cache_data(ttl=3600)
 def fetch_live_data(selected_codes, start_date, end_date):
     if not selected_codes: return pd.DataFrame()
@@ -59,16 +58,17 @@ def fetch_live_data(selected_codes, start_date, end_date):
     for code in selected_codes:
         try:
             series = client.query_day_ahead_prices(code, start=start, end=end)
-            df_temp = series.to_frame(name='Price')
+            # Flatten the index into a column named 'Time' immediately
+            df_temp = series.to_frame(name='Price').reset_index()
+            df_temp.columns = ['Time', 'Price']
             df_temp['Country'] = code.replace("_", "")
-            # Ensure index is datetime and sorted
-            df_temp.index = pd.to_datetime(df_temp.index)
-            df_temp = df_temp.sort_index()
+            # Ensure Time is a datetime object and localized to UTC for stable processing
+            df_temp['Time'] = pd.to_datetime(df_temp['Time'], utc=True)
             all_data.append(df_temp)
         except Exception as e:
             st.sidebar.warning(f"No data for {code}: {e}")
             
-    return pd.concat(all_data) if all_data else pd.DataFrame()
+    return pd.concat(all_data, ignore_index=True) if all_data else pd.DataFrame()
 
 # 4. Main UI Logic
 st.title("⚡ European Day-Ahead Electricity Market Prices")
@@ -86,25 +86,19 @@ if len(date_range) == 2:
         
         if not raw_df.empty:
             try:
-                # NEW ROBUST RESAMPLING LOGIC:
-                # We process each country individually to avoid index errors
-                resampled_segments = []
-                for country_code in raw_df['Country'].unique():
-                    subset = raw_df[raw_df['Country'] == country_code].copy()
-                    
-                    # Perform resampling on the index
-                    resampled_series = subset['Price'].resample(res_map[resolution]).mean()
-                    
-                    # Convert back to DataFrame and clean up
-                    temp_df = resampled_series.reset_index()
-                    temp_df.columns = ['Time', 'Price']
-                    temp_df['Country'] = country_code
-                    resampled_segments.append(temp_df)
-                
-                plot_df = pd.concat(resampled_segments)
+                # FIX: We resample using the 'on' parameter to specify the Time column
+                # This is much more stable than using the index.
+                plot_df = (
+                    raw_df.groupby('Country')
+                    .resample(res_map[resolution], on='Time')['Price']
+                    .mean()
+                    .reset_index()
+                )
 
                 if not plot_df.empty:
-                    # Line Chart
+                    # Convert back to local Brussels time for the chart display
+                    plot_df['Time'] = plot_df['Time'].dt.tz_convert('Europe/Brussels')
+                    
                     fig = px.line(
                         plot_df, 
                         x='Time', 
@@ -120,19 +114,12 @@ if len(date_range) == 2:
                     )
                     st.plotly_chart(fig, use_container_width=True)
 
-                    # Pivot Table for comparison
                     st.subheader("Comparison Table")
                     pivot_df = plot_df.pivot(index='Time', columns='Country', values='Price')
                     st.dataframe(pivot_df.style.format("{:.2f}"), use_container_width=True)
-                    
-                    # Download Button
-                    csv = plot_df.to_csv(index=False).encode('utf-8')
-                    st.download_button("📥 Download CSV", data=csv, file_name="market_prices.csv", mime="text/csv")
                 else:
-                    st.warning("Data was fetched but could not be displayed.")
+                    st.warning("Data was fetched but is empty for the selected resolution.")
             except Exception as e:
-                st.error(f"Error processing chart: {e}")
+                st.error(f"Error processing resolution: {e}")
         else:
-            st.warning("No data found for the selected countries/dates. Remember: tomorrow's prices are usually released at 13:00 CET.")
-else:
-    st.info("Please select a valid date range in the sidebar.")
+            st.warning("No data found. Note: Tomorrow's prices are usually released at 13:00 CET.")
