@@ -54,9 +54,9 @@ selected_labels = st.sidebar.multiselect(
     default=["Germany & Luxembourg (DELU)", "Great Britain (Elexon) (GB)"]
 )
 
-# 3. Direct CSV Fetcher for GB
+# 3. Robust Direct CSV Fetcher for GB
 def fetch_gb_csv(start_date, end_date):
-    """Fetches the latest Market Index Data (MID) CSV directly from the Elexon Portal."""
+    """Robust fetcher for Elexon CSV that auto-detects column names and formats."""
     try:
         url = f"https://downloads.elexonportal.co.uk/file/download/LATEST_MID_FILE?key={ELEXON_KEY}"
         
@@ -64,49 +64,53 @@ def fetch_gb_csv(start_date, end_date):
         response = requests.get(url, timeout=15)
         
         if response.status_code != 200:
-            st.sidebar.warning(f"Elexon CSV download failed: {response.status_code}")
+            st.sidebar.warning(f"Elexon download failed (Status {response.status_code})")
             return pd.DataFrame()
             
-        # Read the raw CSV text into a Pandas DataFrame
-        # The Elexon CSV format has specific headers, we skip rows until we hit the data
-        raw_csv = response.text
+        # 1. Read the CSV and clean column names (strip spaces and quotes)
+        df = pd.read_csv(io.StringIO(response.text), skipinitialspace=True)
+        df.columns = df.columns.str.strip().str.replace('"', '').str.replace("'", "")
         
-        # Check if the file is actually a CSV and not an HTML error page
-        if "<html" in raw_csv[:50].lower():
-            st.sidebar.error("Elexon returned an HTML page instead of CSV. Check your key.")
+        # 2. Identify the columns dynamically by keyword
+        date_col = next((c for c in df.columns if 'date' in c.lower()), None)
+        price_col = next((c for c in df.columns if 'price' in c.lower()), None)
+        period_col = next((c for c in df.columns if 'period' in c.lower()), None)
+
+        if not date_col or not price_col:
+            # Diagnostic help if it still fails
+            st.sidebar.error(f"GB Column Error. Found: {list(df.columns)}")
             return pd.DataFrame()
-            
-        df = pd.read_csv(io.StringIO(raw_csv), skipinitialspace=True)
+
+        # 3. Convert Dates and Prices using UK formats
+        df[date_col] = pd.to_datetime(df[date_col], dayfirst=True, errors='coerce')
+        df[price_col] = pd.to_numeric(df[price_col], errors='coerce')
         
-        # The CSV has columns like 'Settlement Date', 'Settlement Period', 'Price'
-        # We need to convert 'Settlement Date' to a real datetime object
-        if 'Settlement Date' in df.columns and 'Price' in df.columns:
-            # Convert date format (usually DD/MM/YYYY or YYYY-MM-DD in these files)
-            df['Settlement Date'] = pd.to_datetime(df['Settlement Date'], format='mixed')
-            
-            # Filter the dataframe to only include the dates the user requested
-            start_ts = pd.Timestamp(start_date)
-            end_ts = pd.Timestamp(end_date)
-            df = df[(df['Settlement Date'] >= start_ts) & (df['Settlement Date'] <= end_ts)]
-            
-            # Create a proper 'Time' column by adding the period to the date
-            # Assuming 1 period = 30 minutes
-            df['Time'] = df.apply(lambda row: row['Settlement Date'] + timedelta(minutes=30 * (row['Settlement Period'] - 1)), axis=1)
-            
-            # Clean up to match ENTSO-E format
-            df = df[['Time', 'Price']].copy()
-            df['Time'] = pd.to_datetime(df['Time'], utc=True)
-            df['Country'] = 'GB'
-            
-            # Clean the price column just in case there are strings
-            df['Price'] = pd.to_numeric(df['Price'], errors='coerce').fillna(0.0)
-            
-            return df
-            
-        return pd.DataFrame()
+        # 4. Filter for the date range selected in the sidebar
+        mask = (df[date_col].dt.date >= start_date) & (df[date_col].dt.date <= end_date)
+        df = df.loc[mask].copy()
+
+        if df.empty:
+            return pd.DataFrame()
+
+        # 5. Create proper Time column
+        if period_col:
+            # Handle half-hour periods (1-48)
+            df['Time'] = df.apply(
+                lambda x: x[date_col] + timedelta(minutes=30 * (int(x[period_col]) - 1)), 
+                axis=1
+            )
+        else:
+            df['Time'] = df[date_col]
+
+        # 6. Final Formatting to match chart requirements
+        df = df[['Time', price_col]].rename(columns={price_col: 'Price'})
+        df['Time'] = pd.to_datetime(df['Time'], utc=True)
+        df['Country'] = 'GB'
+        
+        return df
         
     except Exception as e:
-        st.sidebar.error(f"CSV Parse Error: {str(e)[:60]}")
+        st.sidebar.error(f"GB Process Error: {str(e)[:60]}")
         return pd.DataFrame()
 
 # 4. Hybrid Fetcher
@@ -116,7 +120,6 @@ def fetch_hybrid_data(selected_codes, start_date, end_date):
     all_data = []
     for code in selected_codes:
         if code == "GB":
-            # Call the new CSV fetcher here!
             gb_df = fetch_gb_csv(start_date, end_date)
             if not gb_df.empty: all_data.append(gb_df)
         else:
@@ -154,7 +157,9 @@ if len(date_range) == 2:
                 )
 
                 if not plot_df.empty:
+                    # Adjust time for display
                     plot_df['Time'] = plot_df['Time'].dt.tz_convert('Europe/Brussels')
+                    
                     fig = px.line(
                         plot_df, x='Time', y='Price', color='Country',
                         labels={'Time': 'Time (CET)', 'Price': 'Price (Local Currency/MWh)'},
@@ -169,4 +174,4 @@ if len(date_range) == 2:
             except Exception as e:
                 st.error(f"Display Error: {e}")
         else:
-            st.warning("No data found. Make sure the markets have cleared for these dates.")
+            st.warning("No data found for the selected range. Check if the markets have cleared yet.")
