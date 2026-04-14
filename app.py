@@ -2,91 +2,66 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# 1. Page Configuration
-st.set_page_config(
-    page_title="EU Energy Market Dashboard",
-    page_icon="⚡",
-    layout="wide"
-)
+# 1. Bidding Zone Name Dictionary
+ZONE_NAMES = {
+    "AT": "Austria", "BE": "Belgium", "BG": "Bulgaria", "CH": "Switzerland", 
+    "CZ": "Czech Republic", "DE": "Germany", "EE": "Estonia", "ES": "Spain", 
+    "FI": "Finland", "FR": "France", "GB": "Great Britain", "GR": "Greece", 
+    "HR": "Croatia", "HU": "Hungary", "IE_SEM": "Ireland (SEM)", "LT": "Lithuania", 
+    "LU": "Luxembourg", "LV": "Latvia", "NL": "Netherlands", "PL": "Poland", 
+    "PT": "Portugal", "RO": "Romania", "RS": "Serbia", "SI": "Slovenia", "SK": "Slovakia",
+    # Regional Splits (Denmark, Norway, Sweden, Italy)
+    "DK_1": "Denmark - West", "DK_2": "Denmark - East",
+    "NO_1": "Norway - Oslo", "NO_2": "Norway - Kristiansand", "NO_3": "Norway - Trondheim", 
+    "NO_4": "Norway - Tromsø", "NO_5": "Norway - Bergen",
+    "SE_1": "Sweden - Luleå", "SE_2": "Sweden - Sundsvall", "SE_3": "Sweden - Stockholm", "SE_4": "Sweden - Malmö",
+    "IT_NORD": "Italy - North", "IT_CNOR": "Italy - Central North", "IT_CSUD": "Italy - Central South", 
+    "IT_SUD": "Italy - South", "IT_SICI": "Italy - Sicily", "IT_SARD": "Italy - Sardinia"
+}
 
-# 2. Load Data
-# This looks for the CSV created by your GitHub Action
+st.set_page_config(page_title="EU Energy Market", layout="wide")
+
 @st.cache_data
 def load_data():
     try:
         df = pd.read_csv('market_prices.csv')
         df['Date'] = pd.to_datetime(df['Date'])
         return df
-    except FileNotFoundError:
-        return None
+    except: return None
 
 df = load_data()
 
-# 3. Header
 st.title("🇪🇺 European Energy Market Tracker")
-st.markdown("Automated daily updates for Baseload, Peak, and Off-Peak prices.")
 
-if df is None:
-    st.error("No data found. Please run the GitHub Action (main.py) to generate the market_prices.csv file.")
-else:
-    # 4. Sidebar Filters
-    st.sidebar.header("Dashboard Controls")
+if df is not None:
+    # 2. Prepare Display Labels (Removing Underscores)
+    available_codes = df['Country'].unique()
     
-    countries = sorted(df['Country'].unique())
-    selected_country = st.sidebar.selectbox("Select Bidding Zone", countries)
-    
-    metrics = df['Metric'].unique()
-    selected_metrics = st.sidebar.multiselect("Select Metrics", 
-                                            options=metrics, 
-                                            default=['Baseload', 'Peak'])
+    # Create list of "Name (Cleaned Code)"
+    display_options = []
+    code_to_label = {}
+    for code in available_codes:
+        clean_code = code.replace("_", "") # NO_1 becomes NO1
+        full_name = ZONE_NAMES.get(code, "Unknown Region")
+        label = f"{full_name} ({clean_code})"
+        display_options.append(label)
+        code_to_label[label] = code # Map it back for filtering
 
-    # Filter data
-    mask = (df['Country'] == selected_country) & (df['Metric'].isin(selected_metrics))
+    selected_label = st.sidebar.selectbox("Select Bidding Zone", sorted(display_options))
+    selected_country_code = code_to_label[selected_label]
+    
+    selected_metrics = st.sidebar.multiselect("Metrics", options=df['Metric'].unique(), default=['Baseload', 'Peak'])
+
+    # 3. Filter and Graph
+    mask = (df['Country'] == selected_country_code) & (df['Metric'].isin(selected_metrics))
     filtered_df = df[mask].sort_values(by='Date')
 
-    # 5. Visualizations
-    col1, col2 = st.columns([2, 1])
-
+    col1, col2 = st.columns([3, 1])
     with col1:
-        st.subheader(f"Price Trends: {selected_country}")
-        if not filtered_df.empty:
-            fig = px.line(
-                filtered_df, 
-                x='Date', 
-                y='Price', 
-                color='Metric',
-                labels={'Price': 'Price (EUR/MWh)', 'Date': ''},
-                markers=True,
-                template="plotly_white"
-            )
-            # Make the chart look cleaner
-            fig.update_layout(hovermode="x unified")
-            st.plotly_chart(fig, use_container_width=True)
-        else:
-            st.warning("Please select at least one metric.")
-
+        fig = px.line(filtered_df, x='Date', y='Price', color='Metric', markers=True, template="plotly_white")
+        st.plotly_chart(fig, use_container_width=True)
+    
     with col2:
         st.subheader("Latest Prices")
-        # Get the most recent date in the dataset
         latest_date = filtered_df['Date'].max()
-        latest_data = filtered_df[filtered_df['Date'] == latest_date]
-        
-        if not latest_data.empty:
-            st.info(f"Showing data for: {latest_date.strftime('%Y-%m-%d')}")
-            # Formatted table
-            st.dataframe(
-                latest_data[['Metric', 'Price']].style.format({"Price": "€{:.2f}"}),
-                hide_index=True,
-                use_container_width=True
-            )
-        
-        st.subheader("Historical View")
-        st.dataframe(
-            filtered_df[['Date', 'Metric', 'Price']].style.format({"Price": "{:.2f}"}),
-            hide_index=True,
-            height=300
-        )
-
-# 6. Footer
-st.divider()
-st.caption("Data Source: ENTSO-E Transparency Platform. Updates automatically via GitHub Actions.")
+        st.dataframe(filtered_df[filtered_df['Date'] == latest_date][['Metric', 'Price']], hide_index=True)
