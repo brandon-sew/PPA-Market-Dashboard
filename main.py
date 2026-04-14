@@ -29,6 +29,9 @@ def process_to_long_format(price_series, country_code):
     
     price_series.index = pd.to_datetime(price_series.index)
     
+    # Ensure we don't include 0.0 values that are actually missing data
+    price_series = price_series[price_series != 0]
+    
     baseload = price_series.resample('D').mean()
     peak = price_series.between_time('08:00', '19:59').resample('D').mean()
     off_peak_mask = ~price_series.index.isin(price_series.between_time('08:00', '19:59').index)
@@ -36,11 +39,11 @@ def process_to_long_format(price_series, country_code):
     
     data = []
     for date, val in baseload.items(): 
-        data.append({'Date': date.date(), 'Metric': 'Baseload', 'Price': val})
+        if pd.notna(val): data.append({'Date': date.date(), 'Metric': 'Baseload', 'Price': val})
     for date, val in peak.items(): 
-        data.append({'Date': date.date(), 'Metric': 'Peak', 'Price': val})
+        if pd.notna(val): data.append({'Date': date.date(), 'Metric': 'Peak', 'Price': val})
     for date, val in off_peak.items(): 
-        data.append({'Date': date.date(), 'Metric': 'Off-Peak', 'Price': val})
+        if pd.notna(val): data.append({'Date': date.date(), 'Metric': 'Off-Peak', 'Price': val})
     
     res = pd.DataFrame(data)
     res['Country'] = country_code
@@ -58,28 +61,43 @@ def fetch_gb_direct_csv(start_date, end_date):
             print(f"GB Skip: HTTP {response.status_code}")
             return None
         
+        # Elexon MID files often have a metadata header. We use error_bad_lines=False 
+        # or skipinitialspace to get to the actual data.
         df = pd.read_csv(io.StringIO(response.text), skipinitialspace=True)
         df.columns = df.columns.str.strip().str.replace('"', '').str.replace("'", "")
         
-        # Super-flexible column finding
+        # Target 'Market Index Price' specifically, as 'Price' can be ambiguous
+        price_col = None
+        for col in df.columns:
+            if 'market index price' in col.lower():
+                price_col = col
+                break
+        
+        if not price_col:
+            # Fallback to the last column which is usually the price in Elexon CSVs
+            price_col = df.columns[-1]
+
         date_col = next((c for c in df.columns if 'date' in c.lower()), None)
-        # Look for 'price', 'value', or 'index'
-        price_col = next((c for c in df.columns if any(k in c.lower() for k in ['price', 'value', 'index'])), None)
         period_col = next((c for c in df.columns if 'period' in c.lower()), None)
         
         if not date_col or not price_col:
-            print(f"GB Skip: Could not find columns. Columns are: {list(df.columns)}")
             return None
 
-        df[date_col] = pd.to_datetime(df[date_col], dayfirst=True)
+        df[date_col] = pd.to_datetime(df[date_col], dayfirst=True, errors='coerce')
         df[price_col] = pd.to_numeric(df[price_col], errors='coerce')
         
+        # CRITICAL: Drop zeros and NaNs from the price column
+        df = df[df[price_col] > 0]
+        
         if period_col:
+            df[period_col] = pd.to_numeric(df[period_col], errors='coerce')
             df['Time'] = df.apply(lambda x: x[date_col] + timedelta(minutes=30 * (int(x[period_col]) - 1)), axis=1)
         else:
             df['Time'] = df[date_col]
             
         df = df.set_index('Time')[price_col].sort_index()
+        
+        # Localize for the slice
         return df[start_date.tz_localize(None) : end_date.tz_localize(None)]
     except Exception as e:
         print(f"GB Error: {e}")
@@ -102,7 +120,7 @@ for code in countries:
             processed = process_to_long_format(raw_series, code)
             all_country_data.append(processed)
         
-        time.sleep(1.2) 
+        time.sleep(1.1) 
     except Exception as e:
         print(f"Skipping {code} due to error: {e}")
 
@@ -113,5 +131,4 @@ if all_country_data:
     final_df.to_csv('market_prices.csv', index=False)
     print("Success: market_prices.csv updated.")
 else:
-    # This prevents the "Exit Code 1" if NO data is found, by exiting gracefully
-    print("Warning: No data collected for any country.")
+    print("Warning: No data collected.")
