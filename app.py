@@ -14,7 +14,7 @@ ZONE_NAMES = {
     "AT": "Austria", "BE": "Belgium", "BG": "Bulgaria", "CH": "Switzerland", 
     "CZ": "Czech Republic", "DE_LU": "Germany & Luxembourg", "EE": "Estonia", 
     "ES": "Spain", "FI": "Finland", "FR": "France", 
-    "UK": "Great Britain", # Main GB Bidding Zone
+    "GB": "Great Britain", # Main GB Bidding Zone
     "GR": "Greece", "HR": "Croatia", "HU": "Hungary", 
     "IE_SEM": "Ireland & N. Ireland (SEM)", # Single Electricity Market
     "LT": "Lithuania", "LV": "Latvia", "NL": "Netherlands", "PL": "Poland", 
@@ -46,7 +46,7 @@ display_options = {f"{ZONE_NAMES[c]} ({c.replace('_','')})": c for c in availabl
 selected_labels = st.sidebar.multiselect(
     "Select Bidding Zones", 
     options=sorted(display_options.keys()), 
-    default=[f"Germany & Luxembourg (DELU)", f"Great Britain (UK)"]
+    default=[f"Germany & Luxembourg (DELU)", f"Great Britain (GB)"]
 )
 
 # 3. Data Fetching Function
@@ -117,6 +117,7 @@ if len(date_range) == 2:
                 else:
                     st.warning("Data fetched but could not be processed into the requested resolution.")
             except Exception as e:
-                st.error(f"Display Error: {e}")
+            # This will show the actual error (e.g., "404 No Data Found" or "Unauthorized")
+            st.sidebar.error(f"⚠️ {ZONE_NAMES.get(code, code)}: {e}")
         else:
             st.warning("No data found. Ensure your API key is correct and tomorrow's prices have been published (post-13:00 CET).")
