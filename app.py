@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# 1. Bidding Zone Name Dictionary
+# 1. Bidding Zone Name Dictionary with your custom Norway/Sweden names
 ZONE_NAMES = {
     "AT": "Austria", "BE": "Belgium", "BG": "Bulgaria", "CH": "Switzerland", 
     "CZ": "Czech Republic", "DE": "Germany", "EE": "Estonia", "ES": "Spain", 
@@ -10,7 +10,7 @@ ZONE_NAMES = {
     "HR": "Croatia", "HU": "Hungary", "IE_SEM": "Ireland (SEM)", "LT": "Lithuania", 
     "LU": "Luxembourg", "LV": "Latvia", "NL": "Netherlands", "PL": "Poland", 
     "PT": "Portugal", "RO": "Romania", "RS": "Serbia", "SI": "Slovenia", "SK": "Slovakia",
-    # Regional Splits (Denmark, Norway, Sweden, Italy)
+    # Regional Splits with Custom Labels
     "DK_1": "Denmark - West", "DK_2": "Denmark - East",
     "NO_1": "Eastern Norway", "NO_2": "Southern Norway", "NO_3": "Central Norway", 
     "NO_4": "Northern Norway", "NO_5": "Western Norway",
@@ -19,7 +19,7 @@ ZONE_NAMES = {
     "IT_SUD": "Italy - South", "IT_SICI": "Italy - Sicily", "IT_SARD": "Italy - Sardinia"
 }
 
-st.set_page_config(page_title="EU Energy Market", layout="wide")
+st.set_page_config(page_title="Day-Ahead Market Tracker", layout="wide")
 
 @st.cache_data
 def load_data():
@@ -31,37 +31,69 @@ def load_data():
 
 df = load_data()
 
-st.title("🇪🇺 European Energy Market Tracker")
+# Accurate Title for Day-Ahead Markets
+st.title("⚡ European Day-Ahead Electricity Market Prices")
+st.markdown("Automated Monitoring of Baseload, Peak, and Off-Peak Auction Results")
 
 if df is not None:
-    # 2. Prepare Display Labels (Removing Underscores)
+    # 2. Prepare Display Labels (Removing Underscores for clean look)
     available_codes = df['Country'].unique()
     
-    # Create list of "Name (Cleaned Code)"
-    display_options = []
-    code_to_label = {}
-    for code in available_codes:
-        clean_code = code.replace("_", "") # NO_1 becomes NO1
-        full_name = ZONE_NAMES.get(code, "Unknown Region")
+    # Map the "Friendly Name (Code)" to the original code
+    display_to_code = {}
+    for c in available_codes:
+        clean_code = c.replace("_", "") # NO_1 becomes NO1
+        full_name = ZONE_NAMES.get(c, "Unknown Region")
         label = f"{full_name} ({clean_code})"
-        display_options.append(label)
-        code_to_label[label] = code # Map it back for filtering
-
-    selected_label = st.sidebar.selectbox("Select Bidding Zone", sorted(display_options))
-    selected_country_code = code_to_label[selected_label]
+        display_to_code[label] = c
     
-    selected_metrics = st.sidebar.multiselect("Metrics", options=df['Metric'].unique(), default=['Baseload', 'Peak'])
+    options = sorted(display_to_code.keys())
 
-    # 3. Filter and Graph
-    mask = (df['Country'] == selected_country_code) & (df['Metric'].isin(selected_metrics))
-    filtered_df = df[mask].sort_values(by='Date')
+    # 3. Sidebar Controls for Comparison
+    st.sidebar.header("Comparison Settings")
+    selected_labels = st.sidebar.multiselect(
+        "Select Bidding Zones to Compare", 
+        options=options, 
+        default=options[0] if options else None
+    )
+    
+    selected_metrics = st.sidebar.multiselect(
+        "Select Metrics", 
+        options=df['Metric'].unique(), 
+        default=['Baseload']
+    )
 
-    col1, col2 = st.columns([3, 1])
-    with col1:
-        fig = px.line(filtered_df, x='Date', y='Price', color='Metric', markers=True, template="plotly_white")
+    # 4. Filter and Transform Data
+    selected_codes = [display_to_code[lbl] for lbl in selected_labels]
+    mask = (df['Country'].isin(selected_codes)) & (df['Metric'].isin(selected_metrics))
+    filtered_df = df[mask].copy()
+    
+    # Create legend label: "Country Code - Metric"
+    filtered_df['DisplayGroup'] = filtered_df['Country'].replace("_", "", regex=True) + " - " + filtered_df['Metric']
+
+    # 5. Visualizations
+    if not filtered_df.empty:
+        # Comparison Line Chart
+        fig = px.line(
+            filtered_df.sort_values('Date'), 
+            x='Date', 
+            y='Price', 
+            color='DisplayGroup',
+            labels={'Price': 'Price (EUR/MWh)', 'Date': '', 'DisplayGroup': 'Market / Metric'},
+            markers=True,
+            template="plotly_white",
+            title="Market Comparison Trend"
+        )
+        # Unified hover makes comparing specific days much easier
+        fig.update_layout(hovermode="x unified", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
         st.plotly_chart(fig, use_container_width=True)
-    
-    with col2:
-        st.subheader("Latest Prices")
-        latest_date = filtered_df['Date'].max()
-        st.dataframe(filtered_df[filtered_df['Date'] == latest_date][['Metric', 'Price']], hide_index=True)
+
+        # Side-by-Side Pivot Table
+        st.subheader("Price Breakdown")
+        pivot_df = filtered_df.pivot(index='Date', columns='DisplayGroup', values='Price')
+        st.dataframe(pivot_df.style.format("€{:.2f}"), use_container_width=True)
+    else:
+        st.info("Please select at least one bidding zone and one metric in the sidebar to start comparing.")
+
+else:
+    st.error("Market data file not found. Check if the GitHub Action successfully generated 'market_prices.csv'.")
