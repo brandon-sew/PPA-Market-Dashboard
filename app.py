@@ -85,36 +85,35 @@ if len(date_range) == 2:
     start_dt, end_dt = date_range
     selected_codes = [display_options[lbl] for lbl in selected_labels]
     
-    with st.spinner('Fetching market data...'):
-        raw_df = fetch_live_data(selected_codes, start_dt, end_dt)
-    
-    if not raw_df.empty:
-        # Resample data based on user selection
-        # Note: resample().mean() handles cases where 15-min data is requested from 60-min sources
-        plot_df = raw_df.groupby('Country')['Price'].resample(res_map[resolution]).mean().reset_index()
-
-        # Line Chart
-        fig = px.line(
-            plot_df, 
-            x='index', 
-            y='Price', 
-            color='Country',
-            labels={'index': 'Time (CET)', 'Price': 'Price (EUR/MWh)'},
-            template="plotly_white",
-            markers=True if resolution == "60 min" else False
-        )
-        fig.update_layout(hovermode="x unified", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
-        st.plotly_chart(fig, use_container_width=True)
-
-        # Side-by-Side Pivot Table
-        st.subheader("Raw Data Export")
-        pivot_df = plot_df.pivot(index='index', columns='Country', values='Price')
-        st.dataframe(pivot_df.style.format("{:.2f}"), use_container_width=True)
-        
-        # Download
-        csv = plot_df.to_csv(index=False).encode('utf-8')
-        st.download_button("📥 Download filtered data as CSV", data=csv, file_name="day_ahead_prices.csv", mime="text/csv")
+    if not selected_codes:
+        st.info("Please select at least one Bidding Zone in the sidebar.")
     else:
-        st.info("No data found for this selection. Try adjusting the date range or bidding zones.")
-else:
-    st.info("Please select a complete start and end date in the sidebar.")
+        with st.spinner('Fetching market data...'):
+            raw_df = fetch_live_data(selected_codes, start_dt, end_dt)
+        
+        # --- THE SAFETY GATE ---
+        if raw_df is not None and not raw_df.empty:
+            # Resample data
+            plot_df = raw_df.groupby('Country')['Price'].resample(res_map[resolution]).mean().reset_index()
+
+            # Only plot if plot_df actually has rows
+            if not plot_df.empty:
+                fig = px.line(
+                    plot_df, 
+                    x='index', 
+                    y='Price', 
+                    color='Country',
+                    labels={'index': 'Time (CET)', 'Price': 'Price (EUR/MWh)'},
+                    template="plotly_white",
+                    markers=True if resolution == "60 min" else False
+                )
+                fig.update_layout(hovermode="x unified", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
+                st.plotly_chart(fig, use_container_width=True)
+
+                st.subheader("Raw Data Export")
+                pivot_df = plot_df.pivot(index='index', columns='Country', values='Price')
+                st.dataframe(pivot_df.style.format("{:.2f}"), use_container_width=True)
+            else:
+                st.warning("Data found, but it could not be processed for this resolution.")
+        else:
+            st.warning("No data returned from the API for this selection. This can happen if Day-Ahead prices haven't been published yet for the selected dates.")
