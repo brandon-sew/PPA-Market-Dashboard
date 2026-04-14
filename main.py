@@ -29,9 +29,11 @@ def process_to_long_format(price_series, country_code):
     
     price_series.index = pd.to_datetime(price_series.index)
     
-    # Ensure we don't include 0.0 values that are actually missing data
-    price_series = price_series[price_series != 0]
+    # Strictly remove zeros (which indicate missing data in these legacy feeds)
+    price_series = price_series[price_series > 0.1]
     
+    if price_series.empty: return pd.DataFrame()
+
     baseload = price_series.resample('D').mean()
     peak = price_series.between_time('08:00', '19:59').resample('D').mean()
     off_peak_mask = ~price_series.index.isin(price_series.between_time('08:00', '19:59').index)
@@ -50,57 +52,47 @@ def process_to_long_format(price_series, country_code):
     return res
 
 def fetch_gb_direct_csv(start_date, end_date):
-    if not ELEXON_TOKEN:
-        print("GB Skip: ELEXON_TOKEN secret missing.")
-        return None
-        
+    """Parses the complex Elexon MID file by looking for specific markers."""
+    if not ELEXON_TOKEN: return None
     try:
         url = f"https://downloads.elexonportal.co.uk/file/download/LATEST_MID_FILE?key={ELEXON_TOKEN}"
-        response = requests.get(url, timeout=20)
-        if response.status_code != 200: 
-            print(f"GB Skip: HTTP {response.status_code}")
-            return None
+        r = requests.get(url, timeout=20)
+        if r.status_code != 200: return None
         
-        # Elexon MID files often have a metadata header. We use error_bad_lines=False 
-        # or skipinitialspace to get to the actual data.
-        df = pd.read_csv(io.StringIO(response.text), skipinitialspace=True)
-        df.columns = df.columns.str.strip().str.replace('"', '').str.replace("'", "")
+        # Elexon MID files often contain multiple data types. 
+        # We search line-by-line for the 'MID' price data.
+        lines = r.text.splitlines()
+        extracted_data = []
         
-        # Target 'Market Index Price' specifically, as 'Price' can be ambiguous
-        price_col = None
-        for col in df.columns:
-            if 'market index price' in col.lower():
-                price_col = col
-                break
-        
-        if not price_col:
-            # Fallback to the last column which is usually the price in Elexon CSVs
-            price_col = df.columns[-1]
+        for line in lines:
+            parts = [p.strip().replace('"', '').replace("'", "") for p in line.split(',')]
+            # MID rows usually look like: MID, Date, Period, Price...
+            if 'MID' in parts or 'Market Index Data' in line:
+                try:
+                    # Logic: Find a date-looking thing and a number-looking thing
+                    # Standard MID format: [Type, Date, Period, Provider, Price, Volume]
+                    d_str = next(p for p in parts if '/' in p or '-' in p)
+                    nums = [float(p) for p in parts if p.replace('.','',1).isdigit()]
+                    if len(nums) >= 2:
+                        extracted_data.append({
+                            'Date': pd.to_datetime(d_str, dayfirst=True),
+                            'Period': int(nums[0]),
+                            'Price': float(nums[-1] if nums[-1] > 1 else nums[-2]) # Grab the price, not the volume
+                        })
+                except: continue
 
-        date_col = next((c for c in df.columns if 'date' in c.lower()), None)
-        period_col = next((c for c in df.columns if 'period' in c.lower()), None)
+        if not extracted_data: return None
         
-        if not date_col or not price_col:
-            return None
-
-        df[date_col] = pd.to_datetime(df[date_col], dayfirst=True, errors='coerce')
-        df[price_col] = pd.to_numeric(df[price_col], errors='coerce')
+        df = pd.DataFrame(extracted_data)
+        df = df[df['Price'] > 1.0] # Ignore near-zero values
         
-        # CRITICAL: Drop zeros and NaNs from the price column
-        df = df[df[price_col] > 0]
+        # Create Time index (30 min periods)
+        df['Time'] = df.apply(lambda x: x['Date'] + timedelta(minutes=30 * (x['Period'] - 1)), axis=1)
+        df = df.set_index('Time')['Price'].sort_index()
         
-        if period_col:
-            df[period_col] = pd.to_numeric(df[period_col], errors='coerce')
-            df['Time'] = df.apply(lambda x: x[date_col] + timedelta(minutes=30 * (int(x[period_col]) - 1)), axis=1)
-        else:
-            df['Time'] = df[date_col]
-            
-        df = df.set_index('Time')[price_col].sort_index()
-        
-        # Localize for the slice
         return df[start_date.tz_localize(None) : end_date.tz_localize(None)]
     except Exception as e:
-        print(f"GB Error: {e}")
+        print(f"GB Detail Error: {e}")
         return None
 
 all_country_data = []
@@ -108,13 +100,7 @@ all_country_data = []
 for code in countries:
     try:
         print(f"Fetching {code}...")
-        raw_series = None
-        
-        if code == 'GB':
-            raw_series = fetch_gb_direct_csv(start, end)
-        else:
-            if ENTSOE_API_KEY:
-                raw_series = client.query_day_ahead_prices(code, start=start, end=end)
+        raw_series = fetch_gb_direct_csv(start, end) if code == 'GB' else client.query_day_ahead_prices(code, start=start, end=end)
             
         if raw_series is not None and not raw_series.empty:
             processed = process_to_long_format(raw_series, code)
@@ -122,13 +108,10 @@ for code in countries:
         
         time.sleep(1.1) 
     except Exception as e:
-        print(f"Skipping {code} due to error: {e}")
+        print(f"Skipping {code}: {e}")
 
 if all_country_data:
     final_df = pd.concat(all_country_data, ignore_index=True)
-    final_df = final_df.dropna(subset=['Price'])
     final_df['Price'] = final_df['Price'].round(2)
     final_df.to_csv('market_prices.csv', index=False)
     print("Success: market_prices.csv updated.")
-else:
-    print("Warning: No data collected.")
