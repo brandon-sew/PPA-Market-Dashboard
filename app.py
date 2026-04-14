@@ -12,9 +12,9 @@ ZONE_NAMES = {
     "PT": "Portugal", "RO": "Romania", "RS": "Serbia", "SI": "Slovenia", "SK": "Slovakia",
     # Regional Splits (Denmark, Norway, Sweden, Italy)
     "DK_1": "Denmark - West", "DK_2": "Denmark - East",
-    "NO_1": "Eastern Norway (NO1)", "NO_2": "Southern Norway (NO2)", "NO_3": "Central Norway (NO3)", 
-    "NO_4": "Northern Norway (NO4)", "NO_5": "Western Norway (NO5)",
-    "SE_1": "Northern Sweden (SE1)", "SE_2": "Central Sweden (SE2)", "SE_3": "Eastern Sweden (SE3)", "SE_4": "Southern Sweden (SE4)",
+    "NO_1": "Eastern Norway", "NO_2": "Southern Norway", "NO_3": "Central Norway", 
+    "NO_4": "Northern Norway", "NO_5": "Western Norway",
+    "SE_1": "Northern Sweden", "SE_2": "Central Sweden", "SE_3": "Eastern Sweden", "SE_4": "Southern Sweden",
     "IT_NORD": "Italy - North", "IT_CNOR": "Italy - Central North", "IT_CSUD": "Italy - Central South", 
     "IT_SUD": "Italy - South", "IT_SICI": "Italy - Sicily", "IT_SARD": "Italy - Sardinia"
 }
