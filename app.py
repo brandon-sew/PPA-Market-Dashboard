@@ -20,9 +20,9 @@ ZONE_NAMES = {
     "LT": "Lithuania", "LV": "Latvia", "NL": "Netherlands", "PL": "Poland", 
     "PT": "Portugal", "RO": "Romania", "RS": "Serbia", "SI": "Slovenia", "SK": "Slovakia",
     "DK_1": "Denmark - West", "DK_2": "Denmark - East",
-    "NO_1": "Eastern Norway", "NO_2": "Southern Norway", "NO_3": "Central Norway", 
-    "NO_4": "Northern Norway", "NO_5": "Western Norway",
-    "SE_1": "Northern Sweden", "SE_2": "Central Sweden", "SE_3": "Eastern Sweden", "SE_4": "Southern Sweden",
+    "NO_1": "Norway East", "NO_2": "Norway South", "NO_3": "Norway Central", 
+    "NO_4": "Norway North", "NO_5": "Norway West",
+    "SE_1": "Sweden North", "SE_2": "Sweden Central", "SE_3": "Sweden East", "SE_4": "Sweden South",
     "IT_NORD": "Italy - North", "IT_CNOR": "Italy - Central North", "IT_CSUD": "Italy - Central South", 
     "IT_SUD": "Italy - South", "IT_SICI": "Italy - Sicily", "IT_SARD": "Italy - Sardinia"
 }
@@ -78,6 +78,10 @@ def fetch_gb_elexon(start_date, end_date):
             df = df[['startTime', 'price']].rename(columns={'startTime': 'Time', 'price': 'Price'})
             df['Time'] = pd.to_datetime(df['Time'], utc=True)
             df['Country'] = 'GB'
+            
+            # --- THE FIX: Unpack dictionary values or convert strings to pure floats ---
+            df['Price'] = df['Price'].apply(lambda x: x.get('value', 0) if isinstance(x, dict) else float(x))
+            
             return df
         return pd.DataFrame()
     except Exception as e:
