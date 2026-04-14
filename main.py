@@ -1,71 +1,33 @@
-import os
-import pandas as pd
-import numpy as np
-from datetime import datetime
-from entsoe import EntsoePandasClient
+name: Daily Market Update
+on:
+  schedule:
+    - cron: '0 13 * * *' # Runs at 13:00 UTC (14:00 CET)
+  workflow_dispatch: 
 
-# 1. Configuration & Secrets
-API_KEY = os.environ.get('ENTSOE_TOKEN')
+# This block is the new "Secret Sauce" that grants write access
+permissions:
+  contents: write
 
-# If no API key is found, the script will fail early to let you know
-if not API_KEY:
-    raise ValueError("ENTSOE_TOKEN not found. Please add it to GitHub Secrets.")
-
-client = EntsoePandasClient(api_key=API_KEY)
-
-# 2. Define Countries & Timeframe
-# You can add or remove country codes here as needed
-countries = ['DE_LU', 'FR', 'ES', 'PL', 'NL', 'IT_SACO_AC']
-
-end = pd.Timestamp(datetime.now(), tz='Europe/Brussels')
-start = end - pd.Timedelta(days=14)  # Fetch last 14 days for a better trend graph
-
-def process_to_long_format(price_series, country_code):
-    """Processes raw hourly data into Baseload, Peak, and Off-Peak averages."""
-    # Daily Baseload
-    baseload = price_series.resample('D').mean()
-    
-    # Peak (08:00 - 20:00)
-    peak = price_series.between_time('08:00', '19:59').resample('D').mean()
-    
-    # Off-Peak (Everything else)
-    off_peak_mask = ~price_series.index.isin(price_series.between_time('08:00', '19:59').index)
-    off_peak = price_series.loc[off_peak_mask].resample('D').mean()
-    
-    data = []
-    for date, val in baseload.items():
-        data.append({'Date': date.date(), 'Metric': 'Baseload', 'Price': val})
-    for date, val in peak.items():
-        data.append({'Date': date.date(), 'Metric': 'Peak', 'Price': val})
-    for date, val in off_peak.items():
-        data.append({'Date': date.date(), 'Metric': 'Off-Peak', 'Price': val})
-        
-    res = pd.DataFrame(data)
-    res['Country'] = country_code
-    return res
-
-# 3. Main Execution Loop
-all_country_data = []
-
-for code in countries:
-    try:
-        print(f"Fetching data for {code}...")
-        raw_series = client.query_day_ahead_prices(code, start=start, end=end)
-        processed_df = process_to_long_format(raw_series, code)
-        all_country_data.append(processed_df)
-    except Exception as e:
-        print(f"Error fetching {code}: {e}")
-
-# 4. Save the Final CSV
-if all_country_data:
-    final_df = pd.concat(all_country_data, ignore_index=True)
-    final_df['Price'] = final_df['Price'].round(2)
-    
-    # Reorder columns for a clean CSV
-    final_df = final_df[['Date', 'Country', 'Metric', 'Price']]
-    
-    # Save to the same folder so app.py can find it
-    final_df.to_csv('market_prices.csv', index=False)
-    print("market_prices.csv successfully updated.")
-else:
-    print("No data was collected.")
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4 # Updated version
+      - name: Set up Python
+        uses: actions/setup-python@v5 # Updated version
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run extraction
+        env:
+          ENTSOE_TOKEN: ${{ secrets.ENTSOE_TOKEN }}
+        run: python main.py
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add market_prices.csv
+          git commit -m "Update market prices" || echo "No changes to commit"
+          git push
