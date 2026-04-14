@@ -46,7 +46,7 @@ display_options = {f"{ZONE_NAMES[c]} ({c.replace('_','')})": c for c in availabl
 selected_labels = st.sidebar.multiselect(
     "Select Bidding Zones", 
     options=sorted(display_options.keys()), 
-    default=[f"Germany & Luxembourg (DELU)", f"Great Britain (GB)"]
+    default=[f"Germany & Luxembourg (DELU)", f"Great Britain (UK)"]
 )
 
 # 3. Data Fetching Function
