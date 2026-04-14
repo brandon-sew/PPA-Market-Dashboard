@@ -9,8 +9,10 @@ from datetime import datetime, timedelta
 from entsoe import EntsoePandasClient
 
 # 1. Setup & Config
-API_KEY = os.environ.get('ENTSOE_TOKEN')
-client = EntsoePandasClient(api_key=API_KEY)
+# Pulling both API keys from your environment secrets
+ENTSOE_API_KEY = os.environ.get('ENTSOE_TOKEN')
+ELEXON_API_KEY = os.environ.get('ELEXON_TOKEN')
+client = EntsoePandasClient(api_key=ENTSOE_API_KEY)
 
 ZONE_NAMES = {
     "AT": "Austria", "BE": "Belgium", "BG": "Bulgaria", "CH": "Switzerland", 
@@ -52,9 +54,9 @@ selected_labels = st.sidebar.multiselect(
     default=["Germany & Luxembourg (DELU)", "Great Britain (Elexon) (GB)"]
 )
 
-# 3. Durable Elexon Fetcher with Retries
+# 3. Durable Elexon Fetcher with Retries AND API Key
 def fetch_gb_elexon(start_date, end_date):
-    """Fetches Day-Ahead prices with connection retry logic."""
+    """Fetches Day-Ahead prices with connection retry logic and API Key auth."""
     try:
         s_str = start_date.strftime('%Y-%m-%d')
         e_str = end_date.strftime('%Y-%m-%d')
@@ -66,11 +68,16 @@ def fetch_gb_elexon(start_date, end_date):
         adapter = HTTPAdapter(max_retries=retry)
         session.mount('https://', adapter)
         
+        # Attach the API key safely to the headers
         headers = {'User-Agent': 'Mozilla/5.0'}
-        # verify=False bypasses SSL certificate handshake issues
-        response = session.get(url, headers=headers, timeout=20, verify=False)
+        if ELEXON_API_KEY:
+            headers['X-API-Key'] = ELEXON_API_KEY
+            
+        # verify=True is standard; if you still hit SSL errors, you can change to False
+        response = session.get(url, headers=headers, timeout=20, verify=True)
         
         if response.status_code != 200:
+            st.sidebar.warning(f"Elexon returned status code: {response.status_code}")
             return pd.DataFrame()
             
         json_data = response.json()
@@ -97,6 +104,7 @@ def fetch_gb_elexon(start_date, end_date):
 
             df['Price'] = df['Price'].apply(clean_price)
             return df
+            
         return pd.DataFrame()
     except Exception as e:
         st.sidebar.error(f"Connection Error: {str(e)[:60]}...")
