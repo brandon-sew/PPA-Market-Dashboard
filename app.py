@@ -3,6 +3,8 @@ import pandas as pd
 import plotly.express as px
 import os
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 from datetime import datetime, timedelta
 from entsoe import EntsoePandasClient
 
@@ -50,24 +52,29 @@ selected_labels = st.sidebar.multiselect(
     default=["Germany & Luxembourg (DELU)", "Great Britain (Elexon) (GB)"]
 )
 
-# 3. Robust Elexon Fetcher
+# 3. Durable Elexon Fetcher with Retries
 def fetch_gb_elexon(start_date, end_date):
-    """Fetches Day-Ahead prices directly from Elexon Insights API."""
+    """Fetches Day-Ahead prices with connection retry logic."""
     try:
         s_str = start_date.strftime('%Y-%m-%d')
         e_str = end_date.strftime('%Y-%m-%d')
-        
         url = f"https://api.data.elexon.co.uk/insights/v1/market/index/prices?from={s_str}&to={e_str}"
+        
+        # Setup session with retries to handle ConnectionPool errors
+        session = requests.Session()
+        retry = Retry(connect=3, backoff_factor=0.5)
+        adapter = HTTPAdapter(max_retries=retry)
+        session.mount('https://', adapter)
+        
         headers = {'User-Agent': 'Mozilla/5.0'}
-        response = requests.get(url, headers=headers, timeout=15)
+        # verify=False bypasses SSL certificate handshake issues
+        response = session.get(url, headers=headers, timeout=20, verify=False)
         
         if response.status_code != 200:
             return pd.DataFrame()
             
         json_data = response.json()
         
-        # --- IMPROVED JSON HANDLING ---
-        # If response is a dict containing a list, get the list. Otherwise, assume it's the list itself.
         if isinstance(json_data, dict) and 'data' in json_data:
             data_list = json_data['data']
         elif isinstance(json_data, list):
@@ -82,17 +89,17 @@ def fetch_gb_elexon(start_date, end_date):
             df['Time'] = pd.to_datetime(df['Time'], utc=True)
             df['Country'] = 'GB'
             
-            # Extract number if price is a dict/object, otherwise convert to float
             def clean_price(p):
-                if isinstance(p, dict): return float(p.get('value', 0))
-                try: return float(p)
+                try:
+                    if isinstance(p, dict): return float(p.get('value', 0))
+                    return float(p)
                 except: return 0.0
 
             df['Price'] = df['Price'].apply(clean_price)
             return df
         return pd.DataFrame()
     except Exception as e:
-        st.sidebar.error(f"Elexon Error: {str(e)[:50]}")
+        st.sidebar.error(f"Connection Error: {str(e)[:60]}...")
         return pd.DataFrame()
 
 # 4. Hybrid Fetcher
@@ -100,7 +107,6 @@ def fetch_gb_elexon(start_date, end_date):
 def fetch_hybrid_data(selected_codes, start_date, end_date):
     if not selected_codes: return pd.DataFrame()
     all_data = []
-    
     for code in selected_codes:
         if code == "GB":
             gb_df = fetch_gb_elexon(start_date, end_date)
@@ -117,7 +123,6 @@ def fetch_hybrid_data(selected_codes, start_date, end_date):
                 all_data.append(df_temp)
             except Exception as e:
                 st.sidebar.error(f"⚠️ {ZONE_NAMES.get(code, code)}: {str(e)[:40]}")
-            
     return pd.concat(all_data, ignore_index=True) if all_data else pd.DataFrame()
 
 # 5. UI Logic
@@ -128,12 +133,11 @@ if len(date_range) == 2:
     selected_codes = [display_options[lbl] for lbl in selected_labels]
     
     if selected_codes:
-        with st.spinner('Accessing Hybrid Market APIs...'):
+        with st.spinner('Establishing connections to Market APIs...'):
             raw_df = fetch_hybrid_data(selected_codes, start_dt, end_dt)
         
         if not raw_df.empty:
             try:
-                # Group and resample
                 plot_df = (
                     raw_df.groupby('Country')
                     .resample(res_map[resolution], on='Time')['Price']
@@ -157,4 +161,4 @@ if len(date_range) == 2:
             except Exception as e:
                 st.error(f"Display Error: {e}")
         else:
-            st.warning("No data found for the selected range.")
+            st.warning("No data found. The connection was successful, but the market result list was empty.")
