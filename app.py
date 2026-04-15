@@ -147,7 +147,7 @@ with col_map:
             if not centers_df.empty:
                 fig_map.add_scattergeo(
                     lat=centers_df['lat'], lon=centers_df['lon'], text=centers_df['Zone'],
-                    mode='text', textfont=dict(size=10, color="#333", family="Arial Black"),
+                    mode='text', textfont=dict(size=10, color="#FFFFFF", family="Arial Black"),
                     showlegend=False
                 )
 
