@@ -31,13 +31,17 @@ ZONE_NAMES = {
 
 st.set_page_config(page_title="Market Explorer", layout="wide", initial_sidebar_state="expanded")
 
-# --- CSS FOR SIDEBAR & TRANSPARENCY ---
+# --- CSS FOR SIDEBAR & FULL SCREEN MAP ---
 st.markdown("""
     <style>
     section[data-testid="stSidebar"] { width: 600px !important; }
-    .block-container { padding-top: 1rem; }
-    /* Making the main background blend with the map if needed */
-    .stApp { background-color: transparent; }
+    /* Force main content to fill width and remove padding */
+    .main .block-container { 
+        padding: 1rem 1rem 0rem 1rem !important; 
+        max-width: 100% !important; 
+    }
+    /* Transparent background for the whole app */
+    .stApp { background-color: transparent !important; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -56,6 +60,7 @@ def fetch_data(codes, start_date, end_date):
             series = client.query_day_ahead_prices(code, start=start, end=end)
             df = series.to_frame(name='Price').reset_index()
             df.columns = ['Time', 'Price']
+            df['Time'] = pd.to_datetime(df['Time']).dt.tz_convert('Europe/Brussels')
             df['Zone'] = code
             df['Currency'] = ZONE_NAMES[code][1]
             all_data.append(df)
@@ -76,23 +81,31 @@ with st.sidebar:
         if len(d_range) == 2:
             with st.spinner("Updating Analytics..."):
                 data = fetch_data(codes, d_range[0], d_range[1])
+            
             if not data.empty:
-                data['Time'] = pd.to_datetime(data['Time']).dt.tz_convert('Europe/Brussels')
+                # 1. Standardize Resolution
+                freq = '60min' if res == "60 min" else '15min'
+                # We group by Zone, set Time as index, and resample each group individually
+                plot_df = data.groupby('Zone').apply(
+                    lambda x: x.set_index('Time').resample(freq).mean().ffill()
+                ).reset_index()
                 
-                # Fixed Pivot Logic to avoid the 2-d error
-                plot_df = data.copy()
                 plot_df['Display'] = plot_df['Zone'].apply(lambda x: f"{x} ({ZONE_NAMES[x][1]}/MWh)")
                 
+                # 2. Plotting
                 fig_line = px.line(plot_df, x='Time', y='Price', color='Display', template="plotly_white")
-                fig_line.update_layout(legend=dict(orientation="h", y=-0.3), margin=dict(l=0, r=0, b=0, t=20), hovermode="x unified")
+                fig_line.update_layout(
+                    legend=dict(orientation="h", y=-0.3), 
+                    margin=dict(l=10, r=10, b=0, t=20), 
+                    hovermode="x unified"
+                )
                 st.plotly_chart(fig_line, use_container_width=True)
                 
+                # 3. Data Table
                 st.subheader("Data Table")
                 plot_df['Date'] = plot_df['Time'].dt.strftime('%d-%m-%Y')
                 plot_df['24h Time'] = plot_df['Time'].dt.strftime('%H:%M')
-                
-                # Pivot table fix: ensured unique index
-                pivot = plot_df.pivot_table(index=['Date', '24h Time'], columns='Display', values='Price', aggfunc='mean')
+                pivot = plot_df.pivot_table(index=['Date', '24h Time'], columns='Display', values='Price')
                 st.dataframe(pivot.style.format("{:.2f}"), use_container_width=True)
     else:
         st.info("Select a bidding zone on the map to see data here.")
@@ -102,7 +115,7 @@ st.subheader("Search and select bidding zones")
 display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
 st.multiselect("Select zones:", options=sorted(display_options.keys()), key="selected_zones", label_visibility="collapsed")
 
-# --- LOGIC TO LOAD AND COMBINE INDIVIDUAL GEOJSON FILES ---
+# --- LOAD GEOJSON & CALCULATE CENTERS FOR OVERLAYS ---
 def load_and_get_centers(folder_path):
     combined = {"type": "FeatureCollection", "features": []}
     centers = []
@@ -115,14 +128,14 @@ def load_and_get_centers(folder_path):
                 feature = data["features"][0] if "features" in data else data
                 combined["features"].append(feature)
                 
-                # Simple centroid calculation for labels
+                # Centroid Calculation for Overlay Text
                 geom = feature["geometry"]
                 coords = []
                 if geom["type"] == "Polygon":
                     coords = np.array(geom["coordinates"][0])
                 elif geom["type"] == "MultiPolygon":
-                    # Use the first polygon of the multipolygon for the label
-                    coords = np.array(geom["coordinates"][0][0])
+                    # Get the largest polygon for the label center
+                    coords = np.array(max(geom["coordinates"], key=lambda x: len(x[0]))[0])
                 
                 if len(coords) > 0:
                     lon, lat = np.mean(coords, axis=0)
@@ -139,7 +152,7 @@ if os.path.exists(geojson_folder):
         current_codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
         map_df = pd.DataFrame([{"Zone": k, "Selected": 1 if k in current_codes else 0} for k in ZONE_NAMES.keys()])
 
-        # Create the Base Choropleth
+        # Create Map
         fig_map = px.choropleth(
             map_df, 
             geojson=geojson_data,
@@ -150,32 +163,32 @@ if os.path.exists(geojson_folder):
             scope="europe"
         )
 
-        # Add the Text Overlay (Zone Codes)
+        # Add Overlay Labels (AT, FR, etc.)
         if not centers_df.empty:
             fig_map.add_scattergeo(
                 lat=centers_df['lat'],
                 lon=centers_df['lon'],
                 text=centers_df['Zone'],
                 mode='text',
-                textfont=dict(size=10, color="black"),
+                textfont=dict(size=12, color="#444", family="Arial Black"),
                 showlegend=False
             )
 
-        # Map Layout Adjustments (Size, Transparency, Centering)
+        # Fix Background Transparency and Size
         fig_map.update_geos(
             fitbounds="locations",
             visible=False,
-            bgcolor='rgba(0,0,0,0)',  # Transparent map background
+            bgcolor='rgba(0,0,0,0)', 
             projection_type="mercator"
         )
 
         fig_map.update_layout(
             margin={"r":0,"t":0,"l":0,"b":0},
-            height=1250, # Increased height to take up main section
-            width=10000, # Width of map to 2000
+            height=1250, # Large map height
+            width=10000,
             coloraxis_showscale=False,
-            paper_bgcolor='rgba(0,0,0,0)', # Transparent paper
-            plot_bgcolor='rgba(0,0,0,0)'   # Transparent plot
+            paper_bgcolor='rgba(0,0,0,0)', 
+            plot_bgcolor='rgba(0,0,0,0)'
         )
 
         st.plotly_chart(fig_map, use_container_width=True)
