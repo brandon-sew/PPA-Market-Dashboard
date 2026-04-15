@@ -59,7 +59,7 @@ def fetch_data(codes, start_date, end_date):
         except: continue
     return pd.concat(all_data) if all_data else pd.DataFrame()
 
-# --- SIDEBAR: MARKET ANALYTICS ---
+# --- SIDEBAR: MARKET ANALYTICS (Kept exactly the same) ---
 with st.sidebar:
     st.title("📊 Market Analytics")
     if st.session_state.selected_zones:
@@ -106,7 +106,6 @@ def load_combined_geojson(folder_path):
         try:
             with open(file, "r") as f:
                 data = json.load(f)
-                # Some files are lists of features, some are single feature objects
                 if isinstance(data, dict) and data.get("type") == "FeatureCollection":
                     combined["features"].extend(data["features"])
                 elif isinstance(data, dict) and data.get("type") == "Feature":
@@ -120,7 +119,6 @@ geojson_folder = "geojson_files"
 if os.path.exists(geojson_folder):
     geojson_data = load_combined_geojson(geojson_folder)
     
-    # Check if we actually found any features
     if geojson_data["features"]:
         current_codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
         map_df = pd.DataFrame([{"Zone": k, "Selected": 1 if k in current_codes else 0} for k in ZONE_NAMES.keys()])
@@ -129,7 +127,7 @@ if os.path.exists(geojson_folder):
             map_df, 
             geojson=geojson_data,
             locations="Zone", 
-            featureidkey="properties.name",
+            featureidkey="properties.zoneName", # UPDATED: Matches the 'zoneName' key in your files
             color="Selected",
             color_continuous_scale=["#f2f2f2", "#1f77b4"],
             scope="europe"
@@ -137,7 +135,9 @@ if os.path.exists(geojson_folder):
 
         fig_map.update_geos(
             fitbounds="locations",
-            visible=False
+            visible=True, # Set to True so the base map displays even if selections are empty
+            showcountries=True,
+            projection_type="mercator"
         )
 
         fig_map.update_layout(
