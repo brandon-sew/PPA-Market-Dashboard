@@ -9,7 +9,7 @@ from entsoe import EntsoePandasClient
 API_KEY = os.environ.get('ENTSOE_TOKEN')
 client = EntsoePandasClient(api_key=API_KEY)
 
-# Dictionary keys MUST match the 'name' property in the GeoJSON for highlighting
+# Mapping - Keys match the GeoJSON names for highlighting
 ZONE_NAMES = {
     "AT": ["Austria", "EUR"], "BE": ["Belgium", "EUR"], "BG": ["Bulgaria", "EUR"],
     "CH": ["Switzerland", "EUR"], "CZ": ["Czech Republic", "EUR"], 
@@ -27,15 +27,17 @@ ZONE_NAMES = {
     "IT_SICI": ["Sicily", "EUR"], "IT_SARD": ["Sardinia", "EUR"]
 }
 
-st.set_page_config(page_title="Market Explorer", layout="wide")
+# Set sidebar to expanded by default to act as your "Side Window"
+st.set_page_config(page_title="Market Explorer", layout="wide", initial_sidebar_state="expanded")
 
-# --- CUSTOM CSS FOR ENTSO-E LOOK ---
+# --- CUSTOM CSS FOR SIDEBAR WIDTH ---
 st.markdown("""
     <style>
-    .block-container { padding-top: 1rem; padding-bottom: 0rem; }
-    header {visibility: hidden;}
-    footer {visibility: hidden;}
-    .stMultiSelect label { font-weight: bold; font-size: 18px; }
+    /* Adjust Sidebar width to be large enough for charts */
+    section[data-testid="stSidebar"] {
+        width: 600px !important; 
+    }
+    .block-container { padding-top: 2rem; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -61,94 +63,74 @@ def fetch_data(codes, start_date, end_date):
         except: continue
     return pd.concat(all_data) if all_data else pd.DataFrame()
 
-# 4. MAIN LAYOUT (Using native columns for stability)
-col_map, col_data = st.columns([1.2, 1]) # Adjusted ratio for better map visibility
-
-# --- LEFT COLUMN: MAP & SEARCH ---
-with col_map:
-    st.markdown("### Search and select bidding zones")
-    display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
+# --- SIDEBAR: MARKET ANALYTICS SECTION ---
+with st.sidebar:
+    st.title("📊 Market Analytics")
     
-    st.multiselect(
-        "Select zones:", options=sorted(display_options.keys()), 
-        key="selected_zones", label_visibility="collapsed"
-    )
-    
-    # Map Prep
-    current_codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
-    map_df = pd.DataFrame([{"Zone": k, "Selected": 1 if k in current_codes else 0} for k in ZONE_NAMES.keys()])
-    
-    # The "ENTSO-E" Flat Map
-    fig_map = px.choropleth(
-        map_df, 
-        geojson="https://raw.githubusercontent.com/Applied-Energy-Solutions/european-bidding-zones-geojson/master/bidding_zones.geojson",
-        locations="Zone", 
-        featureidkey="properties.name",
-        color="Selected",
-        color_continuous_scale=["#f2f2f2", "#1f77b4"], # Minimalist Light Gray to Blue
-        scope="europe"
-    )
-    
-    fig_map.update_layout(
-        margin={"r":0,"t":0,"l":0,"b":0},
-        height=750, 
-        coloraxis_showscale=False,
-        geo=dict(showframe=False, showcoastlines=True, projection_type='mercator'),
-        paper_bgcolor='rgba(0,0,0,0)', 
-        plot_bgcolor='rgba(0,0,0,0)'
-    )
-    st.plotly_chart(fig_map, use_container_width=True)
-
-# --- RIGHT COLUMN: ANALYTICS PANEL ---
-with col_data:
     if st.session_state.selected_zones:
-        st.markdown("### 📊 Market Analytics")
-        
         # Panel Controls
-        c1, c2 = st.columns(2)
-        with c1:
-            res = st.radio("Resolution", ["60 min", "15 min"], horizontal=True)
-        with c2:
-            today = datetime.now().date()
-            d_range = st.date_input("Date Range", value=(today - timedelta(days=2), today))
+        res = st.radio("Resolution", ["60 min", "15 min"], horizontal=True)
+        today = datetime.now().date()
+        d_range = st.date_input("Date Range", value=(today - timedelta(days=2), today))
         
+        display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
+        codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
+
         if len(d_range) == 2:
-            codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
-            with st.spinner("Loading market data..."):
+            with st.spinner("Updating Analytics..."):
                 data = fetch_data(codes, d_range[0], d_range[1])
             
             if not data.empty:
                 data['Time'] = pd.to_datetime(data['Time']).dt.tz_convert('Europe/Brussels')
-                
-                # Resampling
                 res_val = '60min' if res=="60 min" else '15min'
                 plot_df = data.groupby('Zone').resample(res_val, on='Time')['Price'].mean().reset_index()
                 
-                # Formatting
                 plot_df['Display'] = plot_df['Zone'].apply(lambda x: f"{x} ({ZONE_NAMES[x][1]}/MWh)")
                 plot_df['Date'] = plot_df['Time'].dt.strftime('%d-%m-%Y')
                 plot_df['24h Time'] = plot_df['Time'].dt.strftime('%H:%M')
 
-                # Dynamic Axis Title
+                # Chart
                 has_non_eur = any(ZONE_NAMES[c][1] != 'EUR' for c in codes)
                 y_title = "Price" if has_non_eur else "Price (EUR/MWh)"
-
-                # Line Chart
-                fig_line = px.line(
-                    plot_df, x='Time', y='Price', color='Display',
-                    labels={'Price': y_title},
-                    template="plotly_white"
-                )
-                fig_line.update_layout(
-                    legend=dict(orientation="h", y=-0.2),
-                    margin=dict(l=0, r=0, b=0, t=20),
-                    hovermode="x unified"
-                )
+                
+                fig_line = px.line(plot_df, x='Time', y='Price', color='Display', labels={'Price': y_title}, template="plotly_white")
+                fig_line.update_layout(legend=dict(orientation="h", y=-0.3), margin=dict(l=0, r=0, b=0, t=20), hovermode="x unified")
                 st.plotly_chart(fig_line, use_container_width=True)
                 
-                # Restored Data Table
-                st.markdown("#### Data Table")
+                # Data Table
+                st.subheader("Data Table")
                 pivot = plot_df.pivot_table(index=['Date', '24h Time'], columns='Display', values='Price')
                 st.dataframe(pivot.style.format("{:.2f}"), use_container_width=True)
     else:
-        st.info("Select a bidding zone on the map/dropdown to see analytics.")
+        st.info("Select a bidding zone on the map to see data here.")
+
+# --- MAIN PAGE: MAP SECTION ---
+st.subheader("Search and select bidding zones")
+display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
+
+st.multiselect(
+    "Select zones:", options=sorted(display_options.keys()), 
+    key="selected_zones", label_visibility="collapsed"
+)
+
+# Map Logic
+current_codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
+map_df = pd.DataFrame([{"Zone": k, "Selected": 1 if k in current_codes else 0} for k in ZONE_NAMES.keys()])
+
+fig_map = px.choropleth(
+    map_df, 
+    geojson="https://raw.githubusercontent.com/Applied-Energy-Solutions/european-bidding-zones-geojson/master/bidding_zones.geojson",
+    locations="Zone", featureidkey="properties.name",
+    color="Selected",
+    color_continuous_scale=["#f2f2f2", "#1f77b4"],
+    scope="europe"
+)
+
+fig_map.update_layout(
+    margin={"r":0,"t":0,"l":0,"b":0},
+    height=800, coloraxis_showscale=False,
+    geo=dict(showframe=False, showcoastlines=True, projection_type='mercator'),
+    paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)'
+)
+
+st.plotly_chart(fig_map, use_container_width=True)
