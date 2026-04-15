@@ -36,7 +36,7 @@ st.markdown("""
     <style>
     /* Widened sidebar for longer zone names */
     section[data-testid="stSidebar"] {{ width: 450px !important; 
-    background-color: "#616469" !important; }}
+    background-color: {"#616469"} !important; }}
     .main .block-container { 
         padding-top: 2rem !important;
         max-width: 98% !important; 
