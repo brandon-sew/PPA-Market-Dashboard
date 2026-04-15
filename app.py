@@ -35,7 +35,7 @@ st.set_page_config(page_title="Market Explorer", layout="wide", initial_sidebar_
 st.markdown("""
     <style>
     /* Widened sidebar for longer zone names */
-    section[data-testid="stSidebar"] { width: 350px !important; }
+    section[data-testid="stSidebar"] { width: 500px !important; }
     .main .block-container { 
         padding-top: 2rem !important;
         max-width: 98% !important; 
