@@ -12,6 +12,7 @@ from entsoe import EntsoePandasClient
 API_KEY = os.environ.get('ENTSOE_TOKEN')
 client = EntsoePandasClient(api_key=API_KEY)
 
+# ALL ORIGINAL COUNTRIES PRESERVED
 ZONE_NAMES = {
     "AT": ["Austria", "EUR"], "BE": ["Belgium", "EUR"], "BG": ["Bulgaria", "EUR"],
     "CH": ["Switzerland", "EUR"], "CZ": ["Czech Republic", "EUR"], 
@@ -31,23 +32,28 @@ ZONE_NAMES = {
 
 st.set_page_config(page_title="Market Explorer", layout="wide", initial_sidebar_state="expanded")
 
-# --- CSS FOR EDGE-TO-EDGE LAYOUT ---
+# --- FORCE EDGE-TO-EDGE CSS ---
 st.markdown("""
     <style>
     section[data-testid="stSidebar"] { width: 600px !important; }
     
-    /* Remove all padding from the main container to let the map hit the edges */
+    /* Remove streamlit container limits to allow true edge-to-edge */
     .main .block-container { 
         padding-left: 0rem !important; 
         padding-right: 0rem !important;
         padding-top: 1rem !important;
         padding-bottom: 0rem !important;
-        max-width: 100% !important; 
+        max-width: 100vw !important; 
     }
     
-    /* Ensure the subheader also has a little margin since the container padding is gone */
-    .stHeadingContainer { padding-left: 1rem; }
-    div[data-testid="stMultiSelect"] { padding-left: 1rem; padding-right: 1rem; }
+    /* Forces the map iframe to occupy 100% of the viewport width */
+    iframe { width: 100vw !important; }
+
+    /* Add padding back to text elements so they don't touch the screen edge */
+    .stHeadingContainer, div[data-testid="stMultiSelect"] { 
+        padding-left: 2rem !important; 
+        padding-right: 2rem !important; 
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -94,6 +100,7 @@ with st.sidebar:
                     lambda x: x.set_index('Time').resample(freq).mean(numeric_only=True).ffill()
                 ).reset_index()
                 
+                # Safer get() call to handle any missing codes gracefully
                 plot_df['Display'] = plot_df['Zone'].apply(lambda x: f"{x} ({ZONE_NAMES.get(x, ['', 'EUR'])[1]}/MWh)")
                 
                 fig_line = px.line(plot_df, x='Time', y='Price', color='Display', template="plotly_white")
@@ -126,12 +133,10 @@ def load_and_get_centers(folder_path):
                     z_name = feature["properties"]["zoneName"]
                     found_zones.append(z_name)
                     geom = feature["geometry"]
-                    
                     if geom["type"] == "Polygon":
                         coords = np.array(geom["coordinates"][0])
                     elif geom["type"] == "MultiPolygon":
                         coords = np.array(max(geom["coordinates"], key=lambda x: len(x[0]))[0])
-                    
                     if len(coords) > 0:
                         min_lon, min_lat = np.min(coords, axis=0)
                         max_lon, max_lat = np.max(coords, axis=0)
@@ -172,29 +177,27 @@ if os.path.exists(geojson_folder):
             )
 
         fig_map.update_geos(
-            # Centers Europe in the box
-            center=dict(lon=12, lat=52), 
-            projection_scale=5.5, 
+            center=dict(lon=12, lat=52),
+            projection_scale=4.5, 
             visible=True,
             showcountries=True,
             countrycolor="#d1d1d1",
-            showlakes=True,
-            lakecolor="#f0f2f6",
+            showlakes=False,
             projection_type="mercator",
             bgcolor="#f0f2f6"
         )
 
         fig_map.update_layout(
-            # 0 margin ensures the grey box touches the dashboard edges
             margin={"r":0,"t":0,"l":0,"b":0},
-            height=1000, 
+            height=900, 
             coloraxis_showscale=False,
             paper_bgcolor="#f0f2f6",
-            autosize=True
+            autosize=True,
+            modebar=dict(bgcolor='rgba(0,0,0,0)', color='gray', orientation='v')
         )
 
-        st.plotly_chart(fig_map, use_container_width=True)
+        st.plotly_chart(fig_map, use_container_width=True, config={'displaylogo': False})
     else:
-        st.warning("No shapes found in the geojson_files folder.")
+        st.warning("No shapes found in folder.")
 else:
     st.warning(f"Folder '{geojson_folder}' not found.")
