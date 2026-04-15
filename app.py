@@ -37,7 +37,7 @@ st.markdown("""
     /* Sidebar color and Width */
     section[data-testid="stSidebar"] {
     width: 450px !important; 
-    background-color: #007927 !important; }}
+    }
     .main .block-container { 
         padding-top: 2rem !important;
         max-width: 98% !important; 
