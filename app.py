@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import os
+import json
+import glob
 from datetime import datetime, timedelta
 from entsoe import EntsoePandasClient
 
@@ -39,7 +41,7 @@ st.markdown("""
 if 'selected_zones' not in st.session_state:
     st.session_state.selected_zones = ["Germany & Luxembourg (DE_LU)"]
 
-# --- DATA FETCHING (Unchanged as requested) ---
+# --- DATA FETCHING ---
 @st.cache_data(ttl=3600)
 def fetch_data(codes, start_date, end_date):
     if not codes: return pd.DataFrame()
@@ -57,7 +59,7 @@ def fetch_data(codes, start_date, end_date):
         except: continue
     return pd.concat(all_data) if all_data else pd.DataFrame()
 
-# --- SIDEBAR (Unchanged as requested) ---
+# --- SIDEBAR: MARKET ANALYTICS ---
 with st.sidebar:
     st.title("📊 Market Analytics")
     if st.session_state.selected_zones:
@@ -94,35 +96,57 @@ st.subheader("Search and select bidding zones")
 display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
 st.multiselect("Select zones:", options=sorted(display_options.keys()), key="selected_zones", label_visibility="collapsed")
 
-# MAP DATA
-current_codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
-map_df = pd.DataFrame([{"Zone": k, "Selected": 1 if k in current_codes else 0} for k in ZONE_NAMES.keys()])
+# --- LOGIC TO LOAD AND COMBINE INDIVIDUAL GEOJSON/TXT FILES ---
+def load_combined_geojson(folder_path):
+    combined = {"type": "FeatureCollection", "features": []}
+    # Looks for both .geojson and .txt files in your folder
+    files = glob.glob(os.path.join(folder_path, "*.geojson")) + glob.glob(os.path.join(folder_path, "*.txt"))
+    
+    for file in files:
+        try:
+            with open(file, "r") as f:
+                data = json.load(f)
+                if "features" in data:
+                    combined["features"].extend(data["features"])
+                else:
+                    # If the file contains a single feature object
+                    combined["features"].append(data)
+        except Exception as e:
+            st.error(f"Error loading {file}: {e}")
+    return combined
 
-# FIXED MAP LOGIC
-# Use a high-reliability GeoJSON source or fallback to built-in countries if external fails
-geojson_path = "https://raw.githubusercontent.com/Applied-Energy-Solutions/european-bidding-zones-geojson/master/bidding_zones.geojson"
+geojson_folder = "geojson_files"
 
-fig_map = px.choropleth(
-    map_df, 
-    geojson=geojson_path,
-    locations="Zone", 
-    featureidkey="properties.name",
-    color="Selected",
-    color_continuous_scale=["#f2f2f2", "#1f77b4"],
-    scope="europe"
-)
+if os.path.exists(geojson_folder):
+    geojson_data = load_combined_geojson(geojson_folder)
+    
+    # MAP DATA
+    current_codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
+    map_df = pd.DataFrame([{"Zone": k, "Selected": 1 if k in current_codes else 0} for k in ZONE_NAMES.keys()])
 
-fig_map.update_geos(
-    fitbounds="locations", # This forces the map to show the area where data exists
-    visible=False
-)
+    fig_map = px.choropleth(
+        map_df, 
+        geojson=geojson_data,
+        locations="Zone", 
+        featureidkey="properties.name",
+        color="Selected",
+        color_continuous_scale=["#f2f2f2", "#1f77b4"],
+        scope="europe"
+    )
 
-fig_map.update_layout(
-    margin={"r":0,"t":0,"l":0,"b":0},
-    height=800, 
-    coloraxis_showscale=False,
-    paper_bgcolor='rgba(0,0,0,0)', 
-    plot_bgcolor='rgba(0,0,0,0)'
-)
+    fig_map.update_geos(
+        fitbounds="locations",
+        visible=False
+    )
 
-st.plotly_chart(fig_map, use_container_width=True)
+    fig_map.update_layout(
+        margin={"r":0,"t":0,"l":0,"b":0},
+        height=800, 
+        coloraxis_showscale=False,
+        paper_bgcolor='rgba(0,0,0,0)', 
+        plot_bgcolor='rgba(0,0,0,0)'
+    )
+
+    st.plotly_chart(fig_map, use_container_width=True)
+else:
+    st.warning(f"Folder '{geojson_folder}' not found. Place your geojson files there to view the map.")
