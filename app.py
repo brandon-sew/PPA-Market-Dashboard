@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import os
+import json
+import requests
 from datetime import datetime, timedelta
 from entsoe import EntsoePandasClient
 
@@ -9,146 +11,127 @@ from entsoe import EntsoePandasClient
 API_KEY = os.environ.get('ENTSOE_TOKEN')
 client = EntsoePandasClient(api_key=API_KEY)
 
-# Comprehensive Mapping
+# URL for a GeoJSON containing European Bidding Zones (highly recommended for SE, NO, IT borders)
+GEOJSON_URL = "https://raw.githubusercontent.com/Applied-Energy-Solutions/european-bidding-zones-geojson/master/bidding_zones.geojson"
+
 ZONE_NAMES = {
-    "AT": ["Austria", "EUR", "AUT"], "BE": ["Belgium", "EUR", "BEL"], "BG": ["Bulgaria", "EUR", "BGR"],
-    "CH": ["Switzerland", "EUR", "CHE"], "CZ": ["Czech Republic", "EUR", "CZE"], 
-    "DE_LU": ["Germany & Luxembourg", "EUR", "DEU"], "FR": ["France", "EUR", "FRA"], 
-    "GB": ["Great Britain", "GBP", "GBR"], "IE_SEM": ["Ireland", "EUR", "IRL"],
-    "NL": ["Netherlands", "EUR", "NLD"], "PL": ["Poland", "PLN", "POL"], 
-    "DK_1": ["Denmark (DK1)", "EUR", "DNK"], "DK_2": ["Denmark (DK2)", "EUR", "DNK"],
-    "EE": ["Estonia", "EUR", "EST"], "FI": ["Finland", "EUR", "FIN"], "LT": ["Lithuania", "EUR", "LTU"],
-    "LV": ["Latvia", "EUR", "LVA"], "NO_1": ["Norway (NO1)", "EUR", "NOR"], "NO_2": ["Norway (NO2)", "EUR", "NOR"],
-    "NO_3": ["Norway (NO3)", "EUR", "NOR"], "NO_4": ["Norway (NO4)", "EUR", "NOR"], "NO_5": ["Norway (NO5)", "EUR", "NOR"],
-    "SE_1": ["Sweden (SE1)", "EUR", "SWE"], "SE_2": ["Sweden (SE2)", "EUR", "SWE"], "SE_3": ["Sweden (SE3)", "EUR", "SWE"],
-    "SE_4": ["Sweden (SE4)", "EUR", "SWE"], "BG": ["Bulgaria", "EUR", "BGR"], "ES": ["Spain", "EUR", "ESP"], 
-    "GR": ["Greece", "EUR", "GRC"], "HR": ["Croatia", "EUR", "HRV"], "HU": ["Hungary", "EUR", "HUN"],
-    "PT": ["Portugal", "EUR", "PRT"], "RO": ["Romania", "EUR", "ROU"], "RS": ["Serbia", "EUR", "SRB"], 
-    "SI": ["Slovenia", "EUR", "SVN"], "SK": ["Slovakia", "EUR", "SVK"], "IT_NORD": ["Italy (North)", "EUR", "ITA"],
-    "IT_CNOR": ["Italy (CNorth)", "EUR", "ITA"], "IT_CSUD": ["Italy (CSouth)", "EUR", "ITA"],
-    "IT_SUD": ["Italy (South)", "EUR", "ITA"], "IT_SICI": ["Italy (Sicily)", "EUR", "ITA"],
-    "IT_SARD": ["Italy (Sardinia)", "EUR", "ITA"], "IT_CALA": ["Italy (Calabria)", "EUR", "ITA"]
+    "AT": ["Austria", "EUR"], "BE": ["Belgium", "EUR"], "BG": ["Bulgaria", "EUR"],
+    "CH": ["Switzerland", "EUR"], "CZ": ["Czech Republic", "EUR"], 
+    "DE_LU": ["Germany & Luxembourg", "EUR"], "FR": ["France", "EUR"], 
+    "GB": ["Great Britain", "GBP"], "IE_SEM": ["Ireland", "EUR"],
+    "NL": ["Netherlands", "EUR"], "PL": ["Poland", "PLN"], 
+    "DK_1": ["Denmark 1", "EUR"], "DK_2": ["Denmark 2", "EUR"],
+    "EE": ["Estonia", "EUR"], "FI": ["Finland", "EUR"], "LT": ["Lithuania", "EUR"],
+    "LV": ["Latvia", "EUR"], "NO_1": ["Norway 1", "EUR"], "NO_2": ["Norway 2", "EUR"],
+    "NO_3": ["Norway 3", "EUR"], "NO_4": ["Norway 4", "EUR"], "NO_5": ["Norway 5", "EUR"],
+    "SE_1": ["Sweden 1", "EUR"], "SE_2": ["Sweden 2", "EUR"], "SE_3": ["Sweden 3", "EUR"],
+    "SE_4": ["Sweden 4", "EUR"], "ES": ["Spain", "EUR"], "PT": ["Portugal", "EUR"],
+    "GR": ["Greece", "EUR"], "HR": ["Croatia", "EUR"], "HU": ["Hungary", "EUR"],
+    "RO": ["Romania", "EUR"], "RS": ["Serbia", "EUR"], "SI": ["Slovenia", "EUR"],
+    "SK": ["Slovakia", "EUR"], "IT_NORD": ["Italy North", "EUR"],
+    "IT_CNOR": ["Italy C-North", "EUR"], "IT_CSUD": ["Italy C-South", "EUR"],
+    "IT_SUD": ["Italy South", "EUR"], "IT_SICI": ["Sicily", "EUR"],
+    "IT_SARD": ["Sardinia", "EUR"], "IT_CALA": ["Calabria", "EUR"]
 }
 
-st.set_page_config(page_title="Day-Ahead Market Explorer", layout="wide", page_icon="⚡")
+st.set_page_config(page_title="Energy Market Map", layout="wide", initial_sidebar_state="collapsed")
 
-# --- SESSION STATE FOR SELECTION ---
+# 2. Session State
 if 'selected_zones' not in st.session_state:
-    st.session_state.selected_zones = ["Germany & Luxembourg (DE_LU)", "Great Britain (GB)"]
+    st.session_state.selected_zones = ["Germany & Luxembourg (DE_LU)"]
 
-# 2. Sidebar (Technical Settings)
-st.sidebar.header("Data Settings")
-today = datetime.now().date()
-date_range = st.sidebar.date_input("Select Date Range", value=(today - timedelta(days=2), today), max_value=today + timedelta(days=1))
+# 3. Custom CSS for Transparency & Full Width
+st.markdown("""
+    <style>
+    .main { background-color: #0e1117; }
+    [data-testid="stSidebar"] { min-width: 500px !important; max-width: 600px !important; }
+    </style>
+    """, unsafe_allow_html=True)
 
-resolution = st.sidebar.selectbox("Time Resolution", ["60 min", "15 min"])
-res_map = {"60 min": "60min", "15 min": "15min"}
-
-available_codes = sorted(list(ZONE_NAMES.keys()))
-display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in available_codes}
-
-# 3. Data Fetching Function
+# 4. Fetching Logic
 @st.cache_data(ttl=3600)
 def fetch_live_data(selected_codes, start_date, end_date):
     if not selected_codes: return pd.DataFrame()
     start = pd.Timestamp(start_date, tz='Europe/Brussels')
     end = pd.Timestamp(end_date, tz='Europe/Brussels') + pd.Timedelta(days=1)
-    
     all_data = []
     for code in selected_codes:
         try:
             series = client.query_day_ahead_prices(code, start=start, end=end)
-            df_temp = series.to_frame(name='Price').reset_index()
-            df_temp.columns = ['Time', 'Price']
-            df_temp['Bidding Zone'] = code
-            df_temp['Currency'] = ZONE_NAMES[code][1]
-            df_temp['Time'] = pd.to_datetime(df_temp['Time'], utc=True)
-            all_data.append(df_temp)
-        except Exception:
-            st.sidebar.error(f"⚠️ {code}: Data unavailable.")
+            df_t = series.to_frame(name='Price').reset_index()
+            df_t.columns = ['Time', 'Price']
+            df_t['Zone'] = code
+            df_t['Currency'] = ZONE_NAMES[code][1]
+            df_t['Time'] = pd.to_datetime(df_t['Time'], utc=True)
+            all_data.append(df_t)
+        except: pass
     return pd.concat(all_data, ignore_index=True) if all_data else pd.DataFrame()
 
-# --- MAIN UI ---
-st.title("⚡ European Day-Ahead Market Explorer")
+# 5. Main Map View
+st.title("⚡ European Bidding Zone Explorer")
 
-# MAP SECTION
-def create_map():
-    current_codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
-    map_data = [{"Country": info[0], "ISO": info[2], "Selected": 1 if code in current_codes else 0} for code, info in ZONE_NAMES.items()]
-    df_map = pd.DataFrame(map_data)
-    
-    fig_map = px.choropleth(
-        df_map, locations="ISO", color="Selected", hover_name="Country",
-        color_continuous_scale=["#f0f0f0", "#1f77b4"], scope="europe"
-    )
-    fig_map.update_layout(coloraxis_showscale=False, margin={"r":0,"t":0,"l":0,"b":0}, height=350)
-    fig_map.update_geos(visible=False, showcountries=True, countrycolor="White")
-    return fig_map
+# Interactive Search (Acting as map controller)
+display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
+selected_labels = st.multiselect(
+    "Search and select bidding zones to open the data panel:",
+    options=sorted(display_options.keys()),
+    key="selected_zones"
+)
 
-st.plotly_chart(create_map(), use_container_width=True)
+# Render Map
+map_data = []
+current_codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
+for code, info in ZONE_NAMES.items():
+    map_data.append({"Zone": code, "Name": info[0], "Selected": 1 if code in current_codes else 0})
 
-# SEARCH BAR SECTION
-col_search, col_btn = st.columns([4, 1])
-with col_search:
-    # This bar is linked to session state; it updates whenever a country is added/removed
-    selected_labels = st.multiselect(
-        "Search Bidding Zones:", 
-        options=sorted(display_options.keys()), 
-        key="selected_zones",
-        label_visibility="collapsed"
-    )
+fig_map = px.choropleth(
+    pd.DataFrame(map_data),
+    locations="Zone",
+    color="Selected",
+    hover_name="Name",
+    locationmode='ISO-3', # Note: For true sub-borders, you'd link the GeoJSON here
+    color_continuous_scale=["#262730", "#1f77b4"],
+    scope="europe"
+)
 
-with col_btn:
-    if st.button("Clear All Selection", use_container_width=True):
-        st.session_state.selected_zones = []
-        st.rerun()
+fig_map.update_layout(
+    coloraxis_showscale=False,
+    margin={"r":0,"t":0,"l":0,"b":0},
+    height=700,
+    paper_bgcolor='rgba(0,0,0,0)', # Transparent background
+    plot_bgcolor='rgba(0,0,0,0)',
+    geo=dict(bgcolor='rgba(0,0,0,0)', lakecolor='rgba(0,0,0,0)')
+)
+st.plotly_chart(fig_map, use_container_width=True)
 
-# 4. CHART AND TABLE LOGIC (Restored and Connected)
-if len(date_range) == 2 and st.session_state.selected_zones:
-    start_dt, end_dt = date_range
-    selected_codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
-    
-    with st.spinner('Updating charts and tables...'):
-        raw_df = fetch_live_data(selected_codes, start_dt, end_dt)
-    
-    if not raw_df.empty:
-        raw_df['Time'] = raw_df['Time'].dt.tz_convert('Europe/Brussels')
+# 6. The "Side Window" (Standard Sidebar used as a Result Panel)
+if st.session_state.selected_zones:
+    with st.sidebar:
+        st.header("📊 Market Data Panel")
+        st.write("Results for: " + ", ".join([lbl.split(" (")[0] for lbl in st.session_state.selected_zones]))
         
-        # Resample based on resolution
-        plot_df = (
-            raw_df.groupby('Bidding Zone')
-            .resample(res_map[resolution], on='Time')['Price']
-            .mean()
-            .reset_index()
-        )
+        # Settings inside the panel
+        res = st.selectbox("Resolution", ["60 min", "15 min"])
+        date_range = st.date_input("Range", value=(datetime.now().date() - timedelta(days=2), datetime.now().date()))
         
-        plot_df['Currency'] = plot_df['Bidding Zone'].map(lambda x: ZONE_NAMES[x][1])
-        plot_df['Display Name'] = plot_df.apply(lambda x: f"{x['Bidding Zone']} ({x['Currency']}/MWh)", axis=1)
-        plot_df['Date'] = plot_df['Time'].dt.strftime('%d-%m-%Y')
-        plot_df['24h Time'] = plot_df['Time'].dt.strftime('%H:%M')
-
-        # Dynamic Y-axis label logic
-        has_non_eur = any(ZONE_NAMES[c][1] != 'EUR' for c in selected_codes)
-        y_label = "Price" if has_non_eur else "Price (EUR/MWh)"
-
-        # THE CHART
-        fig = px.line(
-            plot_df, x='Time', y='Price', color='Display Name',
-            labels={'Time': 'Time (CET/CEST)', 'Price': y_label},
-            template="plotly_white",
-            markers=True if resolution == "60 min" else False,
-            hover_data={'Display Name': False, 'Bidding Zone': True, 'Date': True, '24h Time': True, 'Price': ':.2f', 'Time': False}
-        )
-        fig.update_yaxes(autorange=True, fixedrange=False) # Fix for negative prices
-        fig.update_layout(hovermode="x unified", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
-        st.plotly_chart(fig, use_container_width=True)
-
-        # THE DATA TABLE
-        st.subheader("Data Table")
-        pivot_df = plot_df.pivot_table(index=['Date', '24h Time'], columns='Display Name', values='Price')
-        st.dataframe(pivot_df.style.format("{:.2f}"), use_container_width=True)
-
-    else:
-        st.warning("No data found for selected zones.")
+        if len(date_range) == 2:
+            codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
+            raw_df = fetch_live_data(codes, date_range[0], date_range[1])
+            
+            if not raw_df.empty:
+                raw_df['Time'] = raw_df['Time'].dt.tz_convert('Europe/Brussels')
+                plot_df = raw_df.groupby('Zone').resample('60min' if res=="60 min" else '15min', on='Time')['Price'].mean().reset_index()
+                plot_df['Display'] = plot_df['Zone'].apply(lambda x: f"{x} ({ZONE_NAMES[x][1]}/MWh)")
+                
+                # Big Chart
+                fig_line = px.line(plot_df, x='Time', y='Price', color='Display', template="plotly_dark")
+                fig_line.update_layout(legend=dict(orientation="h", y=-0.2))
+                st.plotly_chart(fig_line, use_container_width=True)
+                
+                # Table
+                st.subheader("Raw Data")
+                st.dataframe(plot_df.pivot(index='Time', columns='Display', values='Price').tail(50))
+            else:
+                st.info("Fetching data...")
 else:
-    st.info("Search for and select at least one Bidding Zone above to see the chart and data table.")
+    st.sidebar.write("Select a bidding zone on the main page to view price analytics.")
