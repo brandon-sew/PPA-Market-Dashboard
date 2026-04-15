@@ -35,12 +35,10 @@ st.set_page_config(page_title="Market Explorer", layout="wide", initial_sidebar_
 st.markdown("""
     <style>
     section[data-testid="stSidebar"] { width: 600px !important; }
-    /* Force main content to fill width and remove padding */
     .main .block-container { 
         padding: 1rem 1rem 0rem 1rem !important; 
         max-width: 100% !important; 
     }
-    /* Transparent background for the whole app */
     .stApp { background-color: transparent !important; }
     </style>
     """, unsafe_allow_html=True)
@@ -60,6 +58,8 @@ def fetch_data(codes, start_date, end_date):
             series = client.query_day_ahead_prices(code, start=start, end=end)
             df = series.to_frame(name='Price').reset_index()
             df.columns = ['Time', 'Price']
+            # Ensure Price is float
+            df['Price'] = pd.to_numeric(df['Price'], errors='coerce')
             df['Time'] = pd.to_datetime(df['Time']).dt.tz_convert('Europe/Brussels')
             df['Zone'] = code
             df['Currency'] = ZONE_NAMES[code][1]
@@ -83,13 +83,15 @@ with st.sidebar:
                 data = fetch_data(codes, d_range[0], d_range[1])
             
             if not data.empty:
-                # 1. Standardize Resolution
                 freq = '60min' if res == "60 min" else '15min'
-                # We group by Zone, set Time as index, and resample each group individually
+                
+                # FIXED: Added numeric_only=True to prevent the TypeError with strings
                 plot_df = data.groupby('Zone').apply(
-                    lambda x: x.set_index('Time').resample(freq).mean().ffill()
+                    lambda x: x.set_index('Time').resample(freq).mean(numeric_only=True).ffill()
                 ).reset_index()
                 
+                # Re-add Currency/Display info after resampling
+                plot_df['Currency'] = plot_df['Zone'].map(lambda x: ZONE_NAMES[x][1])
                 plot_df['Display'] = plot_df['Zone'].apply(lambda x: f"{x} ({ZONE_NAMES[x][1]}/MWh)")
                 
                 # 2. Plotting
@@ -115,31 +117,32 @@ st.subheader("Search and select bidding zones")
 display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
 st.multiselect("Select zones:", options=sorted(display_options.keys()), key="selected_zones", label_visibility="collapsed")
 
-# --- LOAD GEOJSON & CALCULATE CENTERS FOR OVERLAYS ---
 def load_and_get_centers(folder_path):
     combined = {"type": "FeatureCollection", "features": []}
     centers = []
-    files = glob.glob(os.path.join(folder_path, "*.geojson"))
+    # Search for both geojson and txt extensions
+    files = glob.glob(os.path.join(folder_path, "*.geojson")) + glob.glob(os.path.join(folder_path, "*.txt"))
     
     for file in files:
         try:
             with open(file, "r") as f:
                 data = json.load(f)
-                feature = data["features"][0] if "features" in data else data
-                combined["features"].append(feature)
-                
-                # Centroid Calculation for Overlay Text
-                geom = feature["geometry"]
-                coords = []
-                if geom["type"] == "Polygon":
-                    coords = np.array(geom["coordinates"][0])
-                elif geom["type"] == "MultiPolygon":
-                    # Get the largest polygon for the label center
-                    coords = np.array(max(geom["coordinates"], key=lambda x: len(x[0]))[0])
-                
-                if len(coords) > 0:
-                    lon, lat = np.mean(coords, axis=0)
-                    centers.append({"Zone": feature["properties"]["zoneName"], "lat": lat, "lon": lon})
+                features = data["features"] if "features" in data else [data]
+                for feature in features:
+                    combined["features"].append(feature)
+                    
+                    # Centroid Calculation
+                    geom = feature["geometry"]
+                    coords = []
+                    if geom["type"] == "Polygon":
+                        coords = np.array(geom["coordinates"][0])
+                    elif geom["type"] == "MultiPolygon":
+                        # Pick the polygon with the most points (usually the main landmass)
+                        coords = np.array(max(geom["coordinates"], key=lambda x: len(x[0]))[0])
+                    
+                    if len(coords) > 0:
+                        lon, lat = np.nanmean(coords, axis=0)
+                        centers.append({"Zone": feature["properties"]["zoneName"], "lat": lat, "lon": lon})
         except: continue
     return combined, pd.DataFrame(centers)
 
@@ -152,7 +155,6 @@ if os.path.exists(geojson_folder):
         current_codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
         map_df = pd.DataFrame([{"Zone": k, "Selected": 1 if k in current_codes else 0} for k in ZONE_NAMES.keys()])
 
-        # Create Map
         fig_map = px.choropleth(
             map_df, 
             geojson=geojson_data,
@@ -163,7 +165,6 @@ if os.path.exists(geojson_folder):
             scope="europe"
         )
 
-        # Add Overlay Labels (AT, FR, etc.)
         if not centers_df.empty:
             fig_map.add_scattergeo(
                 lat=centers_df['lat'],
@@ -174,7 +175,6 @@ if os.path.exists(geojson_folder):
                 showlegend=False
             )
 
-        # Fix Background Transparency and Size
         fig_map.update_geos(
             fitbounds="locations",
             visible=False,
@@ -184,7 +184,7 @@ if os.path.exists(geojson_folder):
 
         fig_map.update_layout(
             margin={"r":0,"t":0,"l":0,"b":0},
-            height=1250, # Large map height
+            height=1250, 
             width=10000,
             coloraxis_showscale=False,
             paper_bgcolor='rgba(0,0,0,0)', 
