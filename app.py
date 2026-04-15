@@ -171,8 +171,8 @@ if os.path.exists(geojson_folder):
 
         fig_map.update_layout(
             margin={"r":0,"t":0,"l":0,"b":0},
-            height=1500, # Increased height to take up main section
-            width=4000, # Width of map to 2000
+            height=1250, # Increased height to take up main section
+            width=10000, # Width of map to 2000
             coloraxis_showscale=False,
             paper_bgcolor='rgba(0,0,0,0)', # Transparent paper
             plot_bgcolor='rgba(0,0,0,0)'   # Transparent plot
