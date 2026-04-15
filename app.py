@@ -91,20 +91,27 @@ if len(d_range) == 2 and codes:
         plot_df = data.groupby('Zone').apply(
             lambda x: x.set_index('Time').resample(freq).mean(numeric_only=True).ffill()
         ).reset_index()
+        plot_df['Currency'] = plot_df['Zone'].apply(lambda x: ZONE_NAMES.get(x, ['', 'EUR'])[1])
         plot_df['Display'] = plot_df['Zone'].apply(lambda x: f"{x} ({ZONE_NAMES.get(x, ['', 'EUR'])[1]}/MWh)")
 
 # --- MIDDLE SECTION (CHART & MAP) ---
-# Adjusted column ratio [2, 1] to make chart larger and map smaller
 col_chart, col_map = st.columns([2, 1])
 
 with col_chart:
     st.subheader("Day-Ahead Prices")
     if not plot_df.empty:
-        fig_line = px.line(plot_df, x='Time', y='Price', color='Display', template="plotly_white")
+        fig_line = px.line(plot_df, x='Time', y='Price', color='Display', template="plotly_white", 
+                           custom_data=['Currency'])
         fig_line.update_layout(
             legend=dict(orientation="h", y=-0.2), 
             margin=dict(l=0, r=0, b=0, t=20),
-            hovermode="x unified"
+            hovermode="closest"
+        )
+        # Custom Hover Template
+        fig_line.update_traces(
+            hovertemplate="<b>Date:</b> %{x|%b %d %Y}<br>" +
+                          "<b>Time:</b> %{x|%H:%M}<br>" +
+                          "<b>Price:</b> %{y:.2f} %{customdata[0]}/MWh<extra></extra>"
         )
         st.plotly_chart(fig_line, use_container_width=True)
     else:
@@ -142,19 +149,42 @@ with col_map:
         geojson_data, centers_df, all_found_codes = load_and_get_centers(geojson_folder)
         if geojson_data["features"]:
             current_codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
-            map_df = pd.DataFrame([{"Zone": k, "Selected": 1 if k in current_codes else 0} for k in all_found_codes])
+            
+            # Calculate Average Prices for selected date range per zone
+            avg_prices = {}
+            if not plot_df.empty:
+                avg_prices = plot_df.groupby('Zone')['Price'].mean().to_dict()
+
+            map_rows = []
+            for k in all_found_codes:
+                price = avg_prices.get(k, None)
+                currency = ZONE_NAMES.get(k, ["", "EUR"])[1]
+                map_rows.append({
+                    "Zone": k, 
+                    "Selected": 1 if k in current_codes else 0,
+                    "AvgPrice": f"{price:.2f}" if price is not None else "N/A",
+                    "Currency": currency
+                })
+            map_df = pd.DataFrame(map_rows)
 
             fig_map = px.choropleth(
                 map_df, geojson=geojson_data, locations="Zone", 
                 featureidkey="properties.zoneName", color="Selected",
-                color_continuous_scale=["#262730", "#007927"] 
+                color_continuous_scale=["#262730", "#007927"],
+                custom_data=["AvgPrice", "Currency"]
+            )
+
+            fig_map.update_traces(
+                hovertemplate="<b>Zone:</b> %{location}<br>" +
+                              "<b>Avg Price:</b> %{customdata[0]} %{customdata[1]}/MWh<extra></extra>"
             )
 
             if not centers_df.empty:
                 fig_map.add_scattergeo(
                     lat=centers_df['lat'], lon=centers_df['lon'], text=centers_df['Zone'],
                     mode='text', textfont=dict(size=10, color="#FFFFFF", family="Arial Black"),
-                    showlegend=False
+                    showlegend=False,
+                    hoverinfo="skip" # Removes hover from the zone labels
                 )
 
             fig_map.update_geos(
