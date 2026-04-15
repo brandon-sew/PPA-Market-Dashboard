@@ -12,8 +12,8 @@ from entsoe import EntsoePandasClient
 API_KEY = os.environ.get('ENTSOE_TOKEN')
 client = EntsoePandasClient(api_key=API_KEY)
 
-# Brand Colours
-B_LIGHT_BLUE = "#A07EE"
+# --- EXACT BRAND COLORS ---
+B_LIGHT_BLUE = "#A0E7EE"
 B_LIME = "#CDFC57"
 B_ORANGE = "#FFB04C"
 B_NAVY = "#275B7F"
@@ -86,11 +86,9 @@ st.markdown(f"""
 if 'selected_zones' not in st.session_state:
     st.session_state.selected_zones = ["Germany & Luxembourg (DE_LU)"]
 
-# --- SIDEBAR: CONTROLS ---
+# --- SIDEBAR ---
 with st.sidebar:
-    st.title("Configuration")
-    
-    # Bidding Zone Search in Sidebar
+    st.title("⚙️ Controls")
     display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
     st.multiselect("Select bidding zones:", options=sorted(display_options.keys()), key="selected_zones")
     
@@ -119,9 +117,8 @@ def fetch_data(codes, start_date, end_date):
     return pd.concat(all_data) if all_data else pd.DataFrame()
 
 # --- MAIN AREA ---
-st.title("⚡ European Day-Ahead Electricity Market Prices")
+st.title("⚡ Energy Market Explorer")
 
-# Pre-fetch data
 codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
 plot_df = pd.DataFrame()
 if len(d_range) == 2 and codes:
@@ -133,8 +130,7 @@ if len(d_range) == 2 and codes:
         ).reset_index()
         plot_df['Display'] = plot_df['Zone'].apply(lambda x: f"{x} ({ZONE_NAMES.get(x, ['', 'EUR'])[1]}/MWh)")
 
-# --- MIDDLE SECTION (CHART & MAP) ---
-# Adjusted column ratio [2, 1] to make chart larger and map smaller
+# --- VISUALS ---
 col_chart, col_map = st.columns([2, 1])
 
 with col_chart:
@@ -216,7 +212,7 @@ with col_map:
 
 # --- DATA TABLE ---
 st.divider()
-st.subheader("Data Table")
+st.subheader("Price Data Explorer")
 if not plot_df.empty:
     plot_df['Date'] = plot_df['Time'].dt.strftime('%d-%m-%Y')
     plot_df['24h Time'] = plot_df['Time'].dt.strftime('%H:%M')
