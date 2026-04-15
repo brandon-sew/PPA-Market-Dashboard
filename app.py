@@ -12,7 +12,7 @@ client = EntsoePandasClient(api_key=API_KEY)
 # Refined Mapping
 ZONE_NAMES = {
     "AT": "Austria", "BE": "Belgium", "BG": "Bulgaria", "CH": "Switzerland", 
-    "CZ": "Czech Republic", "DE": "Germany", "EE": "Estonia", 
+    "CZ": "Czech Republic", "DE_LU": "Germany & Luxembourg", "EE": "Estonia", 
     "ES": "Spain", "FI": "Finland", "FR": "France", 
     "GB": "Great Britain", 
     "GR": "Greece", "HR": "Croatia", "HU": "Hungary", 
@@ -20,9 +20,9 @@ ZONE_NAMES = {
     "LT": "Lithuania", "LV": "Latvia", "NL": "Netherlands", "PL": "Poland", 
     "PT": "Portugal", "RO": "Romania", "RS": "Serbia", "SI": "Slovenia", "SK": "Slovakia",
     "DK_1": "Denmark (West)", "DK_2": "Denmark (East)",
-    "NO_1": "Norway (Oslo)", "NO_2": "Norway (Kr.Sand)", "NO_3": "Norway (Tr.Heim)", 
-    "NO_4": "Norway (Tromsø)", "NO_5": "Norway (Bergen)",
-    "SE_1": "Sweden (Luleå)", "SE_2": "Sweden (Sundsvall)", "SE_3": "Sweden (Stockholm)", "SE_4": "Sweden (Malmö)",
+    "NO_1": "Norway (East)", "NO_2": "Norway (South)", "NO_3": "Norway (Central)", 
+    "NO_4": "Norway (North)", "NO_5": "Norway (West)",
+    "SE_1": "Sweden (North)", "SE_2": "Sweden (Central North)", "SE_3": "Sweden (Central South)", "SE_4": "Sweden (South)",
     "IT_NORD": "Italy (North)"
 }
 
@@ -46,7 +46,7 @@ display_options = {f"{ZONE_NAMES[c]} ({c})": c for c in available_codes}
 selected_labels = st.sidebar.multiselect(
     "Select Bidding Zones", 
     options=sorted(display_options.keys()), 
-    default=["Germany (DE)", "Great Britain (GB)", "France (FR)"]
+    default=["Germany & Luxembourg (DE_LU)"]
 )
 
 # 3. Data Fetching Function
