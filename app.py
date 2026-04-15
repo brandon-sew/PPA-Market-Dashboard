@@ -47,7 +47,7 @@ if 'selected_zones' not in st.session_state:
 
 # --- SIDEBAR: CONTROLS ---
 with st.sidebar:
-    st.title("⚙️ Controls")
+    st.title("⚙️ Configuration Menu")
     
     # Moved Bidding Zone Search to Sidebar
     display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
@@ -78,7 +78,7 @@ def fetch_data(codes, start_date, end_date):
     return pd.concat(all_data) if all_data else pd.DataFrame()
 
 # --- MAIN AREA ---
-st.title("⚡ Energy Market Explorer")
+st.title("⚡ European Electricity Day-Ahead Prices")
 
 # Pre-fetch data
 codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
