@@ -34,7 +34,8 @@ st.set_page_config(page_title="Market Explorer", layout="wide", initial_sidebar_
 # --- CSS FOR CUSTOM LAYOUT ---
 st.markdown("""
     <style>
-    section[data-testid="stSidebar"] { width: 300px !important; }
+    /* Widened sidebar for longer zone names */
+    section[data-testid="stSidebar"] { width: 350px !important; }
     .main .block-container { 
         padding-top: 2rem !important;
         max-width: 98% !important; 
@@ -47,16 +48,16 @@ if 'selected_zones' not in st.session_state:
 
 # --- SIDEBAR: CONTROLS ---
 with st.sidebar:
-    st.title("⚙️ Configuration")
+    st.title("⚙️ Controls")
     
-    # Moved Bidding Zone Search to Sidebar
+    # Bidding Zone Search in Sidebar
     display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
     st.multiselect("Select bidding zones:", options=sorted(display_options.keys()), key="selected_zones")
     
     st.divider()
-    res = st.radio("Time Interval", ["60 min", "15 min"], horizontal=True)
+    res = st.radio("Resolution", ["60 min", "15 min"], horizontal=True)
     today = datetime.now().date()
-    d_range = st.date_input("Select Date Range", value=(today - timedelta(days=2), today))
+    d_range = st.date_input("Date Range", value=(today - timedelta(days=2), today))
 
 # --- DATA FETCHING ---
 @st.cache_data(ttl=3600)
@@ -78,7 +79,7 @@ def fetch_data(codes, start_date, end_date):
     return pd.concat(all_data) if all_data else pd.DataFrame()
 
 # --- MAIN AREA ---
-st.title("⚡ European Electricity Day-Ahead Prices")
+st.title("⚡ Energy Market Explorer")
 
 # Pre-fetch data
 codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
@@ -93,7 +94,8 @@ if len(d_range) == 2 and codes:
         plot_df['Display'] = plot_df['Zone'].apply(lambda x: f"{x} ({ZONE_NAMES.get(x, ['', 'EUR'])[1]}/MWh)")
 
 # --- MIDDLE SECTION (CHART & MAP) ---
-col_chart, col_map = st.columns([1, 1])
+# Adjusted column ratio [2, 1] to make chart larger and map smaller
+col_chart, col_map = st.columns([2, 1])
 
 with col_chart:
     st.subheader("Day-Ahead Prices")
@@ -145,7 +147,7 @@ with col_map:
             fig_map = px.choropleth(
                 map_df, geojson=geojson_data, locations="Zone", 
                 featureidkey="properties.zoneName", color="Selected",
-                color_continuous_scale=["#262730", "#1f77b4"] # Sidebar grey to Active Blue
+                color_continuous_scale=["#262730", "#1f77b4"] 
             )
 
             if not centers_df.empty:
@@ -175,7 +177,7 @@ with col_map:
 
 # --- BOTTOM SECTION (DATA TABLE) ---
 st.divider()
-st.subheader("Data Table")
+st.subheader("Price Data Explorer")
 if not plot_df.empty:
     plot_df['Date'] = plot_df['Time'].dt.strftime('%d-%m-%Y')
     plot_df['24h Time'] = plot_df['Time'].dt.strftime('%H:%M')
