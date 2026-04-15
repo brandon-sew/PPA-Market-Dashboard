@@ -47,16 +47,16 @@ if 'selected_zones' not in st.session_state:
 
 # --- SIDEBAR: CONTROLS ---
 with st.sidebar:
-    st.title("⚙️ Configuration Menu")
+    st.title("⚙️ Configuration")
     
     # Moved Bidding Zone Search to Sidebar
     display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
     st.multiselect("Select bidding zones:", options=sorted(display_options.keys()), key="selected_zones")
     
     st.divider()
-    res = st.radio("Resolution", ["60 min", "15 min"], horizontal=True)
+    res = st.radio("Time Interval", ["60 min", "15 min"], horizontal=True)
     today = datetime.now().date()
-    d_range = st.date_input("Date Range", value=(today - timedelta(days=2), today))
+    d_range = st.date_input("Select Date Range", value=(today - timedelta(days=2), today))
 
 # --- DATA FETCHING ---
 @st.cache_data(ttl=3600)
@@ -175,7 +175,7 @@ with col_map:
 
 # --- BOTTOM SECTION (DATA TABLE) ---
 st.divider()
-st.subheader("Price Data Explorer")
+st.subheader("Data Table")
 if not plot_df.empty:
     plot_df['Date'] = plot_df['Time'].dt.strftime('%d-%m-%Y')
     plot_df['24h Time'] = plot_df['Time'].dt.strftime('%H:%M')
