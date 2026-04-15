@@ -165,8 +165,7 @@ with col_map:
                 )
 
             fig_map.update_geos(
-                #center=dict(lon=12, lat=52), projection_scale=7, 
-                fitsbounds="locations",
+                center=dict(lon=12, lat=52), projection_scale=7, 
                 visible=True, 
                 showcountries=True, 
                 countrycolor="#262730", 
