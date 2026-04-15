@@ -11,7 +11,7 @@ client = EntsoePandasClient(api_key=ENTSOE_API_KEY)
 
 # Refined country list (LU removed as it is covered by DE)
 countries = [
-    'AT', 'BE', 'BG', 'CH', 'CZ', 'DE', 'DK_1', 'DK_2', 'EE', 'ES', 'FI', 
+    'AT', 'BE', 'BG', 'CH', 'CZ', 'DE_LU', 'DK_1', 'DK_2', 'EE', 'ES', 'FI', 
     'FR', 'GB', 'GR', 'HR', 'HU', 'IE_SEM', 'IT_NORD', 'IT_CNOR', 'IT_CSUD', 
     'IT_SUD', 'IT_SICI', 'IT_SARD', 'LT', 'LV', 'NL', 'NO_1', 'NO_2', 
     'NO_3', 'NO_4', 'NO_5', 'PL', 'PT', 'RO', 'RS', 'SE_1', 'SE_2', 'SE_3', 
