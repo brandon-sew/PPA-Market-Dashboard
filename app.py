@@ -163,7 +163,7 @@ with col_map:
                 center=dict(lon=12, lat=52), projection_scale=7, 
                 visible=True, 
                 showcountries=True, 
-                countrycolor="#616469", 
+                countrycolor="#f0f2f6", 
                 lakecolor="white",
                 landcolor="#e0e0e0", 
                 projection_type="mercator", 
