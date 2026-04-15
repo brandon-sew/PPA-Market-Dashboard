@@ -45,6 +45,13 @@ st.markdown("""
 if 'selected_zones' not in st.session_state:
     st.session_state.selected_zones = ["Germany & Luxembourg (DE_LU)"]
 
+# --- SIDEBAR: CONTROLS ---
+with st.sidebar:
+    st.title("⚙️ Controls")
+    res = st.radio("Resolution", ["60 min", "15 min"], horizontal=True)
+    today = datetime.now().date()
+    d_range = st.date_input("Date Range", value=(today - timedelta(days=2), today))
+
 # --- DATA FETCHING ---
 @st.cache_data(ttl=3600)
 def fetch_data(codes, start_date, end_date):
@@ -64,19 +71,12 @@ def fetch_data(codes, start_date, end_date):
         except: continue
     return pd.concat(all_data) if all_data else pd.DataFrame()
 
-# --- SIDEBAR: CONTROLS ---
-with st.sidebar:
-    st.title("⚙️ Controls")
-    res = st.radio("Resolution", ["60 min", "15 min"], horizontal=True)
-    today = datetime.now().date()
-    d_range = st.date_input("Date Range", value=(today - timedelta(days=2), today))
-
-# --- MAIN AREA: TOP SECTION (SEARCH) ---
+# --- MAIN AREA ---
 st.title("⚡ Energy Market Explorer")
 display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
 st.multiselect("Select bidding zones:", options=sorted(display_options.keys()), key="selected_zones", label_visibility="collapsed")
 
-# Pre-fetch data for the analytics
+# Pre-fetch data
 codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
 plot_df = pd.DataFrame()
 if len(d_range) == 2 and codes:
@@ -88,7 +88,7 @@ if len(d_range) == 2 and codes:
         ).reset_index()
         plot_df['Display'] = plot_df['Zone'].apply(lambda x: f"{x} ({ZONE_NAMES.get(x, ['', 'EUR'])[1]}/MWh)")
 
-# --- MAIN AREA: MIDDLE SECTION (CHART & MAP) ---
+# --- MIDDLE SECTION (CHART & MAP) ---
 col_chart, col_map = st.columns([1, 1])
 
 with col_chart:
@@ -141,7 +141,7 @@ with col_map:
             fig_map = px.choropleth(
                 map_df, geojson=geojson_data, locations="Zone", 
                 featureidkey="properties.zoneName", color="Selected",
-                color_continuous_scale=["#ffffff", "#1f77b4"]
+                color_continuous_scale=["#f0f2f6", "#1f77b4"] # Sidebar grey to Active Blue
             )
 
             if not centers_df.empty:
@@ -153,8 +153,14 @@ with col_map:
 
             fig_map.update_geos(
                 center=dict(lon=12, lat=52), projection_scale=4.2, 
-                visible=True, showcountries=True, countrycolor="#d1d1d1",
-                projection_type="mercator", bgcolor="rgba(0,0,0,0)"
+                visible=True, 
+                showcountries=True, 
+                countrycolor="#ffffff", # White border for base countries
+                lakecolor="white",
+                # Base countries (UK, etc.) get this color:
+                landcolor="#e0e0e0", 
+                projection_type="mercator", 
+                bgcolor="rgba(0,0,0,0)"
             )
 
             fig_map.update_layout(
@@ -164,7 +170,7 @@ with col_map:
             )
             st.plotly_chart(fig_map, use_container_width=True, config={'displaylogo': False})
 
-# --- MAIN AREA: BOTTOM SECTION (DATA TABLE) ---
+# --- BOTTOM SECTION (DATA TABLE) ---
 st.divider()
 st.subheader("Price Data Explorer")
 if not plot_df.empty:
