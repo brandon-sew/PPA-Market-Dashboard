@@ -26,9 +26,7 @@ ZONE_NAMES = {
     "SE_4": ["Sweden 4", "EUR"], "ES": ["Spain", "EUR"], "PT": ["Portugal", "EUR"],
     "IT_NORD": ["Italy North", "EUR"], "IT_CNOR": ["Italy C-North", "EUR"],
     "IT_CSUD": ["Italy C-South", "EUR"], "IT_SUD": ["Italy South", "EUR"],
-    "IT_SICI": ["Sicily", "EUR"], "IT_SARD": ["Sardinia", "EUR"], "IT_CALA": ["Calabria", "EUR"], "SK": ["Slovakia", "EUR"], 
-    "HU": ["Hungary", "EUR"], "SI": ["Slovenia", "EUR"], "HR": ["Croatia", "EUR"], "RS": ["Serbia", "EUR"],
-    "RO": ["Romania", "EUR"], "GR": ["Greece", "EUR"],
+    "IT_SICI": ["Sicily", "EUR"], "IT_SARD": ["Sardinia", "EUR"]
 }
 
 st.set_page_config(page_title="Market Explorer", layout="wide", initial_sidebar_state="expanded")
@@ -38,7 +36,7 @@ st.markdown("""
     <style>
     section[data-testid="stSidebar"] { width: 600px !important; }
     .main .block-container { 
-        padding: 1rem 1rem 0rem 1rem !important; 
+        padding: 0rem !important; 
         max-width: 100% !important; 
     }
     </style>
@@ -87,7 +85,7 @@ with st.sidebar:
                     lambda x: x.set_index('Time').resample(freq).mean(numeric_only=True).ffill()
                 ).reset_index()
                 
-                plot_df['Display'] = plot_df['Zone'].apply(lambda x: f"{x} ({ZONE_NAMES[x][1]}/MWh)")
+                plot_df['Display'] = plot_df['Zone'].apply(lambda x: f"{x} ({ZONE_NAMES.get(x, ['', 'EUR'])[1]}/MWh)")
                 
                 fig_line = px.line(plot_df, x='Time', y='Price', color='Display', template="plotly_white")
                 fig_line.update_layout(legend=dict(orientation="h", y=-0.3), margin=dict(l=10, r=10, b=0, t=20), hovermode="x unified")
@@ -98,8 +96,6 @@ with st.sidebar:
                 plot_df['24h Time'] = plot_df['Time'].dt.strftime('%H:%M')
                 pivot = plot_df.pivot_table(index=['Date', '24h Time'], columns='Display', values='Price')
                 st.dataframe(pivot.style.format("{:.2f}"), use_container_width=True)
-    else:
-        st.info("Select a bidding zone on the map to see data here.")
 
 # --- MAIN PAGE: SEARCH & MAP ---
 st.subheader("Search and select bidding zones")
@@ -109,6 +105,7 @@ st.multiselect("Select zones:", options=sorted(display_options.keys()), key="sel
 def load_and_get_centers(folder_path):
     combined = {"type": "FeatureCollection", "features": []}
     centers = []
+    found_zones = []
     files = glob.glob(os.path.join(folder_path, "*.geojson")) + glob.glob(os.path.join(folder_path, "*.txt"))
     for file in files:
         try:
@@ -117,68 +114,73 @@ def load_and_get_centers(folder_path):
                 features = data["features"] if "features" in data else [data]
                 for feature in features:
                     combined["features"].append(feature)
+                    z_name = feature["properties"]["zoneName"]
+                    found_zones.append(z_name)
                     geom = feature["geometry"]
+                    
+                    # Improved Centering: Find the bounding box center
                     if geom["type"] == "Polygon":
                         coords = np.array(geom["coordinates"][0])
                     elif geom["type"] == "MultiPolygon":
                         coords = np.array(max(geom["coordinates"], key=lambda x: len(x[0]))[0])
+                    
                     if len(coords) > 0:
-                        lon, lat = np.nanmean(coords, axis=0)
-                        centers.append({"Zone": feature["properties"]["zoneName"], "lat": lat, "lon": lon})
+                        min_lon, min_lat = np.min(coords, axis=0)
+                        max_lon, max_lat = np.max(coords, axis=0)
+                        centers.append({
+                            "Zone": z_name, 
+                            "lat": (min_lat + max_lat) / 2, 
+                            "lon": (min_lon + max_lon) / 2
+                        })
         except: continue
-    return combined, pd.DataFrame(centers)
+    return combined, pd.DataFrame(centers), found_zones
 
 geojson_folder = "geojson_files"
 
 if os.path.exists(geojson_folder):
-    geojson_data, centers_df = load_and_get_centers(geojson_folder)
+    geojson_data, centers_df, all_found_codes = load_and_get_centers(geojson_folder)
     
     if geojson_data["features"]:
         current_codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
-        map_df = pd.DataFrame([{"Zone": k, "Selected": 1 if k in current_codes else 0} for k in ZONE_NAMES.keys()])
+        map_df = pd.DataFrame([{"Zone": k, "Selected": 1 if k in current_codes else 0} for k in all_found_codes])
 
-        # Create Map
         fig_map = px.choropleth(
             map_df, 
             geojson=geojson_data,
             locations="Zone", 
             featureidkey="properties.zoneName",
             color="Selected",
-            color_continuous_scale=["#ffffff", "#1f77b4"] # White for unselected, Blue for selected
+            color_continuous_scale=["#ffffff", "#1f77b4"]
         )
 
-        # Add Overlay Labels
         if not centers_df.empty:
             fig_map.add_scattergeo(
                 lat=centers_df['lat'],
                 lon=centers_df['lon'],
                 text=centers_df['Zone'],
                 mode='text',
-                textfont=dict(size=11, color="#333", family="Arial Black"),
+                textfont=dict(size=10, color="#333", family="Arial Black"),
                 showlegend=False
             )
 
-        # --- MAP BACKGROUND & BORDER CONTROLS ---
         fig_map.update_geos(
-            fitbounds="geojson",
-            visible=True,           # Keep the base map visible
-            showcountries=True,      # Ensure country outlines are drawn
-            countrycolor="#cccccc",  # Light grey outlines for countries
-            showcoastlines=True,
-            coastlinecolor="#cccccc",
-            bgcolor="#f0f2f6",       # LIGHT GREY BACKGROUND
-            projection_type="mercator"
+            # Default view of Europe
+            center=dict(lon=10, lat=52),
+            projection_scale=3.5, 
+            visible=True,
+            showcountries=True,
+            countrycolor="#d1d1d1",
+            showlakes=True,
+            lakecolor="#f0f2f6",
+            projection_type="mercator",
+            bgcolor="#f0f2f6"
         )
 
         fig_map.update_layout(
             margin={"r":0,"t":0,"l":0,"b":0},
             height=1000, 
             coloraxis_showscale=False,
-            paper_bgcolor="#f0f2f6",  # Match paper to map background
+            paper_bgcolor="#f0f2f6"
         )
 
         st.plotly_chart(fig_map, use_container_width=True)
-    else:
-        st.warning("No shapes found in the geojson_files folder.")
-else:
-    st.warning(f"Folder '{geojson_folder}' not found.")
