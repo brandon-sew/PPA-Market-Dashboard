@@ -48,6 +48,12 @@ if 'selected_zones' not in st.session_state:
 # --- SIDEBAR: CONTROLS ---
 with st.sidebar:
     st.title("⚙️ Controls")
+    
+    # Moved Bidding Zone Search to Sidebar
+    display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
+    st.multiselect("Select bidding zones:", options=sorted(display_options.keys()), key="selected_zones")
+    
+    st.divider()
     res = st.radio("Resolution", ["60 min", "15 min"], horizontal=True)
     today = datetime.now().date()
     d_range = st.date_input("Date Range", value=(today - timedelta(days=2), today))
@@ -73,8 +79,6 @@ def fetch_data(codes, start_date, end_date):
 
 # --- MAIN AREA ---
 st.title("⚡ Energy Market Explorer")
-display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
-st.multiselect("Select bidding zones:", options=sorted(display_options.keys()), key="selected_zones", label_visibility="collapsed")
 
 # Pre-fetch data
 codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
@@ -155,9 +159,8 @@ with col_map:
                 center=dict(lon=12, lat=52), projection_scale=7, 
                 visible=True, 
                 showcountries=True, 
-                countrycolor="#262730", # White border for base countries
+                countrycolor="#262730", 
                 lakecolor="white",
-                # Base countries (UK, etc.) get this color:
                 landcolor="#e0e0e0", 
                 projection_type="mercator", 
                 bgcolor="rgba(0,0,0,0)"
