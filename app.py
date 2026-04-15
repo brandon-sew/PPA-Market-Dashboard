@@ -141,7 +141,7 @@ with col_map:
             fig_map = px.choropleth(
                 map_df, geojson=geojson_data, locations="Zone", 
                 featureidkey="properties.zoneName", color="Selected",
-                color_continuous_scale=["#f0f2f6", "#1f77b4"] # Sidebar grey to Active Blue
+                color_continuous_scale=["#262730", "#1f77b4"] # Sidebar grey to Active Blue
             )
 
             if not centers_df.empty:
