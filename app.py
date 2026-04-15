@@ -149,13 +149,13 @@ with col_map:
             fig_map = px.choropleth(
                 map_df, geojson=geojson_data, locations="Zone", 
                 featureidkey="properties.zoneName", color="Selected",
-                color_continuous_scale=["#f0f2f6", "#007927"] 
+                color_continuous_scale=["#f0f2f6", "#1f77b4"] 
             )
 
             if not centers_df.empty:
                 fig_map.add_scattergeo(
                     lat=centers_df['lat'], lon=centers_df['lon'], text=centers_df['Zone'],
-                    mode='text', textfont=dict(size=10, color="#FFFFFF", family="Arial Black"),
+                    mode='text', textfont=dict(size=10, color="#333", family="Arial Black"),
                     showlegend=False
                 )
 
@@ -163,7 +163,7 @@ with col_map:
                 center=dict(lon=12, lat=52), projection_scale=7, 
                 visible=True, 
                 showcountries=True, 
-                countrycolor="#f0f2f6", 
+                countrycolor="#ffffff", 
                 lakecolor="white",
                 landcolor="#e0e0e0", 
                 projection_type="mercator", 
