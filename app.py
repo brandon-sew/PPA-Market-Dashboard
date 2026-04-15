@@ -174,7 +174,7 @@ if os.path.exists(geojson_folder):
         fig_map.update_geos(
             # Centers Europe in the box
             center=dict(lon=12, lat=52), 
-            projection_scale=3, 
+            projection_scale=5.5, 
             visible=True,
             showcountries=True,
             countrycolor="#d1d1d1",
