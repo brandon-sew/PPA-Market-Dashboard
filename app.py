@@ -12,7 +12,6 @@ from entsoe import EntsoePandasClient
 API_KEY = os.environ.get('ENTSOE_TOKEN')
 client = EntsoePandasClient(api_key=API_KEY)
 
-# ALL ORIGINAL COUNTRIES PRESERVED
 ZONE_NAMES = {
     "AT": ["Austria", "EUR"], "BE": ["Belgium", "EUR"], "BG": ["Bulgaria", "EUR"],
     "CH": ["Switzerland", "EUR"], "CZ": ["Czech Republic", "EUR"], 
@@ -32,27 +31,13 @@ ZONE_NAMES = {
 
 st.set_page_config(page_title="Market Explorer", layout="wide", initial_sidebar_state="expanded")
 
-# --- FORCE EDGE-TO-EDGE CSS ---
+# --- CSS FOR CUSTOM LAYOUT ---
 st.markdown("""
     <style>
-    section[data-testid="stSidebar"] { width: 600px !important; }
-    
-    /* Remove streamlit container limits to allow true edge-to-edge */
+    section[data-testid="stSidebar"] { width: 300px !important; }
     .main .block-container { 
-        padding-left: 0rem !important; 
-        padding-right: 0rem !important;
-        padding-top: 1rem !important;
-        padding-bottom: 0rem !important;
-        max-width: 100vw !important; 
-    }
-    
-    /* Forces the map iframe to occupy 100% of the viewport width */
-    iframe { width: 100vw !important; }
-
-    /* Add padding back to text elements so they don't touch the screen edge */
-    .stHeadingContainer, div[data-testid="stMultiSelect"] { 
-        padding-left: 2rem !important; 
-        padding-right: 2rem !important; 
+        padding-top: 2rem !important;
+        max-width: 98% !important; 
     }
     </style>
     """, unsafe_allow_html=True)
@@ -79,125 +64,111 @@ def fetch_data(codes, start_date, end_date):
         except: continue
     return pd.concat(all_data) if all_data else pd.DataFrame()
 
-# --- SIDEBAR: MARKET ANALYTICS ---
+# --- SIDEBAR: CONTROLS ---
 with st.sidebar:
-    st.title("📊 Market Analytics")
-    if st.session_state.selected_zones:
-        res = st.radio("Resolution", ["60 min", "15 min"], horizontal=True)
-        today = datetime.now().date()
-        d_range = st.date_input("Date Range", value=(today - timedelta(days=2), today))
-        
-        display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
-        codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
+    st.title("⚙️ Controls")
+    res = st.radio("Resolution", ["60 min", "15 min"], horizontal=True)
+    today = datetime.now().date()
+    d_range = st.date_input("Date Range", value=(today - timedelta(days=2), today))
 
-        if len(d_range) == 2:
-            with st.spinner("Updating Analytics..."):
-                data = fetch_data(codes, d_range[0], d_range[1])
-            
-            if not data.empty:
-                freq = '60min' if res == "60 min" else '15min'
-                plot_df = data.groupby('Zone').apply(
-                    lambda x: x.set_index('Time').resample(freq).mean(numeric_only=True).ffill()
-                ).reset_index()
-                
-                # Safer get() call to handle any missing codes gracefully
-                plot_df['Display'] = plot_df['Zone'].apply(lambda x: f"{x} ({ZONE_NAMES.get(x, ['', 'EUR'])[1]}/MWh)")
-                
-                fig_line = px.line(plot_df, x='Time', y='Price', color='Display', template="plotly_white")
-                fig_line.update_layout(legend=dict(orientation="h", y=-0.3), margin=dict(l=10, r=10, b=0, t=20), hovermode="x unified")
-                st.plotly_chart(fig_line, use_container_width=True)
-                
-                st.subheader("Data Table")
-                plot_df['Date'] = plot_df['Time'].dt.strftime('%d-%m-%Y')
-                plot_df['24h Time'] = plot_df['Time'].dt.strftime('%H:%M')
-                pivot = plot_df.pivot_table(index=['Date', '24h Time'], columns='Display', values='Price')
-                st.dataframe(pivot.style.format("{:.2f}"), use_container_width=True)
-
-# --- MAIN PAGE: SEARCH & MAP ---
-st.subheader("Search and select bidding zones")
+# --- MAIN AREA: TOP SECTION (SEARCH) ---
+st.title("⚡ Energy Market Explorer")
 display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
-st.multiselect("Select zones:", options=sorted(display_options.keys()), key="selected_zones", label_visibility="collapsed")
+st.multiselect("Select bidding zones:", options=sorted(display_options.keys()), key="selected_zones", label_visibility="collapsed")
 
-def load_and_get_centers(folder_path):
-    combined = {"type": "FeatureCollection", "features": []}
-    centers = []
-    found_zones = []
-    files = glob.glob(os.path.join(folder_path, "*.geojson")) + glob.glob(os.path.join(folder_path, "*.txt"))
-    for file in files:
-        try:
-            with open(file, "r") as f:
-                data = json.load(f)
-                features = data["features"] if "features" in data else [data]
-                for feature in features:
-                    combined["features"].append(feature)
-                    z_name = feature["properties"]["zoneName"]
-                    found_zones.append(z_name)
-                    geom = feature["geometry"]
-                    if geom["type"] == "Polygon":
-                        coords = np.array(geom["coordinates"][0])
-                    elif geom["type"] == "MultiPolygon":
-                        coords = np.array(max(geom["coordinates"], key=lambda x: len(x[0]))[0])
-                    if len(coords) > 0:
-                        min_lon, min_lat = np.min(coords, axis=0)
-                        max_lon, max_lat = np.max(coords, axis=0)
-                        centers.append({
-                            "Zone": z_name, 
-                            "lat": (min_lat + max_lat) / 2, 
-                            "lon": (min_lon + max_lon) / 2
-                        })
-        except: continue
-    return combined, pd.DataFrame(centers), found_zones
+# Pre-fetch data for the analytics
+codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
+plot_df = pd.DataFrame()
+if len(d_range) == 2 and codes:
+    data = fetch_data(codes, d_range[0], d_range[1])
+    if not data.empty:
+        freq = '60min' if res == "60 min" else '15min'
+        plot_df = data.groupby('Zone').apply(
+            lambda x: x.set_index('Time').resample(freq).mean(numeric_only=True).ffill()
+        ).reset_index()
+        plot_df['Display'] = plot_df['Zone'].apply(lambda x: f"{x} ({ZONE_NAMES.get(x, ['', 'EUR'])[1]}/MWh)")
 
-geojson_folder = "geojson_files"
+# --- MAIN AREA: MIDDLE SECTION (CHART & MAP) ---
+col_chart, col_map = st.columns([1, 1])
 
-if os.path.exists(geojson_folder):
-    geojson_data, centers_df, all_found_codes = load_and_get_centers(geojson_folder)
-    
-    if geojson_data["features"]:
-        current_codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
-        map_df = pd.DataFrame([{"Zone": k, "Selected": 1 if k in current_codes else 0} for k in all_found_codes])
-
-        fig_map = px.choropleth(
-            map_df, 
-            geojson=geojson_data,
-            locations="Zone", 
-            featureidkey="properties.zoneName",
-            color="Selected",
-            color_continuous_scale=["#ffffff", "#1f77b4"]
+with col_chart:
+    st.subheader("Day-Ahead Prices")
+    if not plot_df.empty:
+        fig_line = px.line(plot_df, x='Time', y='Price', color='Display', template="plotly_white")
+        fig_line.update_layout(
+            legend=dict(orientation="h", y=-0.2), 
+            margin=dict(l=0, r=0, b=0, t=20),
+            hovermode="x unified"
         )
+        st.plotly_chart(fig_line, use_container_width=True)
+    else:
+        st.info("Select zones to view price trends.")
 
-        if not centers_df.empty:
-            fig_map.add_scattergeo(
-                lat=centers_df['lat'],
-                lon=centers_df['lon'],
-                text=centers_df['Zone'],
-                mode='text',
-                textfont=dict(size=10, color="#333", family="Arial Black"),
-                showlegend=False
+with col_map:
+    def load_and_get_centers(folder_path):
+        combined = {"type": "FeatureCollection", "features": []}
+        centers = []
+        found_zones = []
+        files = glob.glob(os.path.join(folder_path, "*.geojson")) + glob.glob(os.path.join(folder_path, "*.txt"))
+        for file in files:
+            try:
+                with open(file, "r") as f:
+                    data = json.load(f)
+                    features = data["features"] if "features" in data else [data]
+                    for feature in features:
+                        combined["features"].append(feature)
+                        z_name = feature["properties"]["zoneName"]
+                        found_zones.append(z_name)
+                        geom = feature["geometry"]
+                        if geom["type"] == "Polygon":
+                            coords = np.array(geom["coordinates"][0])
+                        elif geom["type"] == "MultiPolygon":
+                            coords = np.array(max(geom["coordinates"], key=lambda x: len(x[0]))[0])
+                        if len(coords) > 0:
+                            min_lon, min_lat = np.min(coords, axis=0)
+                            max_lon, max_lat = np.max(coords, axis=0)
+                            centers.append({"Zone": z_name, "lat": (min_lat + max_lat) / 2, "lon": (min_lon + max_lon) / 2})
+            except: continue
+        return combined, pd.DataFrame(centers), found_zones
+
+    geojson_folder = "geojson_files"
+    if os.path.exists(geojson_folder):
+        geojson_data, centers_df, all_found_codes = load_and_get_centers(geojson_folder)
+        if geojson_data["features"]:
+            current_codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
+            map_df = pd.DataFrame([{"Zone": k, "Selected": 1 if k in current_codes else 0} for k in all_found_codes])
+
+            fig_map = px.choropleth(
+                map_df, geojson=geojson_data, locations="Zone", 
+                featureidkey="properties.zoneName", color="Selected",
+                color_continuous_scale=["#ffffff", "#1f77b4"]
             )
 
-        fig_map.update_geos(
-            center=dict(lon=12, lat=52),
-            projection_scale=4.5, 
-            visible=True,
-            showcountries=True,
-            countrycolor="#d1d1d1",
-            showlakes=False,
-            projection_type="mercator",
-            bgcolor="#f0f2f6"
-        )
+            if not centers_df.empty:
+                fig_map.add_scattergeo(
+                    lat=centers_df['lat'], lon=centers_df['lon'], text=centers_df['Zone'],
+                    mode='text', textfont=dict(size=10, color="#333", family="Arial Black"),
+                    showlegend=False
+                )
 
-        fig_map.update_layout(
-            margin={"r":0,"t":0,"l":0,"b":0},
-            height=900, 
-            coloraxis_showscale=False,
-            paper_bgcolor="#f0f2f6",
-            autosize=True,
-            modebar=dict(bgcolor='rgba(0,0,0,0)', color='gray', orientation='v')
-        )
+            fig_map.update_geos(
+                center=dict(lon=12, lat=52), projection_scale=4.2, 
+                visible=True, showcountries=True, countrycolor="#d1d1d1",
+                projection_type="mercator", bgcolor="rgba(0,0,0,0)"
+            )
 
-        st.plotly_chart(fig_map, use_container_width=True, config={'displaylogo': False})
-    else:
-        st.warning("No shapes found in folder.")
-else:
-    st.warning(f"Folder '{geojson_folder}' not found.")
+            fig_map.update_layout(
+                margin={"r":0,"t":0,"l":0,"b":0}, height=500, 
+                coloraxis_showscale=False, paper_bgcolor="rgba(0,0,0,0)",
+                autosize=True, modebar=dict(bgcolor='rgba(0,0,0,0)', color='gray', orientation='v')
+            )
+            st.plotly_chart(fig_map, use_container_width=True, config={'displaylogo': False})
+
+# --- MAIN AREA: BOTTOM SECTION (DATA TABLE) ---
+st.divider()
+st.subheader("Price Data Explorer")
+if not plot_df.empty:
+    plot_df['Date'] = plot_df['Time'].dt.strftime('%d-%m-%Y')
+    plot_df['24h Time'] = plot_df['Time'].dt.strftime('%H:%M')
+    pivot = plot_df.pivot_table(index=['Date', '24h Time'], columns='Display', values='Price')
+    st.dataframe(pivot.style.format("{:.2f}"), use_container_width=True, height=400)
