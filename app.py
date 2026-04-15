@@ -81,31 +81,18 @@ def fetch_data(codes, start_date, end_date):
 # --- MAIN AREA ---
 st.title("⚡ Energy Market Explorer")
 
-# Fetch data for ALL zones to populate the map, then filter for chart
-all_codes = list(ZONE_NAMES.keys())
-selected_codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
-
+# Pre-fetch data
+codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
 plot_df = pd.DataFrame()
-full_map_data_df = pd.DataFrame()
-
-if len(d_range) == 2:
-    # Fetch all data for the map averages
-    all_data = fetch_data(all_codes, d_range[0], d_range[1])
-    
-    if not all_data.empty:
+if len(d_range) == 2 and codes:
+    data = fetch_data(codes, d_range[0], d_range[1])
+    if not data.empty:
         freq = '60min' if res == "60 min" else '15min'
-        
-        # Process full data for the map
-        full_map_data_df = all_data.groupby('Zone').apply(
+        plot_df = data.groupby('Zone').apply(
             lambda x: x.set_index('Time').resample(freq).mean(numeric_only=True).ffill()
         ).reset_index()
-        
-        # Filter down for the line chart and table based on selection
-        plot_df = full_map_data_df[full_map_data_df['Zone'].isin(selected_codes)].copy()
-        
-        if not plot_df.empty:
-            plot_df['Currency'] = plot_df['Zone'].apply(lambda x: ZONE_NAMES.get(x, ['', 'EUR'])[1])
-            plot_df['Display'] = plot_df['Zone'].apply(lambda x: f"{x} ({ZONE_NAMES.get(x, ['', 'EUR'])[1]}/MWh)")
+        plot_df['Currency'] = plot_df['Zone'].apply(lambda x: ZONE_NAMES.get(x, ['', 'EUR'])[1])
+        plot_df['Display'] = plot_df['Zone'].apply(lambda x: f"{x} ({ZONE_NAMES.get(x, ['', 'EUR'])[1]}/MWh)")
 
 # --- MIDDLE SECTION (CHART & MAP) ---
 col_chart, col_map = st.columns([2, 1])
@@ -115,19 +102,11 @@ with col_chart:
     if not plot_df.empty:
         fig_line = px.line(plot_df, x='Time', y='Price', color='Display', template="plotly_white", 
                            custom_data=['Currency'])
-        
-        # Increased Font Size and Label Styling
         fig_line.update_layout(
             legend=dict(orientation="h", y=-0.2), 
             margin=dict(l=0, r=0, b=0, t=20),
-            hovermode="closest",
-            hoverlabel=dict(
-                font_size=18,        # Larger text
-                font_family="Inter",
-                bgcolor="white"
-            )
+            hovermode="closest"
         )
-        
         # Custom Hover Template
         fig_line.update_traces(
             hovertemplate="<b>Date:</b> %{x|%b %d %Y}<br>" +
@@ -169,10 +148,12 @@ with col_map:
     if os.path.exists(geojson_folder):
         geojson_data, centers_df, all_found_codes = load_and_get_centers(geojson_folder)
         if geojson_data["features"]:
-            # Averages calculated from full_map_data_df (all countries)
+            current_codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
+            
+            # Calculate Average Prices for selected date range per zone
             avg_prices = {}
-            if not full_map_data_df.empty:
-                avg_prices = full_map_data_df.groupby('Zone')['Price'].mean().to_dict()
+            if not plot_df.empty:
+                avg_prices = plot_df.groupby('Zone')['Price'].mean().to_dict()
 
             map_rows = []
             for k in all_found_codes:
@@ -180,7 +161,7 @@ with col_map:
                 currency = ZONE_NAMES.get(k, ["", "EUR"])[1]
                 map_rows.append({
                     "Zone": k, 
-                    "Selected": 1 if k in selected_codes else 0,
+                    "Selected": 1 if k in current_codes else 0,
                     "AvgPrice": f"{price:.2f}" if price is not None else "N/A",
                     "Currency": currency
                 })
@@ -193,11 +174,6 @@ with col_map:
                 custom_data=["AvgPrice", "Currency"]
             )
 
-            # Larger text for map hover as well
-            fig_map.update_layout(
-                hoverlabel=dict(font_size=16, font_family="Inter")
-            )
-
             fig_map.update_traces(
                 hovertemplate="<b>Zone:</b> %{location}<br>" +
                               "<b>Avg Price:</b> %{customdata[0]} %{customdata[1]}/MWh<extra></extra>"
@@ -208,7 +184,7 @@ with col_map:
                     lat=centers_df['lat'], lon=centers_df['lon'], text=centers_df['Zone'],
                     mode='text', textfont=dict(size=10, color="#FFFFFF", family="Arial Black"),
                     showlegend=False,
-                    hoverinfo="skip"
+                    hoverinfo="skip" # Removes hover from the zone labels
                 )
 
             fig_map.update_geos(
