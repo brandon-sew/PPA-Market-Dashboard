@@ -24,8 +24,7 @@ countries = [
     
     # Italy (Complete list from screenshots)
     'IT_NORD', 'IT_CNOR', 'IT_CSUD', 'IT_SUD', 'IT_SICI', 'IT_SARD', 
-    'IT_CALA', 'IT_SACO_AC', 'IT_SACO_DC', 'IT_BRNN', 'IT_FOGN', 
-    'IT_ROSN', 'IT_PRGP', 'IT_MALT'
+    'IT_CALA'
 ]
 
 # Set time window (Brussels time is the standard for ENTSO-E)
