@@ -186,9 +186,8 @@ if os.path.exists(geojson_folder):
 
         fig_map.update_layout(
             # 0 margin ensures the grey box touches the dashboard edges
-            margin={"r":0,"t":0,"l":0,"b":0},
+            margin={"r":1,"t":0,"l":1,"b":0},
             height=1000, 
-            width=2000,
             coloraxis_showscale=False,
             paper_bgcolor="#f0f2f6",
             autosize=True
