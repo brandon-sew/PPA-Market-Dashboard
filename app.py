@@ -26,7 +26,9 @@ ZONE_NAMES = {
     "SE_4": ["Sweden 4", "EUR"], "ES": ["Spain", "EUR"], "PT": ["Portugal", "EUR"],
     "IT_NORD": ["Italy North", "EUR"], "IT_CNOR": ["Italy C-North", "EUR"],
     "IT_CSUD": ["Italy C-South", "EUR"], "IT_SUD": ["Italy South", "EUR"],
-    "IT_SICI": ["Sicily", "EUR"], "IT_SARD": ["Sardinia", "EUR"]
+    "IT_SICI": ["Sicily", "EUR"], "IT_SARD": ["Sardinia", "EUR"], "SK": ["Slovakia", "EUR"], 
+    "HU": ["Hungary", "EUR"], "SI": ["Slovenia", "EUR"], "HR": ["Croatia", "EUR"], "RS": ["Serbia", "EUR"],
+    "RO": ["Romania", "EUR"], "GR": ["Greece", "EUR"],
 }
 
 st.set_page_config(page_title="Market Explorer", layout="wide", initial_sidebar_state="expanded")
@@ -142,8 +144,7 @@ if os.path.exists(geojson_folder):
             locations="Zone", 
             featureidkey="properties.zoneName",
             color="Selected",
-            color_continuous_scale=["#ffffff", "#1f77b4"], # White for unselected, Blue for selected
-            scope="europe"
+            color_continuous_scale=["#ffffff", "#1f77b4"] # White for unselected, Blue for selected
         )
 
         # Add Overlay Labels
@@ -159,7 +160,7 @@ if os.path.exists(geojson_folder):
 
         # --- MAP BACKGROUND & BORDER CONTROLS ---
         fig_map.update_geos(
-            fitbounds="locations",
+            fitbounds="geojson",
             visible=True,           # Keep the base map visible
             showcountries=True,      # Ensure country outlines are drawn
             countrycolor="#cccccc",  # Light grey outlines for countries
