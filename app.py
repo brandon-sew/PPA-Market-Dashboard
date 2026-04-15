@@ -155,7 +155,7 @@ with col_map:
                 center=dict(lon=12, lat=52), projection_scale=4.2, 
                 visible=True, 
                 showcountries=True, 
-                countrycolor="#ffffff", # White border for base countries
+                countrycolor="#262730", # White border for base countries
                 lakecolor="white",
                 # Base countries (UK, etc.) get this color:
                 landcolor="#e0e0e0", 
