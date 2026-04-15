@@ -4,6 +4,7 @@ import plotly.express as px
 import os
 import json
 import glob
+import numpy as np
 from datetime import datetime, timedelta
 from entsoe import EntsoePandasClient
 
@@ -30,11 +31,13 @@ ZONE_NAMES = {
 
 st.set_page_config(page_title="Market Explorer", layout="wide", initial_sidebar_state="expanded")
 
-# --- CSS FOR SIDEBAR WIDTH ---
+# --- CSS FOR SIDEBAR & TRANSPARENCY ---
 st.markdown("""
     <style>
     section[data-testid="stSidebar"] { width: 600px !important; }
-    .block-container { padding-top: 2rem; }
+    .block-container { padding-top: 1rem; }
+    /* Making the main background blend with the map if needed */
+    .stApp { background-color: transparent; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -59,7 +62,7 @@ def fetch_data(codes, start_date, end_date):
         except: continue
     return pd.concat(all_data) if all_data else pd.DataFrame()
 
-# --- SIDEBAR: MARKET ANALYTICS (Kept exactly the same) ---
+# --- SIDEBAR: MARKET ANALYTICS ---
 with st.sidebar:
     st.title("📊 Market Analytics")
     if st.session_state.selected_zones:
@@ -75,18 +78,21 @@ with st.sidebar:
                 data = fetch_data(codes, d_range[0], d_range[1])
             if not data.empty:
                 data['Time'] = pd.to_datetime(data['Time']).dt.tz_convert('Europe/Brussels')
-                plot_df = data.groupby('Zone').resample('60min' if res=="60 min" else '15min', on='Time')['Price'].mean().reset_index()
-                plot_df['Display'] = plot_df['Zone'].apply(lambda x: f"{x} ({ZONE_NAMES[x][1]}/MWh)")
-                plot_df['Date'] = plot_df['Time'].dt.strftime('%d-%m-%Y')
-                plot_df['24h Time'] = plot_df['Time'].dt.strftime('%H:%M')
                 
-                has_non_eur = any(ZONE_NAMES[c][1] != 'EUR' for c in codes)
-                fig_line = px.line(plot_df, x='Time', y='Price', color='Display', labels={'Price': "Price" if has_non_eur else "Price (EUR/MWh)"}, template="plotly_white")
+                # Fixed Pivot Logic to avoid the 2-d error
+                plot_df = data.copy()
+                plot_df['Display'] = plot_df['Zone'].apply(lambda x: f"{x} ({ZONE_NAMES[x][1]}/MWh)")
+                
+                fig_line = px.line(plot_df, x='Time', y='Price', color='Display', template="plotly_white")
                 fig_line.update_layout(legend=dict(orientation="h", y=-0.3), margin=dict(l=0, r=0, b=0, t=20), hovermode="x unified")
                 st.plotly_chart(fig_line, use_container_width=True)
                 
                 st.subheader("Data Table")
-                pivot = plot_df.pivot_table(index=['Date', '24h Time'], columns='Display', values='Price')
+                plot_df['Date'] = plot_df['Time'].dt.strftime('%d-%m-%Y')
+                plot_df['24h Time'] = plot_df['Time'].dt.strftime('%H:%M')
+                
+                # Pivot table fix: ensured unique index
+                pivot = plot_df.pivot_table(index=['Date', '24h Time'], columns='Display', values='Price', aggfunc='mean')
                 st.dataframe(pivot.style.format("{:.2f}"), use_container_width=True)
     else:
         st.info("Select a bidding zone on the map to see data here.")
@@ -97,59 +103,82 @@ display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
 st.multiselect("Select zones:", options=sorted(display_options.keys()), key="selected_zones", label_visibility="collapsed")
 
 # --- LOGIC TO LOAD AND COMBINE INDIVIDUAL GEOJSON FILES ---
-def load_combined_geojson(folder_path):
+def load_and_get_centers(folder_path):
     combined = {"type": "FeatureCollection", "features": []}
-    # Looks for .geojson files in your folder
+    centers = []
     files = glob.glob(os.path.join(folder_path, "*.geojson"))
     
     for file in files:
         try:
             with open(file, "r") as f:
                 data = json.load(f)
-                if isinstance(data, dict) and data.get("type") == "FeatureCollection":
-                    combined["features"].extend(data["features"])
-                elif isinstance(data, dict) and data.get("type") == "Feature":
-                    combined["features"].append(data)
-        except Exception as e:
-            st.error(f"Error loading {file}: {e}")
-    return combined
+                feature = data["features"][0] if "features" in data else data
+                combined["features"].append(feature)
+                
+                # Simple centroid calculation for labels
+                geom = feature["geometry"]
+                coords = []
+                if geom["type"] == "Polygon":
+                    coords = np.array(geom["coordinates"][0])
+                elif geom["type"] == "MultiPolygon":
+                    # Use the first polygon of the multipolygon for the label
+                    coords = np.array(geom["coordinates"][0][0])
+                
+                if len(coords) > 0:
+                    lon, lat = np.mean(coords, axis=0)
+                    centers.append({"Zone": feature["properties"]["zoneName"], "lat": lat, "lon": lon})
+        except: continue
+    return combined, pd.DataFrame(centers)
 
 geojson_folder = "geojson_files"
 
 if os.path.exists(geojson_folder):
-    geojson_data = load_combined_geojson(geojson_folder)
+    geojson_data, centers_df = load_and_get_centers(geojson_folder)
     
     if geojson_data["features"]:
         current_codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
         map_df = pd.DataFrame([{"Zone": k, "Selected": 1 if k in current_codes else 0} for k in ZONE_NAMES.keys()])
 
+        # Create the Base Choropleth
         fig_map = px.choropleth(
             map_df, 
             geojson=geojson_data,
             locations="Zone", 
-            featureidkey="properties.zoneName", # UPDATED: Matches the 'zoneName' key in your files
+            featureidkey="properties.zoneName",
             color="Selected",
             color_continuous_scale=["#f2f2f2", "#1f77b4"],
             scope="europe"
         )
 
+        # Add the Text Overlay (Zone Codes)
+        if not centers_df.empty:
+            fig_map.add_scattergeo(
+                lat=centers_df['lat'],
+                lon=centers_df['lon'],
+                text=centers_df['Zone'],
+                mode='text',
+                textfont=dict(size=10, color="black"),
+                showlegend=False
+            )
+
+        # Map Layout Adjustments (Size, Transparency, Centering)
         fig_map.update_geos(
             fitbounds="locations",
-            visible=True, # Set to True so the base map displays even if selections are empty
-            showcountries=True,
+            visible=False,
+            bgcolor='rgba(0,0,0,0)',  # Transparent map background
             projection_type="mercator"
         )
 
         fig_map.update_layout(
             margin={"r":0,"t":0,"l":0,"b":0},
-            height=800, 
+            height=1000, # Increased height to take up main section
             coloraxis_showscale=False,
-            paper_bgcolor='rgba(0,0,0,0)', 
-            plot_bgcolor='rgba(0,0,0,0)'
+            paper_bgcolor='rgba(0,0,0,0)', # Transparent paper
+            plot_bgcolor='rgba(0,0,0,0)'   # Transparent plot
         )
 
         st.plotly_chart(fig_map, use_container_width=True)
     else:
-        st.warning("No valid features found in the GeoJSON files. Check that the files are valid JSON.")
+        st.warning("No shapes found in the geojson_files folder.")
 else:
-    st.warning(f"Folder '{geojson_folder}' not found. Place your .geojson files there to view the map.")
+    st.warning(f"Folder '{geojson_folder}' not found.")
