@@ -147,7 +147,7 @@ with col_map:
             fig_map = px.choropleth(
                 map_df, geojson=geojson_data, locations="Zone", 
                 featureidkey="properties.zoneName", color="Selected",
-                color_continuous_scale=["#262730", "#1f77b4"] 
+                color_continuous_scale=["#616469", "#007297"] 
             )
 
             if not centers_df.empty:
@@ -161,7 +161,7 @@ with col_map:
                 center=dict(lon=12, lat=52), projection_scale=7, 
                 visible=True, 
                 showcountries=True, 
-                countrycolor="#262730", 
+                countrycolor="#616469", 
                 lakecolor="white",
                 landcolor="#e0e0e0", 
                 projection_type="mercator", 
