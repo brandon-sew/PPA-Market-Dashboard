@@ -126,14 +126,21 @@ with col_map:
                         z_name = feature["properties"]["zoneName"]
                         found_zones.append(z_name)
                         geom = feature["geometry"]
+
+                        all_coords = []
                         if geom["type"] == "Polygon":
                             coords = np.array(geom["coordinates"][0])
                         elif geom["type"] == "MultiPolygon":
-                            coords = np.array(max(geom["coordinates"], key=lambda x: len(x[0]))[0])
+                            largest = max(geom["coordinates"], key=lambda x: len(x[0]))
+                            all_coords = np.array(largest[0])
+
+                        
                         if len(coords) > 0:
-                            min_lon, min_lat = np.min(coords, axis=0)
-                            max_lon, max_lat = np.max(coords, axis=0)
-                            centers.append({"Zone": z_name, "lat": (min_lat + max_lat) / 2, "lon": (min_lon + max_lon) / 2})
+                            centers.append({
+                                "Zone": z_name,
+                                "lat": np.mean(all_coords[:, 1]),
+                                "lon": np.mean(all_coords[:, 0])
+                            })
             except: continue
         return combined, pd.DataFrame(centers), found_zones
 
@@ -158,7 +165,8 @@ with col_map:
                 )
 
             fig_map.update_geos(
-                center=dict(lon=12, lat=52), projection_scale=7, 
+                #center=dict(lon=12, lat=52), projection_scale=7, 
+                fitsbounds="locations",
                 visible=True, 
                 showcountries=True, 
                 countrycolor="#262730", 
