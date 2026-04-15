@@ -31,14 +31,23 @@ ZONE_NAMES = {
 
 st.set_page_config(page_title="Market Explorer", layout="wide", initial_sidebar_state="expanded")
 
-# --- CSS FOR SIDEBAR & LAYOUT ---
+# --- CSS FOR EDGE-TO-EDGE LAYOUT ---
 st.markdown("""
     <style>
     section[data-testid="stSidebar"] { width: 600px !important; }
+    
+    /* Remove all padding from the main container to let the map hit the edges */
     .main .block-container { 
-        padding: 0rem !important; 
+        padding-left: 0rem !important; 
+        padding-right: 0rem !important;
+        padding-top: 1rem !important;
+        padding-bottom: 0rem !important;
         max-width: 100% !important; 
     }
+    
+    /* Ensure the subheader also has a little margin since the container padding is gone */
+    .stHeadingContainer { padding-left: 1rem; }
+    div[data-testid="stMultiSelect"] { padding-left: 1rem; padding-right: 1rem; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -118,7 +127,6 @@ def load_and_get_centers(folder_path):
                     found_zones.append(z_name)
                     geom = feature["geometry"]
                     
-                    # Improved Centering: Find the bounding box center
                     if geom["type"] == "Polygon":
                         coords = np.array(geom["coordinates"][0])
                     elif geom["type"] == "MultiPolygon":
@@ -164,9 +172,9 @@ if os.path.exists(geojson_folder):
             )
 
         fig_map.update_geos(
-            # Default view of Europe
-            center=dict(lon=10, lat=52),
-            projection_scale=3.5, 
+            # Centers Europe in the box
+            center=dict(lon=12, lat=52), 
+            projection_scale=4.2, 
             visible=True,
             showcountries=True,
             countrycolor="#d1d1d1",
@@ -177,10 +185,16 @@ if os.path.exists(geojson_folder):
         )
 
         fig_map.update_layout(
+            # 0 margin ensures the grey box touches the dashboard edges
             margin={"r":0,"t":0,"l":0,"b":0},
             height=1000, 
             coloraxis_showscale=False,
-            paper_bgcolor="#f0f2f6"
+            paper_bgcolor="#f0f2f6",
+            autosize=True
         )
 
         st.plotly_chart(fig_map, use_container_width=True)
+    else:
+        st.warning("No shapes found in the geojson_files folder.")
+else:
+    st.warning(f"Folder '{geojson_folder}' not found.")
