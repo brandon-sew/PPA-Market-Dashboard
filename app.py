@@ -34,9 +34,10 @@ st.set_page_config(page_title="Market Explorer", layout="wide", initial_sidebar_
 # --- CSS FOR CUSTOM LAYOUT ---
 st.markdown("""
     <style>
-    /* Widened sidebar for longer zone names */
-    section[data-testid="stSidebar"] {{ width: 450px !important; 
-    background-color: {"#616469"} !important; }}
+    /* Sidebar color and Width */
+    section[data-testid="stSidebar"] {
+    width: 450px !important; 
+    background-color: #616469 !important; }}
     .main .block-container { 
         padding-top: 2rem !important;
         max-width: 98% !important; 
