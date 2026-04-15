@@ -152,7 +152,7 @@ with col_map:
                 )
 
             fig_map.update_geos(
-                center=dict(lon=12, lat=52), projection_scale=4.2, 
+                center=dict(lon=12, lat=52), projection_scale=5.5, 
                 visible=True, 
                 showcountries=True, 
                 countrycolor="#262730", # White border for base countries
