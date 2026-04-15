@@ -48,7 +48,7 @@ if 'selected_zones' not in st.session_state:
 
 # --- SIDEBAR: CONTROLS ---
 with st.sidebar:
-    st.title("⚙️ Controls")
+    st.title("Configuration")
     
     # Bidding Zone Search in Sidebar
     display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
@@ -126,21 +126,14 @@ with col_map:
                         z_name = feature["properties"]["zoneName"]
                         found_zones.append(z_name)
                         geom = feature["geometry"]
-
-                        all_coords = []
                         if geom["type"] == "Polygon":
                             coords = np.array(geom["coordinates"][0])
                         elif geom["type"] == "MultiPolygon":
-                            largest = max(geom["coordinates"], key=lambda x: len(x[0]))
-                            all_coords = np.array(largest[0])
-
-                        
+                            coords = np.array(max(geom["coordinates"], key=lambda x: len(x[0]))[0])
                         if len(coords) > 0:
-                            centers.append({
-                                "Zone": z_name,
-                                "lat": np.mean(all_coords[:, 1]),
-                                "lon": np.mean(all_coords[:, 0])
-                            })
+                            min_lon, min_lat = np.min(coords, axis=0)
+                            max_lon, max_lat = np.max(coords, axis=0)
+                            centers.append({"Zone": z_name, "lat": (min_lat + max_lat) / 2, "lon": (min_lon + max_lon) / 2})
             except: continue
         return combined, pd.DataFrame(centers), found_zones
 
