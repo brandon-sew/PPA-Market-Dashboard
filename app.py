@@ -155,7 +155,7 @@ with col_map:
             if not centers_df.empty:
                 fig_map.add_scattergeo(
                     lat=centers_df['lat'], lon=centers_df['lon'], text=centers_df['Zone'],
-                    mode='text', textfont=dict(size=10, color="#333", family="Arial Black"),
+                    mode='text', textfont=dict(size=10, color="#FFFFFF", family="Arial Black"),
                     showlegend=False
                 )
 
@@ -163,7 +163,7 @@ with col_map:
                 center=dict(lon=12, lat=52), projection_scale=7, 
                 visible=True, 
                 showcountries=True, 
-                countrycolor="#ffffff", 
+                countrycolor="#f0f2f6", 
                 lakecolor="white",
                 landcolor="#e0e0e0", 
                 projection_type="mercator", 
