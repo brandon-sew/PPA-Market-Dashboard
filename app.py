@@ -191,7 +191,7 @@ if os.path.exists(geojson_folder):
             height=1250, 
             width=10000,
             coloraxis_showscale=False,
-            paper_bgcolor="f0f2f6"
+            paper_bgcolor="f0f2f6",
         )
 
         st.plotly_chart(fig_map, use_container_width=True)
