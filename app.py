@@ -9,7 +9,7 @@ from entsoe import EntsoePandasClient
 API_KEY = os.environ.get('ENTSOE_TOKEN')
 client = EntsoePandasClient(api_key=API_KEY)
 
-# Mapping with Currency Info for display
+# Mapping with Currency Info
 ZONE_NAMES = {
     "AT": ["Austria", "EUR"], "BE": ["Belgium", "EUR"], "CH": ["Switzerland", "EUR"],
     "CZ": ["Czech Republic", "EUR"], "DE_LU": ["Germany & Luxembourg", "EUR"],
@@ -82,38 +82,56 @@ if len(date_range) == 2:
             raw_df = fetch_live_data(selected_codes, start_dt, end_dt)
         
         if not raw_df.empty:
-            # 1) Time is automatically converted to CET/CEST here
-            plot_df = raw_df.copy()
-            plot_df['Time'] = plot_df['Time'].dt.tz_convert('Europe/Brussels')
+            # Time Conversion
+            raw_df['Time'] = raw_df['Time'].dt.tz_convert('Europe/Brussels')
             
-            # Formatting for Hover and Table
+            # 2) Resampling Logic for Table & Chart
+            # We group by zone first, then resample to ensure 60min/15min is respected
+            plot_df = (
+                raw_df.groupby('Bidding Zone')
+                .resample(res_map[resolution], on='Time')['Price']
+                .mean() # Correctly averages 15m into 60m if needed
+                .reset_index()
+            )
+            
+            # Re-merge the currency info after resampling
+            plot_df['Currency'] = plot_df['Bidding Zone'].map(lambda x: ZONE_NAMES[x][1])
+            plot_df['Display Name'] = plot_df.apply(lambda x: f"{x['Bidding Zone']} ({x['Currency']}/MWh)", axis=1)
             plot_df['Date'] = plot_df['Time'].dt.strftime('%d-%m-%Y')
             plot_df['24h Time'] = plot_df['Time'].dt.strftime('%H:%M')
-            
-            # Create the Display Name for legend and table: "ZONE (CUR/MWh)"
-            plot_df['Display Name'] = plot_df.apply(lambda x: f"{x['Bidding Zone']} ({x['Currency']}/MWh)", axis=1)
 
-            # 6) Custom Hover Plot
+            # 1) Dynamic Y-Axis Label Logic
+            has_non_eur = any(ZONE_NAMES[c][1] != 'EUR' for c in selected_codes)
+            y_label = "Price" if has_non_eur else "Price (EUR/MWh)"
+
+            # 6) Chart with Automatic Negative Axis handling
             fig = px.line(
                 plot_df, x='Time', y='Price', color='Display Name',
-                labels={'Time': 'Time (CET/CEST)', 'Price': 'Price'},
+                labels={'Time': 'Time (CET/CEST)', 'Price': y_label},
                 template="plotly_white",
                 markers=True if resolution == "60 min" else False,
                 hover_data={
-                    'Display Name': False, # Hide original
+                    'Display Name': False,
                     'Bidding Zone': True,
                     'Date': True,
                     '24h Time': True,
                     'Price': ':.2f',
-                    'Time': False # Hide the raw timestamp
+                    'Time': False 
                 }
             )
-            fig.update_layout(hovermode="x unified", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
+            
+            # 3) Ensure Y-axis is NOT fixed at 0 (allows negative prices)
+            fig.update_yaxes(autorange=True, fixedrange=False)
+            
+            fig.update_layout(
+                hovermode="x unified", 
+                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+            )
             st.plotly_chart(fig, use_container_width=True)
 
-            # 3, 4, 5) Data Table Styling
+            # 2, 3, 4, 5) Data Table (Now respects resampling)
             st.subheader("Data Table")
             pivot_df = plot_df.pivot_table(index=['Date', '24h Time'], columns='Display Name', values='Price')
             st.dataframe(pivot_df.style.format("{:.2f}"), use_container_width=True)
         else:
-            st.warning("No data found for the selected range.")
+            st.warning("No data found.")
