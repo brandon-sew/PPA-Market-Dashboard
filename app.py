@@ -59,14 +59,7 @@ ZONE_NAMES = {
     "IT_SUD": "Italy (South)",
     "IT_SICI": "Italy (Sicily)",
     "IT_SARD": "Italy (Sardinia)",
-    "IT_CALA": "Italy (Calabria)",
-    "IT_SACO_AC": "Italy (Saco AC)",
-    "IT_SACO_DC": "Italy (Saco DC)",
-    "IT_BRNN": "Italy (Brindisi)",
-    "IT_FOGN": "Italy (Foggia)",
-    "IT_ROSN": "Italy (Rossano)",
-    "IT_PRGP": "Italy (Priolo Gargallo)",
-    "IT_MALT": "Italy (Malta)"
+    "IT_CALA": "Italy (Calabria)"
 }
 
 st.set_page_config(page_title="Day-Ahead Market Explorer", layout="wide", page_icon="⚡")
