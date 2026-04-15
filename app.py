@@ -177,8 +177,12 @@ if os.path.exists(geojson_folder):
 
         fig_map.update_geos(
             fitbounds="locations",
-            visible=False,
-            bgcolor='rgba(0,0,0,0)', 
+            visible=True,
+            showcountries=True,
+            countrycolor="#cccccc",
+            showcoastlines=True,
+            coastlinecolor="#cccccc",
+            bgcolor="f0f2f6", 
             projection_type="mercator"
         )
 
@@ -187,8 +191,7 @@ if os.path.exists(geojson_folder):
             height=1250, 
             width=10000,
             coloraxis_showscale=False,
-            paper_bgcolor='rgba(0,0,0,0)', 
-            plot_bgcolor='rgba(0,0,0,0)'
+            paper_bgcolor="f0f2f6"
         )
 
         st.plotly_chart(fig_map, use_container_width=True)
