@@ -9,21 +9,64 @@ from entsoe import EntsoePandasClient
 API_KEY = os.environ.get('ENTSOE_TOKEN')
 client = EntsoePandasClient(api_key=API_KEY)
 
-# Refined Mapping
+# Comprehensive Mapping based on ENTSO-E List View
 ZONE_NAMES = {
-    "AT": "Austria", "BE": "Belgium", "BG": "Bulgaria", "CH": "Switzerland", 
-    "CZ": "Czech Republic", "DE_LU": "Germany & Luxembourg", "EE": "Estonia", 
-    "ES": "Spain", "FI": "Finland", "FR": "France", 
-    "GB": "Great Britain", 
-    "GR": "Greece", "HR": "Croatia", "HU": "Hungary", 
-    "IE_SEM": "Ireland (SEM)", 
-    "LT": "Lithuania", "LV": "Latvia", "NL": "Netherlands", "PL": "Poland", 
-    "PT": "Portugal", "RO": "Romania", "RS": "Serbia", "SI": "Slovenia", "SK": "Slovakia",
-    "DK_1": "Denmark (West)", "DK_2": "Denmark (East)",
-    "NO_1": "Norway (East)", "NO_2": "Norway (South)", "NO_3": "Norway (Central)", 
-    "NO_4": "Norway (North)", "NO_5": "Norway (West)",
-    "SE_1": "Sweden (North)", "SE_2": "Sweden (Central North)", "SE_3": "Sweden (Central South)", "SE_4": "Sweden (South)",
-    "IT_NORD": "Italy (North)"
+    # Central & Western Europe
+    "AT": "Austria",
+    "BE": "Belgium",
+    "CH": "Switzerland",
+    "CZ": "Czech Republic",
+    "DE_LU": "Germany & Luxembourg",
+    "FR": "France",
+    "GB": "Great Britain",
+    "IE_SEM": "Ireland (SEM)",
+    "NL": "Netherlands",
+    "PL": "Poland",
+
+    # Northern Europe
+    "DK_1": "Denmark (DK1)",
+    "DK_2": "Denmark (DK2)",
+    "EE": "Estonia",
+    "FI": "Finland",
+    "LT": "Lithuania",
+    "LV": "Latvia",
+    "NO_1": "Norway (NO1)",
+    "NO_2": "Norway (NO2)",
+    "NO_3": "Norway (NO3)",
+    "NO_4": "Norway (NO4)",
+    "NO_5": "Norway (NO5)",
+    "SE_1": "Sweden (SE1)",
+    "SE_2": "Sweden (SE2)",
+    "SE_3": "Sweden (SE3)",
+    "SE_4": "Sweden (SE4)",
+
+    # Southern & Eastern Europe
+    "BG": "Bulgaria",
+    "ES": "Spain",
+    "GR": "Greece",
+    "HR": "Croatia",
+    "HU": "Hungary",
+    "PT": "Portugal",
+    "RO": "Romania",
+    "RS": "Serbia",
+    "SI": "Slovenia",
+    "SK": "Slovakia",
+
+    # Italy (Comprehensive Zone List)
+    "IT_NORD": "Italy (North)",
+    "IT_CNOR": "Italy (Central North)",
+    "IT_CSUD": "Italy (Central South)",
+    "IT_SUD": "Italy (South)",
+    "IT_SICI": "Italy (Sicily)",
+    "IT_SARD": "Italy (Sardinia)",
+    "IT_CALA": "Italy (Calabria)",
+    "IT_SACO_AC": "Italy (Saco AC)",
+    "IT_SACO_DC": "Italy (Saco DC)",
+    "IT_BRNN": "Italy (Brindisi)",
+    "IT_FOGN": "Italy (Foggia)",
+    "IT_ROSN": "Italy (Rossano)",
+    "IT_PRGP": "Italy (Priolo Gargallo)",
+    "IT_MALT": "Italy (Malta)"
 }
 
 st.set_page_config(page_title="Day-Ahead Market Explorer", layout="wide", page_icon="⚡")
@@ -43,10 +86,11 @@ res_map = {"60 min": "60min", "15 min": "15min"}
 available_codes = sorted(list(ZONE_NAMES.keys()))
 display_options = {f"{ZONE_NAMES[c]} ({c})": c for c in available_codes}
 
+# Corrected default to use the underscore version to match keys
 selected_labels = st.sidebar.multiselect(
     "Select Bidding Zones", 
     options=sorted(display_options.keys()), 
-    default=["Germany & Luxembourg (DE_LU)"]
+    default=["Germany & Luxembourg (DE_LU)", "Great Britain (GB)"]
 )
 
 # 3. Data Fetching Function
@@ -67,7 +111,8 @@ def fetch_live_data(selected_codes, start_date, end_date):
             df_temp['Time'] = pd.to_datetime(df_temp['Time'], utc=True)
             all_data.append(df_temp)
         except Exception as e:
-            st.sidebar.error(f"⚠️ {code}: Data unavailable or not released yet.")
+            # Errors appear in sidebar so they don't break the main chart
+            st.sidebar.error(f"⚠️ {code}: Data unavailable or not yet released.")
             
     return pd.concat(all_data, ignore_index=True) if all_data else pd.DataFrame()
 
@@ -86,6 +131,7 @@ if len(date_range) == 2:
         
         if not raw_df.empty:
             try:
+                # Group and resample for time consistency
                 plot_df = (
                     raw_df.groupby('Country')
                     .resample(res_map[resolution], on='Time')['Price']
@@ -120,6 +166,6 @@ if len(date_range) == 2:
             except Exception as e:
                 st.error(f"Display Error: {e}")
         else:
-            st.warning("No data found. Note: Tomorrow's prices are typically released at 13:00 CET.")
+            st.warning("No data found for the selected range. Note: Prices for the next day are usually released between 12:45 and 13:30 CET.")
 else:
     st.info("Please select a date range (Start and End date) in the sidebar.")
