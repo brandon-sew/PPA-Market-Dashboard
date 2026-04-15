@@ -2,4 +2,4 @@ entsoe-py
 pandas
 plotly
 streamlit
-requests
+openpyxl
