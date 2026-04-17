@@ -510,15 +510,10 @@ with col_met:
             # Wind Capture (Onshore + Offshore)
 
             wind_cols = [c for c in ['Wind Onshore', 'Wind Offshore'] if c in m_df.columns]
-
             wind_cap = "N/A"
-
             if wind_cols:
-
                 total_wind = m_df[wind_cols].sum(axis=1)
-
                 if total_wind.sum() > 0:
-
                     wind_cap = f"{(m_df['Price'] * total_wind).sum() / total_wind.sum():.2f}"
 
             
