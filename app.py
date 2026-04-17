@@ -141,7 +141,7 @@ with col_chart:
             margin=dict(l=0, r=0, b=0, t=20),
             hovermode="closest",
             hoverlabel=dict(
-                bgcolor="white",
+                bgcolor="262730",
                 font_size=18,  # Increased text size
                 font_family="Inter"
             )
