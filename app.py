@@ -152,7 +152,7 @@ with col_chart:
                           "<b>Time:</b> %{x|%H:%M}<br>" +
                           "<b>Price:</b> %{y:.2f} %{customdata[0]}/MWh<extra></extra>"
         )
-        fig_line.update_Xaces(showspikes=True, spikecolor="grey", spikethickness=1, spikesnap ="cursor", spikemode="across")
+        fig_line.update_xaxes(showspikes=True, spikecolor="grey", spikethickness=1, spikesnap ="cursor", spikemode="across")
         st.plotly_chart(fig_line, use_container_width=True)
     else:
         st.info("Select zones to view price trends.")
