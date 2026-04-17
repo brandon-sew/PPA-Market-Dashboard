@@ -5,11 +5,9 @@ from datetime import datetime
 from entsoe import EntsoePandasClient
 
 # 1. Config
-# Only need the ENTSO-E token now
 ENTSOE_API_KEY = os.environ.get('ENTSOE_TOKEN')
 client = EntsoePandasClient(api_key=ENTSOE_API_KEY)
 
-# Comprehensive list of bidding zones matching your app.py mapping
 countries = [
     # Central & Western Europe
     'AT', 'BE', 'CH', 'CZ', 'DE_LU', 'FR', 'GB', 'IE_SEM', 'NL', 'PL',
@@ -22,66 +20,90 @@ countries = [
     # Southern & Eastern Europe
     'BG', 'ES', 'GR', 'HR', 'HU', 'PT', 'RO', 'RS', 'SI', 'SK',
     
-    # Italy (Complete list from screenshots)
+    # Italy
     'IT_NORD', 'IT_CNOR', 'IT_CSUD', 'IT_SUD', 'IT_SICI', 'IT_SARD', 
     'IT_CALA'
 ]
 
-# Set time window (Brussels time is the standard for ENTSO-E)
 end = pd.Timestamp(datetime.now(), tz='Europe/Brussels')
 start = end - pd.Timedelta(days=10)
 
-def process_to_long_format(price_series, country_code):
+def process_metrics(price_series, gen_df, country_code):
     if price_series is None or price_series.empty: 
         return pd.DataFrame()
     
-    # Ensure index is datetime and drop any missing values
     price_series.index = pd.to_datetime(price_series.index)
     price_series = price_series[price_series.notna()]
     
-    # Calculate daily metrics
-    # Baseload: Average of all hours in the day
+    # Daily Baseload
     baseload = price_series.resample('D').mean()
     
-    # Peak: Average of 08:00 to 20:00 (Standard European Peak definition)
-    peak = price_series.between_time('08:00', '19:59').resample('D').mean()
-    
-    # Off-Peak: Average of remaining hours
-    off_peak_mask = ~price_series.index.isin(price_series.between_time('08:00', '19:59').index)
-    off_peak = price_series.loc[off_peak_mask].resample('D').mean()
-    
+    # Prep for Capture Price calculations
     data = []
-    # Build list of records
+    
+    # Add Baseload to data
     for date, val in baseload.items(): 
         if pd.notna(val): data.append({'Date': date.date(), 'Metric': 'Baseload', 'Price': val})
-    for date, val in peak.items(): 
-        if pd.notna(val): data.append({'Date': date.date(), 'Metric': 'Peak', 'Price': val})
-    for date, val in off_peak.items(): 
-        if pd.notna(val): data.append({'Date': date.date(), 'Metric': 'Off-Peak', 'Price': val})
-    
+
+    # Capture Prices (Solar & Wind)
+    if gen_df is not None and not gen_df.empty:
+        # Align indexes (Ensure both are hourly/15min matching)
+        # Handle ENTSO-E multi-index generation columns
+        if isinstance(gen_df.columns, pd.MultiIndex):
+            gen_df.columns = gen_df.columns.get_level_values(0)
+        
+        # Merge price and generation on time
+        combined = pd.merge(price_series.to_frame('Price'), gen_df, left_index=True, right_index=True, how='inner')
+        
+        # Solar Capture Price
+        if 'Solar' in combined.columns:
+            def calc_solar(group):
+                total_gen = group['Solar'].sum()
+                return (group['Price'] * group['Solar']).sum() / total_gen if total_gen > 0 else None
+            
+            solar_cap = combined.resample('D').apply(calc_solar)
+            for date, val in solar_cap.items():
+                if pd.notna(val): data.append({'Date': date.date(), 'Metric': 'Solar Capture', 'Price': val})
+
+        # Wind Capture Price (Onshore + Offshore)
+        wind_cols = [c for c in ['Wind Onshore', 'Wind Offshore'] if c in combined.columns]
+        if wind_cols:
+            combined['Total_Wind'] = combined[wind_cols].sum(axis=1)
+            def calc_wind(group):
+                total_gen = group['Total_Wind'].sum()
+                return (group['Price'] * group['Total_Wind']).sum() / total_gen if total_gen > 0 else None
+            
+            wind_cap = combined.resample('D').apply(calc_wind)
+            for date, val in wind_cap.items():
+                if pd.notna(val): data.append({'Date': date.date(), 'Metric': 'Wind Capture', 'Price': val})
+
     res = pd.DataFrame(data)
     res['Country'] = country_code
     return res
 
 all_country_data = []
 
-# 2. Execution Loop
 print(f"Starting data fetch for {len(countries)} zones...")
 
 for code in countries:
     try:
         print(f"Fetching {code}...")
-        # Every country, including GB and DE_LU, now uses the standard query
+        # Fetch Prices
         raw_series = client.query_day_ahead_prices(code, start=start, end=end)
+        
+        # Fetch Generation for Capture Prices
+        try:
+            gen_df = client.query_generation(code, start=start, end=end)
+        except:
+            gen_df = None
             
         if raw_series is not None and not raw_series.empty:
-            processed = process_to_long_format(raw_series, code)
+            processed = process_metrics(raw_series, gen_df, code)
             all_country_data.append(processed)
         
-        # Respect API rate limits (ENTSO-E is strict)
-        time.sleep(1.2) 
+        # Respect API rate limits (Two calls now, so we stay cautious)
+        time.sleep(1.5) 
     except Exception as e:
-        # Print a short version of the error to keep logs clean
         print(f"Skipping {code}: {str(e)[:75]}...")
 
 # 3. Export
@@ -89,7 +111,6 @@ if all_country_data:
     final_df = pd.concat(all_country_data, ignore_index=True)
     final_df['Price'] = final_df['Price'].round(2)
     final_df.to_csv('market_prices.csv', index=False)
-    print(f"\nSuccess: market_prices.csv updated.")
-    print(f"Final file contains {final_df['Country'].nunique()} bidding zones.")
+    print(f"\nSuccess: market_prices.csv updated with Baseload and Capture prices.")
 else:
-    print("\nNo data collected. Check your API key and connection.")
+    print("\nNo data collected.")
