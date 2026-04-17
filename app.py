@@ -143,7 +143,7 @@ with col_chart:
             hoverlabel=dict(
                 bgcolor="#262730",
                 font_size=18,  # Increased text size
-                font_family="Inter"
+                font_family="Arial"
             )
         )
         
