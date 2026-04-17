@@ -139,7 +139,7 @@ with col_chart:
         fig_line.update_layout(
             legend=dict(orientation="h", y=-0.2), 
             margin=dict(l=0, r=0, b=0, t=20),
-            hovermode="closest",
+            hovermode="x unified",
             hoverlabel=dict(
                 bgcolor="black",
                 font_size=18,  # Increased text size
@@ -152,6 +152,7 @@ with col_chart:
                           "<b>Time:</b> %{x|%H:%M}<br>" +
                           "<b>Price:</b> %{y:.2f} %{customdata[0]}/MWh<extra></extra>"
         )
+        fig_line.update_Xaces(showspikes=True, spikecolor="grey", spikethickness=1, spikesnap ="cursor", spikemode="across")
         st.plotly_chart(fig_line, use_container_width=True)
     else:
         st.info("Select zones to view price trends.")
