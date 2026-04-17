@@ -500,7 +500,7 @@ with col_met:
 
                 if total_solar_gen > 0:
                     #Calculate weighted average price
-                    solar_revenue = (m_df['Price'] * m_df['Soar']).sum()
+                    solar_revenue = (m_df['Price'] * m_df['Solar']).sum()
                     if isinstance(solar_revenue, pd.Series):
                         solar_revenue = solar_revenue.sum()
                     sol_cap = f"{solar_revenue / total_solar_gen:.2f}"
