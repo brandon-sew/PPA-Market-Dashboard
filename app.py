@@ -79,7 +79,7 @@ def fetch_data(codes, start_date, end_date):
     return pd.concat(all_data) if all_data else pd.DataFrame()
 
 # --- MAIN AREA ---
-st.title("⚡ Energy Market Explorer")
+st.title("⚡ European Energy Market Explorer")
 
 # Pre-fetch data
 codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
@@ -207,7 +207,7 @@ with col_map:
 
 # --- BOTTOM SECTION (DATA TABLE) ---
 st.divider()
-st.subheader("Price Data Explorer")
+st.subheader("Data Table")
 if not plot_df.empty:
     plot_df['Date'] = plot_df['Time'].dt.strftime('%d-%m-%Y')
     plot_df['24h Time'] = plot_df['Time'].dt.strftime('%H:%M')
