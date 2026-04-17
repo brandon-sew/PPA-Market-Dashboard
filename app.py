@@ -34,7 +34,6 @@ st.set_page_config(page_title="Market Explorer", layout="wide", initial_sidebar_
 # --- CSS FOR CUSTOM LAYOUT ---
 st.markdown("""
     <style>
-    /* Widened sidebar for longer zone names */
     section[data-testid="stSidebar"] { width: 400px !important; }
     .main .block-container { 
         padding-top: 2rem !important;
@@ -50,7 +49,6 @@ if 'selected_zones' not in st.session_state:
 with st.sidebar:
     st.title("Configuration")
     
-    # Bidding Zone Search in Sidebar
     display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
     st.multiselect("Select bidding zones:", options=sorted(display_options.keys()), key="selected_zones")
     
@@ -76,10 +74,10 @@ def fetch_data(codes, start_date, end_date):
             df['Zone'] = code
             all_data.append(df)
         except: continue
-    return pd.concat(all_data) if all_data else pd.DataFrame()
+    return pd.concat(all_data, ignore_index=True) if all_data else pd.DataFrame()
 
 @st.cache_data(ttl=3600)
-def fetch_gen_data(codes, start_date, end_date):
+def fetch_gen_data(codes, start_date, end_date, freq):
     if not codes: return pd.DataFrame()
     start = pd.Timestamp(start_date, tz='Europe/Brussels')
     end = pd.Timestamp(end_date, tz='Europe/Brussels') + pd.Timedelta(days=1)
@@ -89,17 +87,21 @@ def fetch_gen_data(codes, start_date, end_date):
             df = client.query_generation(code, start=start, end=end)
             if isinstance(df.columns, pd.MultiIndex):
                 df.columns = df.columns.get_level_values(0)
+            
+            # NECESSARY FIX: Sum duplicate columns and resample to match resolution
+            df = df.groupby(df.columns, axis=1).sum()
+            df = df.resample(freq).mean().ffill()
+            
             df = df.reset_index().rename(columns={'index': 'Time'})
             df['Time'] = pd.to_datetime(df['Time']).dt.tz_convert('Europe/Brussels')
             df['Zone'] = code
             all_gen.append(df)
         except: continue
-    return pd.concat(all_gen) if all_gen else pd.DataFrame()
+    return pd.concat(all_gen, ignore_index=True) if all_gen else pd.DataFrame()
 
 # --- MAIN AREA ---
 st.title("⚡ European Energy Market Explorer")
 
-# Fetch data for ALL zones for map coverage, then filter for charts
 all_zones = list(ZONE_NAMES.keys())
 selected_codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
 
@@ -107,15 +109,15 @@ plot_df = pd.DataFrame()
 full_price_df = pd.DataFrame()
 
 if len(d_range) == 2:
+    freq = '60min' if res == "60 min" else '15min'
+    
     # 1. Fetch Prices for ALL zones (for the map)
     full_price_df = fetch_data(all_zones, d_range[0], d_range[1])
     
-    # 2. Fetch Generation for SELECTED zones (for capture prices)
-    gen_df = fetch_gen_data(selected_codes, d_range[0], d_range[1])
+    # 2. Fetch Generation for SELECTED zones
+    gen_df = fetch_gen_data(selected_codes, d_range[0], d_range[1], freq)
     
     if not full_price_df.empty:
-        freq = '60min' if res == "60 min" else '15min'
-        
         # Resample full price data for map averages
         full_price_resampled = full_price_df.groupby('Zone').apply(
             lambda x: x.set_index('Time').resample(freq).mean(numeric_only=True).ffill()
@@ -133,18 +135,13 @@ with col_chart:
     st.subheader("Day-Ahead Prices")
     if not plot_df.empty:
         fig_line = px.line(plot_df, x='Time', y='Price', color='Display', template="plotly_white", 
-                           custom_data=['Currency'])
+                            custom_data=['Currency'])
         
-        # IMPLEMENTATION: Bigger Hover Box and Text
         fig_line.update_layout(
             legend=dict(orientation="h", y=-0.2), 
             margin=dict(l=0, r=0, b=0, t=20),
             hovermode="closest",
-            hoverlabel=dict(
-                bgcolor="white",
-                font_size=18,  # Increased text size
-                font_family="Inter"
-            )
+            hoverlabel=dict(bgcolor="white", font_size=18, font_family="Inter")
         )
         
         fig_line.update_traces(
@@ -187,7 +184,6 @@ with col_map:
     if os.path.exists(geojson_folder):
         geojson_data, centers_df, all_found_codes = load_and_get_centers(geojson_folder)
         if geojson_data["features"]:
-            # Calculate Baseload (Average) Prices for ALL zones
             avg_prices = full_price_resampled.groupby('Zone')['Price'].mean().to_dict() if not full_price_resampled.empty else {}
 
             map_rows = []
@@ -218,11 +214,10 @@ with col_map:
                 fig_map.add_scattergeo(
                     lat=centers_df['lat'], lon=centers_df['lon'], text=centers_df['Zone'],
                     mode='text', textfont=dict(size=10, color="#FFFFFF", family="Arial Black"),
-                    showlegend=False,
-                    hoverinfo="skip"
+                    showlegend=False, hoverinfo="skip"
                 )
 
-            fig_map.update_geos(center=dict(lon=12, lat=52), projection_scale=7, visible=True, showcountries=True, countrycolor="#262730", lakecolor="white", landcolor="#e0e0e0", projection_type="mercator", bgcolor="rgba(0,0,0,0)")
+            fig_map.update_geos(center=dict(lon=12, lat=52), projection_scale=7, visible=True, showcountries=True, countrycolor="#262730", projection_type="mercator", bgcolor="rgba(0,0,0,0)")
             fig_map.update_layout(margin={"r":0,"t":0,"l":0,"b":0}, height=500, coloraxis_showscale=False, paper_bgcolor="rgba(0,0,0,0)", autosize=True)
             st.plotly_chart(fig_map, use_container_width=True, config={'displaylogo': False})
 
@@ -242,12 +237,10 @@ with col_met:
             baseload = p_sub['Price'].mean()
             currency = ZONE_NAMES[code][1]
             
-            # Solar Capture
             sol_cap = "N/A"
             if 'Solar' in m_df.columns and m_df['Solar'].sum() > 0:
                 sol_cap = f"{(m_df['Price'] * m_df['Solar']).sum() / m_df['Solar'].sum():.2f}"
             
-            # Wind Capture (Onshore + Offshore)
             wind_cols = [c for c in ['Wind Onshore', 'Wind Offshore'] if c in m_df.columns]
             wind_cap = "N/A"
             if wind_cols:
