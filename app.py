@@ -492,9 +492,18 @@ with col_met:
 
             sol_cap = "N/A"
 
-            if 'Solar' in m_df.columns and m_df['Solar'].sum() > 0:
+            if 'Solar' in m_df.columns:
+                # Use .sum() .sum() to handle multiple columns of the same name
+                total_solar_gen = m_df['Solar'].sum()
+                if isinstance(total_solar_gen, pd.Series):
+                    total_solar_gen = total_solar_gen.sum()
 
-                sol_cap = f"{(m_df['Price'] * m_df['Solar']).sum() / m_df['Solar'].sum():.2f}"
+                if total_solar_gen > 0:
+                    #Calculate weighted average price
+                    solar_revenue = (m_df['Price'] * m_df['Soar']).sum()
+                    if isinstance(solar_revenue, pd.Series):
+                        solar_revenue = solar_revenue.sum()
+                    sol_cap = f"{solar_revenue / total_solar_gen:.2f}"
 
             
 
