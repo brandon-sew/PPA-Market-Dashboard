@@ -78,19 +78,51 @@ def fetch_data(codes, start_date, end_date):
         except: continue
     return pd.concat(all_data) if all_data else pd.DataFrame()
 
+@st.cache_data(ttl=3600)
+def fetch_gen_data(codes, start_date, end_date):
+    if not codes: return pd.DataFrame()
+    start = pd.Timestamp(start_date, tz='Europe/Brussels')
+    end = pd.Timestamp(end_date, tz='Europe/Brussels') + pd.Timedelta(days=1)
+    all_gen = []
+    for code in codes:
+        try:
+            df = client.query_generation(code, start=start, end=end)
+            if isinstance(df.columns, pd.MultiIndex):
+                df.columns = df.columns.get_level_values(0)
+            df = df.reset_index().rename(columns={'index': 'Time'})
+            df['Time'] = pd.to_datetime(df['Time']).dt.tz_convert('Europe/Brussels')
+            df['Zone'] = code
+            all_gen.append(df)
+        except: continue
+    return pd.concat(all_gen) if all_gen else pd.DataFrame()
+
 # --- MAIN AREA ---
 st.title("⚡ European Energy Market Explorer")
 
-# Pre-fetch data
-codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
+# Fetch data for ALL zones for map coverage, then filter for charts
+all_zones = list(ZONE_NAMES.keys())
+selected_codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
+
 plot_df = pd.DataFrame()
-if len(d_range) == 2 and codes:
-    data = fetch_data(codes, d_range[0], d_range[1])
-    if not data.empty:
+full_price_df = pd.DataFrame()
+
+if len(d_range) == 2:
+    # 1. Fetch Prices for ALL zones (for the map)
+    full_price_df = fetch_data(all_zones, d_range[0], d_range[1])
+    
+    # 2. Fetch Generation for SELECTED zones (for capture prices)
+    gen_df = fetch_gen_data(selected_codes, d_range[0], d_range[1])
+    
+    if not full_price_df.empty:
         freq = '60min' if res == "60 min" else '15min'
-        plot_df = data.groupby('Zone').apply(
+        
+        # Resample full price data for map averages
+        full_price_resampled = full_price_df.groupby('Zone').apply(
             lambda x: x.set_index('Time').resample(freq).mean(numeric_only=True).ffill()
         ).reset_index()
+        
+        # Filter for line chart
+        plot_df = full_price_resampled[full_price_resampled['Zone'].isin(selected_codes)].copy()
         plot_df['Currency'] = plot_df['Zone'].apply(lambda x: ZONE_NAMES.get(x, ['', 'EUR'])[1])
         plot_df['Display'] = plot_df['Zone'].apply(lambda x: f"{x} ({ZONE_NAMES.get(x, ['', 'EUR'])[1]}/MWh)")
 
@@ -102,12 +134,19 @@ with col_chart:
     if not plot_df.empty:
         fig_line = px.line(plot_df, x='Time', y='Price', color='Display', template="plotly_white", 
                            custom_data=['Currency'])
+        
+        # IMPLEMENTATION: Bigger Hover Box and Text
         fig_line.update_layout(
             legend=dict(orientation="h", y=-0.2), 
             margin=dict(l=0, r=0, b=0, t=20),
-            hovermode="closest"
+            hovermode="closest",
+            hoverlabel=dict(
+                bgcolor="white",
+                font_size=18,  # Increased text size
+                font_family="Inter"
+            )
         )
-        # Custom Hover Template
+        
         fig_line.update_traces(
             hovertemplate="<b>Date:</b> %{x|%b %d %Y}<br>" +
                           "<b>Time:</b> %{x|%H:%M}<br>" +
@@ -148,12 +187,8 @@ with col_map:
     if os.path.exists(geojson_folder):
         geojson_data, centers_df, all_found_codes = load_and_get_centers(geojson_folder)
         if geojson_data["features"]:
-            current_codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
-            
-            # Calculate Average Prices for selected date range per zone
-            avg_prices = {}
-            if not plot_df.empty:
-                avg_prices = plot_df.groupby('Zone')['Price'].mean().to_dict()
+            # Calculate Baseload (Average) Prices for ALL zones
+            avg_prices = full_price_resampled.groupby('Zone')['Price'].mean().to_dict() if not full_price_resampled.empty else {}
 
             map_rows = []
             for k in all_found_codes:
@@ -161,7 +196,7 @@ with col_map:
                 currency = ZONE_NAMES.get(k, ["", "EUR"])[1]
                 map_rows.append({
                     "Zone": k, 
-                    "Selected": 1 if k in current_codes else 0,
+                    "Selected": 1 if k in selected_codes else 0,
                     "AvgPrice": f"{price:.2f}" if price is not None else "N/A",
                     "Currency": currency
                 })
@@ -176,7 +211,7 @@ with col_map:
 
             fig_map.update_traces(
                 hovertemplate="<b>Zone:</b> %{location}<br>" +
-                              "<b>Avg Price:</b> %{customdata[0]} %{customdata[1]}/MWh<extra></extra>"
+                              "<b>Baseload Price:</b> %{customdata[0]} %{customdata[1]}/MWh<extra></extra>"
             )
 
             if not centers_df.empty:
@@ -184,32 +219,54 @@ with col_map:
                     lat=centers_df['lat'], lon=centers_df['lon'], text=centers_df['Zone'],
                     mode='text', textfont=dict(size=10, color="#FFFFFF", family="Arial Black"),
                     showlegend=False,
-                    hoverinfo="skip" # Removes hover from the zone labels
+                    hoverinfo="skip"
                 )
 
-            fig_map.update_geos(
-                center=dict(lon=12, lat=52), projection_scale=7, 
-                visible=True, 
-                showcountries=True, 
-                countrycolor="#262730", 
-                lakecolor="white",
-                landcolor="#e0e0e0", 
-                projection_type="mercator", 
-                bgcolor="rgba(0,0,0,0)"
-            )
-
-            fig_map.update_layout(
-                margin={"r":0,"t":0,"l":0,"b":0}, height=500, 
-                coloraxis_showscale=False, paper_bgcolor="rgba(0,0,0,0)",
-                autosize=True, modebar=dict(bgcolor='rgba(0,0,0,0)', color='gray', orientation='v')
-            )
+            fig_map.update_geos(center=dict(lon=12, lat=52), projection_scale=7, visible=True, showcountries=True, countrycolor="#262730", lakecolor="white", landcolor="#e0e0e0", projection_type="mercator", bgcolor="rgba(0,0,0,0)")
+            fig_map.update_layout(margin={"r":0,"t":0,"l":0,"b":0}, height=500, coloraxis_showscale=False, paper_bgcolor="rgba(0,0,0,0)", autosize=True)
             st.plotly_chart(fig_map, use_container_width=True, config={'displaylogo': False})
 
-# --- BOTTOM SECTION (DATA TABLE) ---
+# --- BOTTOM SECTION (METRICS & DATA TABLE) ---
 st.divider()
-st.subheader("Data Table")
-if not plot_df.empty:
-    plot_df['Date'] = plot_df['Time'].dt.strftime('%d-%m-%Y')
-    plot_df['24h Time'] = plot_df['Time'].dt.strftime('%H:%M')
-    pivot = plot_df.pivot_table(index=['Date', '24h Time'], columns='Display', values='Price')
-    st.dataframe(pivot.style.format("{:.2f}"), use_container_width=True, height=400)
+col_met, col_tab = st.columns([1, 2])
+
+with col_met:
+    st.subheader("Baseload & Capture Metrics")
+    if not plot_df.empty and not gen_df.empty:
+        metrics_list = []
+        for code in selected_codes:
+            p_sub = plot_df[plot_df['Zone'] == code]
+            g_sub = gen_df[gen_df['Zone'] == code]
+            m_df = pd.merge(p_sub, g_sub, on='Time', how='inner')
+            
+            baseload = p_sub['Price'].mean()
+            currency = ZONE_NAMES[code][1]
+            
+            # Solar Capture
+            sol_cap = "N/A"
+            if 'Solar' in m_df.columns and m_df['Solar'].sum() > 0:
+                sol_cap = f"{(m_df['Price'] * m_df['Solar']).sum() / m_df['Solar'].sum():.2f}"
+            
+            # Wind Capture (Onshore + Offshore)
+            wind_cols = [c for c in ['Wind Onshore', 'Wind Offshore'] if c in m_df.columns]
+            wind_cap = "N/A"
+            if wind_cols:
+                total_wind = m_df[wind_cols].sum(axis=1)
+                if total_wind.sum() > 0:
+                    wind_cap = f"{(m_df['Price'] * total_wind).sum() / total_wind.sum():.2f}"
+            
+            metrics_list.append({
+                "Zone": code, "Baseload": f"{baseload:.2f}", 
+                "Solar Capture": sol_cap, "Wind Capture": wind_cap, "Unit": f"{currency}/MWh"
+            })
+        st.table(pd.DataFrame(metrics_list))
+    else:
+        st.info("Select zones to calculate Capture prices.")
+
+with col_tab:
+    st.subheader("Hourly Price Data")
+    if not plot_df.empty:
+        plot_df['Date'] = plot_df['Time'].dt.strftime('%d-%m-%Y')
+        plot_df['24h Time'] = plot_df['Time'].dt.strftime('%H:%M')
+        pivot = plot_df.pivot_table(index=['Date', '24h Time'], columns='Display', values='Price')
+        st.dataframe(pivot.style.format("{:.2f}"), use_container_width=True, height=400)
