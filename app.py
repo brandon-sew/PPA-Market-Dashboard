@@ -35,7 +35,7 @@ st.set_page_config(page_title="Market Explorer", layout="wide", initial_sidebar_
 st.markdown("""
     <style>
     /* Widened sidebar for longer zone names */
-    section[data-testid="stSidebar"] { width: 450px !important; }
+    section[data-testid="stSidebar"] { width: 400px !important; }
     .main .block-container { 
         padding-top: 2rem !important;
         max-width: 98% !important; 
@@ -48,7 +48,7 @@ if 'selected_zones' not in st.session_state:
 
 # --- SIDEBAR: CONTROLS ---
 with st.sidebar:
-    st.title("⚙️ Controls")
+    st.title("Configuration")
     
     # Bidding Zone Search in Sidebar
     display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
