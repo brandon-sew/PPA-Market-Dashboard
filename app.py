@@ -492,28 +492,24 @@ with col_met:
 
             sol_cap = "N/A"
 
-            if 'Solar' in m_df.columns:
-                # Use .sum() .sum() to handle multiple columns of the same name
-                total_solar_gen = m_df['Solar'].sum()
-                if isinstance(total_solar_gen, pd.Series):
-                    total_solar_gen = total_solar_gen.sum()
+            if 'Solar' in m_df.columns and m_df['Solar'].sum() > 0:
 
-                if total_solar_gen > 0:
-                    #Calculate weighted average price
-                    solar_revenue = (m_df['Price'] * m_df['Solar']).sum()
-                    if isinstance(solar_revenue, pd.Series):
-                        solar_revenue = solar_revenue.sum()
-                    sol_cap = f"{solar_revenue / total_solar_gen:.2f}"
+                sol_cap = f"{(m_df['Price'] * m_df['Solar']).sum() / m_df['Solar'].sum():.2f}"
 
             
 
             # Wind Capture (Onshore + Offshore)
 
             wind_cols = [c for c in ['Wind Onshore', 'Wind Offshore'] if c in m_df.columns]
+
             wind_cap = "N/A"
+
             if wind_cols:
+
                 total_wind = m_df[wind_cols].sum(axis=1)
+
                 if total_wind.sum() > 0:
+
                     wind_cap = f"{(m_df['Price'] * total_wind).sum() / total_wind.sum():.2f}"
 
             
