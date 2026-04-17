@@ -76,7 +76,8 @@ def fetch_data(codes, start_date, end_date):
             df['Zone'] = code
             all_data.append(df)
         except: continue
-    return pd.concat(all_data) if all_data else pd.DataFrame()
+    # FIX: Added ignore_index=True
+    return pd.concat(all_data, ignore_index=True) if all_data else pd.DataFrame()
 
 @st.cache_data(ttl=3600)
 def fetch_gen_data(codes, start_date, end_date):
@@ -89,12 +90,17 @@ def fetch_gen_data(codes, start_date, end_date):
             df = client.query_generation(code, start=start, end=end)
             if isinstance(df.columns, pd.MultiIndex):
                 df.columns = df.columns.get_level_values(0)
+            
+            # FIX: Group identical columns to prevent InvalidIndexError during concat
+            df = df.groupby(df.columns, axis=1).sum()
+            
             df = df.reset_index().rename(columns={'index': 'Time'})
             df['Time'] = pd.to_datetime(df['Time']).dt.tz_convert('Europe/Brussels')
             df['Zone'] = code
             all_gen.append(df)
         except: continue
-    return pd.concat(all_gen) if all_gen else pd.DataFrame()
+    # FIX: Added ignore_index=True
+    return pd.concat(all_gen, ignore_index=True) if all_gen else pd.DataFrame()
 
 # --- MAIN AREA ---
 st.title("⚡ European Energy Market Explorer")
