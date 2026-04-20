@@ -1,7 +1,10 @@
 {
   "type": "FeatureCollection", 
-  "features": [{"properties": {"zoneName":"ME",
+  "features": [
     {
+      "properties": {
+        "zoneName":"ME"
+      },
       "geometry": {
         "type": "Polygon", 
         "coordinates": [
