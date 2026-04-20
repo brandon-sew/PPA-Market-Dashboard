@@ -2,9 +2,6 @@
   "type": "FeatureCollection", 
   "features": [
     {
-      "properties": {
-        "zoneName":"ME"
-      ,
       "geometry": {
         "type": "Polygon", 
         "coordinates": [
@@ -1447,7 +1444,7 @@
       "type": "Feature", 
       "properties": {
         "source": "https://simplemaps.com", 
-        "id": "ME", 
+        "zoneName": "ME", 
         "name": "Montenegro"
       }, 
       "id": 1
