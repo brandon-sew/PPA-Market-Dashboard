@@ -24,6 +24,12 @@ ZONE_NAMES = {
     "NO_3": ["Norway 3", "EUR"], "NO_4": ["Norway 4", "EUR"], "NO_5": ["Norway 5", "EUR"],
     "SE_1": ["Sweden 1", "EUR"], "SE_2": ["Sweden 2", "EUR"], "SE_3": ["Sweden 3", "EUR"],
     "SE_4": ["Sweden 4", "EUR"], "ES": ["Spain", "EUR"], "PT": ["Portugal", "EUR"],
+    # Balkan and Central/Eastern European Zones
+    "HR": ["Croatia", "EUR"], "HU": ["Hungary", "EUR"], 
+    "ME": ["Montenegro", "EUR",], "MK": ["North Macedonia", "EUR"],
+    "RO": ["Romania", "EUR"], "RS": ["Serbia", "EUR"], 
+    "SI": ["Slovenia", "EUR"], "SK": ["Slovakia", "EUR"],
+    # Italian Zones
     "IT_NORD": ["Italy North", "EUR"], "IT_CNOR": ["Italy C-North", "EUR"],
     "IT_CSUD": ["Italy C-South", "EUR"], "IT_SUD": ["Italy South", "EUR"],
     "IT_SICI": ["Sicily", "EUR"], "IT_SARD": ["Sardinia", "EUR"]
