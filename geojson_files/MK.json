@@ -4,7 +4,7 @@
     {
       "properties": {
         "zoneName":"MK"
-      },
+      ,
       "geometry": {
         "type": "Polygon", 
         "coordinates": [
