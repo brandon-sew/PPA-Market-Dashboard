@@ -45,10 +45,8 @@ def process_metrics(price_series, gen_df, country_code):
     for date, val in baseload.items(): 
         if pd.notna(val): data.append({'Date': date.date(), 'Metric': 'Baseload', 'Price': val})
 
-    # Capture Prices (Solar & Wind)
+    # Capture Prices
     if gen_df is not None and not gen_df.empty:
-        # Align indexes (Ensure both are hourly/15min matching)
-        # Handle ENTSO-E multi-index generation columns
         if isinstance(gen_df.columns, pd.MultiIndex):
             gen_df.columns = gen_df.columns.get_level_values(0)
         
@@ -65,17 +63,23 @@ def process_metrics(price_series, gen_df, country_code):
             for date, val in solar_cap.items():
                 if pd.notna(val): data.append({'Date': date.date(), 'Metric': 'Solar Capture', 'Price': val})
 
-        # Wind Capture Price (Onshore + Offshore)
-        wind_cols = [c for c in ['Wind Onshore', 'Wind Offshore'] if c in combined.columns]
-        if wind_cols:
-            combined['Total_Wind'] = combined[wind_cols].sum(axis=1)
-            def calc_wind(group):
-                total_gen = group['Total_Wind'].sum()
-                return (group['Price'] * group['Total_Wind']).sum() / total_gen if total_gen > 0 else None
-            
-            wind_cap = combined.resample('D').apply(calc_wind)
-            for date, val in wind_cap.items():
-                if pd.notna(val): data.append({'Date': date.date(), 'Metric': 'Wind Capture', 'Price': val})
+        # Wind Onshore Capture Price
+        if 'Wind Onshore' in combined.columns:
+            def calc_onshore(group):
+                total_gen = group['Wind Onshore'].sum()
+                return (group['Price'] * group['Wind Onshore']).sum() / total_gen if total_gen > 0 else None
+            onshore_cap = combined.resample('D').apply(calc_onshore)
+            for date, val in onshore_cap.items():
+                if pd.notna(val): data.append({'Date': date.date(), 'Metric': 'Wind Onshore Capture', 'Price': val})
+
+        # Wind Offshore Capture Price
+        if 'Wind Offshore' in combined.columns:
+            def calc_offshore(group):
+                total_gen = group['Wind Offshore'].sum()
+                return (group['Price'] * group['Wind Offshore']).sum() / total_gen if total_gen > 0 else None
+            offshore_cap = combined.resample('D').apply(calc_offshore)
+            for date, val in offshore_cap.items():
+                if pd.notna(val): data.append({'Date': date.date(), 'Metric': 'Wind Offshore Capture', 'Price': val})
 
     res = pd.DataFrame(data)
     res['Country'] = country_code
@@ -88,12 +92,15 @@ print(f"Starting data fetch for {len(countries)} zones...")
 for code in countries:
     try:
         print(f"Fetching {code}...")
-        # Fetch Prices
         raw_series = client.query_day_ahead_prices(code, start=start, end=end)
         
-        # Fetch Generation for Capture Prices
         try:
             gen_df = client.query_generation(code, start=start, end=end)
+            # Fix duplicate columns for Austria/NL
+            if gen_df is not None:
+                if isinstance(gen_df.columns, pd.MultiIndex):
+                    gen_df.columns = gen_df.columns.get_level_values(0)
+                gen_df = gen_df.T.groupby(level=0).sum().T
         except:
             gen_df = None
             
@@ -101,7 +108,6 @@ for code in countries:
             processed = process_metrics(raw_series, gen_df, code)
             all_country_data.append(processed)
         
-        # Respect API rate limits (Two calls now, so we stay cautious)
         time.sleep(1.5) 
     except Exception as e:
         print(f"Skipping {code}: {str(e)[:75]}...")
@@ -111,6 +117,6 @@ if all_country_data:
     final_df = pd.concat(all_country_data, ignore_index=True)
     final_df['Price'] = final_df['Price'].round(2)
     final_df.to_csv('market_prices.csv', index=False)
-    print(f"\nSuccess: market_prices.csv updated with Baseload and Capture prices.")
+    print(f"\nSuccess: market_prices.csv updated.")
 else:
     print("\nNo data collected.")
