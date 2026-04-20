@@ -18,7 +18,7 @@ countries = [
     'SE_1', 'SE_2', 'SE_3', 'SE_4',
     
     # Southern & Eastern Europe
-    'BG', 'ES', 'GR', 'HR', 'HU', 'PT', 'RO', 'RS', 'SI', 'SK',
+    'BG', 'ES', 'GR', 'HR', 'HU', 'ME', 'MK', 'PT', 'RO', 'RS', 'SI', 'SK',
     
     # Italy
     'IT_NORD', 'IT_CNOR', 'IT_CSUD', 'IT_SUD', 'IT_SICI', 'IT_SARD', 
