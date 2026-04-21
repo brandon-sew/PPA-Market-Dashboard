@@ -123,7 +123,7 @@ def fetch_forecast_data(codes, start_date, end_date):
         except: continue
     return pd.concat(all_forecast) if all_forecast else pd.DataFrame()
 
-st.title("⚡ European Energy Market Explorer")
+st.title("⚡ European Electricity Market Explorer")
 all_zones = list(ZONE_NAMES.keys())
 selected_codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
 plot_df = pd.DataFrame()
@@ -161,7 +161,7 @@ if len(d_range) == 2:
 
 col_chart, col_map = st.columns([2, 1])
 with col_chart:
-    st.subheader("Day-Ahead Prices")
+    st.subheader("Day-Ahead Prices and Generation Forecasts")
     if not plot_df.empty: 
         fig = make_subplots(specs=[[{"secondary_y": True}]])
 
