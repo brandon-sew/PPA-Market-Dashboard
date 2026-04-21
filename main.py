@@ -28,28 +28,19 @@ countries = [
 end = pd.Timestamp(datetime.now(), tz='Europe/Brussels')
 start = end - pd.Timedelta(days=10)
 
-def process_metrics(price_series, gen_df, country_code):
-    if price_series is None or price_series.empty: 
+def fetch_forecast_data(client, codes, start_date, end_date):
+    """Fetches Solar, Wind Onshore, and Wind Offshore forecasts."""
+    if not codes: 
         return pd.DataFrame()
     
-    price_series.index = pd.to_datetime(price_series.index)
-    price_series = price_series[price_series.notna()]
-
-    # Solar, offshore wind, and onshore wind generation
-    @st.cache_data(ttl=3600)
-        def fetch_forecast_data(client, codes, start_date, end_date):
-        if not codes: return pd.DataFrame()
-    
-    start = pd.Timestamp(start_date, tz='Europe/Brussels')
-    end = pd.Timestamp(end_date, tz='Europe/Brussels') + pd.Timedelta(days=1)
+    f_start = pd.Timestamp(start_date, tz='Europe/Brussels')
+    f_end = pd.Timestamp(end_date, tz='Europe/Brussels') + pd.Timedelta(days=1)
     
     all_forecasts = []
     for code in codes:
         try:
-            # Fetches Solar, Wind Onshore, and Wind Offshore forecasts
-            df = client.query_wind_and_solar_forecast(code, start=start, end=end)
+            df = client.query_wind_and_solar_forecast(code, start=f_start, end=f_end)
             
-            # Cleaning multi-index columns if they exist
             if isinstance(df.columns, pd.MultiIndex):
                 df.columns = df.columns.get_level_values(0)
             
@@ -57,21 +48,26 @@ def process_metrics(price_series, gen_df, country_code):
             df['Zone'] = code
             all_forecasts.append(df)
         except Exception as e:
-            # Some zones (like ME or MK) might not report certain forecasts yet
             print(f"No forecast data for {code}: {e}")
             continue
             
     return pd.concat(all_forecasts) if all_forecasts else pd.DataFrame()
+
+def process_metrics(price_series, gen_df, country_code):
+    if price_series is None or price_series.empty: 
+        return pd.DataFrame()
+    
+    price_series.index = pd.to_datetime(price_series.index)
+    price_series = price_series[price_series.notna()]
     
     # Daily Baseload
     baseload = price_series.resample('D').mean()
-    
-    # Prep for Capture Price calculations
     data = []
     
     # Add Baseload to data
     for date, val in baseload.items(): 
-        if pd.notna(val): data.append({'Date': date.date(), 'Metric': 'Baseload', 'Price': val})
+        if pd.notna(val): 
+            data.append({'Date': date.date(), 'Metric': 'Baseload', 'Price': val})
 
     # Capture Prices
     if gen_df is not None and not gen_df.empty:
@@ -89,25 +85,30 @@ def process_metrics(price_series, gen_df, country_code):
             
             solar_cap = combined.resample('D').apply(calc_solar)
             for date, val in solar_cap.items():
-                if pd.notna(val): data.append({'Date': date.date(), 'Metric': 'Solar Capture', 'Price': val})
+                if pd.notna(val): 
+                    data.append({'Date': date.date(), 'Metric': 'Solar Capture', 'Price': val})
 
         # Wind Onshore Capture Price
         if 'Wind Onshore' in combined.columns:
             def calc_onshore(group):
                 total_gen = group['Wind Onshore'].sum()
                 return (group['Price'] * group['Wind Onshore']).sum() / total_gen if total_gen > 0 else None
+            
             onshore_cap = combined.resample('D').apply(calc_onshore)
             for date, val in onshore_cap.items():
-                if pd.notna(val): data.append({'Date': date.date(), 'Metric': 'Wind Onshore Capture', 'Price': val})
+                if pd.notna(val): 
+                    data.append({'Date': date.date(), 'Metric': 'Wind Onshore Capture', 'Price': val})
 
         # Wind Offshore Capture Price
         if 'Wind Offshore' in combined.columns:
             def calc_offshore(group):
                 total_gen = group['Wind Offshore'].sum()
                 return (group['Price'] * group['Wind Offshore']).sum() / total_gen if total_gen > 0 else None
+            
             offshore_cap = combined.resample('D').apply(calc_offshore)
             for date, val in offshore_cap.items():
-                if pd.notna(val): data.append({'Date': date.date(), 'Metric': 'Wind Offshore Capture', 'Price': val})
+                if pd.notna(val): 
+                    data.append({'Date': date.date(), 'Metric': 'Wind Offshore Capture', 'Price': val})
 
     res = pd.DataFrame(data)
     res['Country'] = country_code
@@ -124,7 +125,6 @@ for code in countries:
         
         try:
             gen_df = client.query_generation(code, start=start, end=end)
-            # Fix duplicate columns for Austria/NL
             if gen_df is not None:
                 if isinstance(gen_df.columns, pd.MultiIndex):
                     gen_df.columns = gen_df.columns.get_level_values(0)
