@@ -303,7 +303,7 @@ with col_met:
                 "Zone": code, 
                 "Negative Hours": neg_hours,
                 "Lowest Price": f"{min_price:.2f} {currency}/MWh",
-                "Lowest Price Time": min_time_str
+                "Lowest Price Date & Time": min_time_str
             })
         st.table(pd.DataFrame(key_metrics_list))
     else:
