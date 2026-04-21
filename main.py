@@ -34,6 +34,34 @@ def process_metrics(price_series, gen_df, country_code):
     
     price_series.index = pd.to_datetime(price_series.index)
     price_series = price_series[price_series.notna()]
+
+    # Solar, offshore wind, and onshore wind generation
+    @st.cache_data(ttl=3600)
+    def fetch_forecast_data(client, codes, start_date, end_date):
+    if not codes: return pd.DataFrame()
+    
+    start = pd.Timestamp(start_date, tz='Europe/Brussels')
+    end = pd.Timestamp(end_date, tz='Europe/Brussels') + pd.Timedelta(days=1)
+    
+    all_forecasts = []
+    for code in codes:
+        try:
+            # Fetches Solar, Wind Onshore, and Wind Offshore forecasts
+            df = client.query_wind_and_solar_forecast(code, start=start, end=end)
+            
+            # Cleaning multi-index columns if they exist
+            if isinstance(df.columns, pd.MultiIndex):
+                df.columns = df.columns.get_level_values(0)
+            
+            df = df.reset_index().rename(columns={'index': 'Time'})
+            df['Zone'] = code
+            all_forecasts.append(df)
+        except Exception as e:
+            # Some zones (like ME or MK) might not report certain forecasts yet
+            print(f"No forecast data for {code}: {e}")
+            continue
+            
+    return pd.concat(all_forecasts) if all_forecasts else pd.DataFrame()
     
     # Daily Baseload
     baseload = price_series.resample('D').mean()
