@@ -56,14 +56,15 @@ with st.sidebar:
     st.title("Configuration")
     display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
     st.multiselect("Select bidding zones:", options=sorted(display_options.keys()), key="selected_zones")
+    
+    # --- MOVED DROPDOWN ---
+    gen_options = ["Solar", "Wind Onshore", "Wind Offshore"]
+    selected_gen_types = st.multiselect("Overlay Generation Forecast:", options=gen_options)
+    
     st.divider()
     res = st.radio("Resolution", ["60 min", "15 min"], horizontal=True)
     today = datetime.now().date()
     d_range = st.date_input("Date Range", value=(today - timedelta(days=2), today))
-    # Solar, Wind Onshore, and Wind Offshore selector
-st.divider()
-gen_options = ["Solar", "Wind Onshore", "Wind Offshore"]
-selected_gen_types = st.multiselect("Overlay Generation Forecast:", options=gen_options)
 
 @st.cache_data(ttl=3600)
 def fetch_data(codes, start_date, end_date):
@@ -94,10 +95,7 @@ def fetch_gen_data(codes, start_date, end_date):
             df = client.query_generation(code, start=start, end=end)
             if isinstance(df.columns, pd.MultiIndex):
                 df.columns = df.columns.get_level_values(0)
-            
-            # --- CRITICAL FIX: Merge duplicate columns like Solar ---
             df = df.T.groupby(level=0).sum().T 
-            
             df = df.reset_index().rename(columns={'index': 'Time'})
             df['Time'] = pd.to_datetime(df['Time']).dt.tz_convert('Europe/Brussels')
             df['Zone'] = code
@@ -105,15 +103,42 @@ def fetch_gen_data(codes, start_date, end_date):
         except: continue
     return pd.concat(all_gen) if all_gen else pd.DataFrame()
 
+# New function to handle the overlay data
+@st.cache_data(ttl=3600)
+def fetch_forecast_data(codes, start_date, end_date):
+    if not codes: return pd.DataFrame()
+    start = pd.Timestamp(start_date, tz='Europe/Brussels')
+    end = pd.Timestamp(end_date, tz='Europe/Brussels') + pd.Timedelta(days=1)
+    all_forecast = []
+    for code in codes:
+        try:
+            df = client.query_wind_and_solar_forecast(code, start=start, end=end)
+            if isinstance(df.columns, pd.MultiIndex):
+                df.columns = df.columns.get_level_values(0)
+            df = df.T.groupby(level=0).sum().T 
+            df = df.reset_index().rename(columns={'index': 'Time'})
+            df['Time'] = pd.to_datetime(df['Time']).dt.tz_convert('Europe/Brussels')
+            df['Zone'] = code
+            all_forecast.append(df)
+        except: continue
+    return pd.concat(all_forecast) if all_forecast else pd.DataFrame()
+
 st.title("⚡ European Energy Market Explorer")
 all_zones = list(ZONE_NAMES.keys())
 selected_codes = [display_options[lbl] for lbl in st.session_state.selected_zones]
 plot_df = pd.DataFrame()
 full_price_df = pd.DataFrame()
+gen_df = pd.DataFrame()
+forecast_df = pd.DataFrame() # Initialized to prevent NameError
 
 if len(d_range) == 2:
     full_price_df = fetch_data(all_zones, d_range[0], d_range[1])
     gen_df = fetch_gen_data(selected_codes, d_range[0], d_range[1])
+    
+    # Fetch Forecast for the overlay
+    if selected_gen_types:
+        forecast_df = fetch_forecast_data(selected_codes, d_range[0], d_range[1])
+        
     if not full_price_df.empty:
         freq = '60min' if res == "60 min" else '15min'
         full_price_resampled = full_price_df.groupby('Zone').apply(
@@ -129,42 +154,43 @@ with col_chart:
     if not plot_df.empty: 
         fig = make_subplots(specs=[[{"secondary_y": True}]])
 
-    # 2. Add Price Lines (Primary Y-Axis)
-    for zone in selected_codes:
-        zone_df = plot_df[plot_df['Zone'] == zone]
-        currency = ZONE_NAMES[zone][1]
-        fig.add_trace(
-            go.Scatter(x=zone_df['Time'], y=zone_df['Price'], 
-                       name=f"{zone} Price ({currency})",
-                       line=dict(width=2)),
-            secondary_y=False
+        # 2. Add Price Lines (Primary Y-Axis)
+        for zone in selected_codes:
+            zone_df = plot_df[plot_df['Zone'] == zone]
+            currency = ZONE_NAMES[zone][1]
+            fig.add_trace(
+                go.Scatter(x=zone_df['Time'], y=zone_df['Price'], 
+                           name=f"{zone} Price ({currency})",
+                           line=dict(width=2)),
+                secondary_y=False
+            )
+
+        # 3. Add Generation Lines (Secondary Y-Axis)
+        if selected_gen_types and not forecast_df.empty:
+            for zone in selected_codes:
+                z_gen_df = forecast_df[forecast_df['Zone'] == zone]
+                if not z_gen_df.empty:
+                    for g_type in selected_gen_types:
+                        if g_type in z_gen_df.columns:
+                            fig.add_trace(
+                                go.Scatter(x=z_gen_df['Time'], y=z_gen_df[g_type], 
+                                           name=f"{zone} {g_type} (Forecast)",
+                                           line=dict(dash='dot', width=1)),
+                                secondary_y=True
+                            )
+
+        # 4. Styling
+        fig.update_layout(
+            template="plotly_white",
+            hovermode="x unified",
+            legend=dict(orientation="h", y=-0.2),
+            margin=dict(l=0, r=0, b=0, t=20)
         )
 
-    # 3. Add Generation Lines (Secondary Y-Axis)
-    if selected_gen_types and not forecast_df.empty:
-        for zone in selected_codes:
-            for g_type in selected_gen_types:
-                z_gen_df = forecast_df[forecast_df['Zone'] == zone]
-                if g_type in z_gen_df.columns:
-                    fig.add_trace(
-                        go.Scatter(x=z_gen_df['Time'], y=z_gen_df[g_type], 
-                                   name=f"{zone} {g_type} (Forecast)",
-                                   line=dict(dash='dot', width=1)),
-                        secondary_y=True
-                    )
+        fig.update_yaxes(title_text="Price [Currency/MWh]", secondary_y=False)
+        fig.update_yaxes(title_text="Generation Forecast [MW]", secondary_y=True)
 
-    # 4. Styling
-    fig.update_layout(
-        template="plotly_white",
-        hovermode="x unified",
-        legend=dict(orientation="h", y=-0.2),
-        margin=dict(l=0, r=0, b=0, t=20)
-    )
-
-    fig.update_yaxes(title_text="Price [Currency/MWh]", secondary_y=False)
-    fig.update_yaxes(title_text="Generation Forecast [MW]", secondary_y=True)
-
-    st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True)
     
     
 
