@@ -37,8 +37,8 @@ def process_metrics(price_series, gen_df, country_code):
 
     # Solar, offshore wind, and onshore wind generation
     @st.cache_data(ttl=3600)
-    def fetch_forecast_data(client, codes, start_date, end_date):
-    if not codes: return pd.DataFrame()
+        def fetch_forecast_data(client, codes, start_date, end_date):
+        if not codes: return pd.DataFrame()
     
     start = pd.Timestamp(start_date, tz='Europe/Brussels')
     end = pd.Timestamp(end_date, tz='Europe/Brussels') + pd.Timedelta(days=1)
