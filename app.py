@@ -301,7 +301,7 @@ with col_met:
             currency = ZONE_NAMES.get(code, ["", "EUR"])[1]
             key_metrics_list.append({
                 "Zone": code, 
-                "Negative Hours": neg_hours,
+                "Number of Negative Hours": neg_hours,
                 "Lowest Price": f"{min_price:.2f} {currency}/MWh",
                 "Lowest Price Date & Time": min_time_str
             })
