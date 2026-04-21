@@ -301,6 +301,9 @@ with col_met:
                 "Negative Hours": neg_hours,
                 "Lowest Price": f"{min_price:.2f} {currency}/MWh"
             })
+        st.table(pd.DataFrame(key_metrics_list))
+    else:
+        st.info("Select zones to view key metrics.")
             
     st.subheader("Baseload & Capture Metrics")
     if not plot_df.empty and not gen_df.empty:
