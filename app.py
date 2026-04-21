@@ -46,31 +46,18 @@ st.markdown("""
         padding-top: 2rem !important;
         max-width: 98% !important; 
     }
-
-    /* Change the background of the multiselect tags */
     span[data-baseweb="tag"] {
-        background-color: #007927 !important;
+    background-color: #007927 !important;
     }
-
-    /* Target the radio button active state specifically */
-    /* 1. This handles the outer circle border and background */
-    div[data-testid="stRadio"] div[role="radiogroup"] label[data-baseweb="radio"] div:first-child div:nth-child(2) {
-        background-color: #007927 !important;
-    }
-
-    /* 2. This handles the inner dot of the radio button */
-    div[data-testid="stRadio"] div[role="radiogroup"] label[data-baseweb="radio"] input:checked + div + div {
-        border-color: #007927 !important;
-    }
-    
-    /* 3. General fallback for the selection circle */
-    div[data-baseweb="radio"] > div:first-child {
-        border-color: #007927 !important;
-    }
-
-    /* Ensure text color remains readable */
     div[data-testid="stMarkdownContainer"] p {
-        font-size: 1rem;
+    font-size: 1rem;
+    }
+    div[data-testid="stRadio"] label[data-baseweb="radio"] div[role="radiogroup"] div[data-testid="stMarkdownContainer"] {
+    color: white;
+    }
+    input[type="radio"]:checked + div {
+    background-color: #007927 !important;
+    border-color: #007927 !important;
     }
     </style>
     """, unsafe_allow_html=True)
