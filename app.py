@@ -288,6 +288,20 @@ st.divider()
 col_met, col_tab = st.columns([1, 2])
 
 with col_met:
+    st.subheader("Key Metrics")
+    if not plot_df.empty:
+        key_metrics_list = []
+        for code in selected_codes:
+            z_df = plot_df[plot_df['Zone'] == code]
+            neg_hours = len(z_df[z_df['Price'] < 0])
+            min_price = z_df['Price'].min()
+            currency = ZONE_NAMES.get(code, ["", "EUR"])[1]
+            key_metrics_list.append({
+                "Zone": code, 
+                "Negative Hours": neg_hours,
+                "Lowest Price": f"{min_price:.2f} {currency}/MWh"
+            })
+            
     st.subheader("Baseload & Capture Metrics")
     if not plot_df.empty and not gen_df.empty:
         metrics_list = []
