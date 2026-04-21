@@ -46,6 +46,19 @@ st.markdown("""
         padding-top: 2rem !important;
         max-width: 98% !important; 
     }
+    span[data-baseweb="tag"] {
+    background-color: #007927 !important;
+    }
+    div[data-testid="stMarkdownContainer"] p {
+    font-size: 1rem;
+    }
+    div[data-testid="stRadio"] label [data-baseweb="radio"] div[role="radiogroup"] div[data-testid="stMarkdownContainer"] {
+    color: white;
+    }
+    input[type="radio"]:checked + div {
+    background-color #007927 !important;
+    border-color: #007927 !important;
+    }
     </style>
     """, unsafe_allow_html=True)
 
