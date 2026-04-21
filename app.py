@@ -126,9 +126,8 @@ if len(d_range) == 2:
 col_chart, col_map = st.columns([2, 1])
 with col_chart:
     st.subheader("Day-Ahead Prices")
-    if not plot_df.empty:
-    # 1. Create subplots with secondary axis
-    fig = make_subplots(specs=[[{"secondary_y": True}]])
+    if not plot_df.empty: 
+        fig = make_subplots(specs=[[{"secondary_y": True}]])
 
     # 2. Add Price Lines (Primary Y-Axis)
     for zone in selected_codes:
@@ -166,6 +165,8 @@ with col_chart:
     fig.update_yaxes(title_text="Generation Forecast [MW]", secondary_y=True)
 
     st.plotly_chart(fig, use_container_width=True)
+    
+    
 
 with col_map:
     def load_and_get_centers(folder_path):
