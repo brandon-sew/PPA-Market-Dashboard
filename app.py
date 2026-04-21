@@ -292,14 +292,18 @@ with col_met:
     if not plot_df.empty:
         key_metrics_list = []
         for code in selected_codes:
-            z_df = plot_df[plot_df['Zone'] == code]
+            z_df = plot_df[plot_df['Zone'] == code].set_index('Time')
             neg_hours = len(z_df[z_df['Price'] < 0])
             min_price = z_df['Price'].min()
+            min_time_ts = z_df['Price'].idxmin()
+            time_format = "%d-%m-%y %H:%M"
+            min_time_str = min_time_ts.strftime(time_format)
             currency = ZONE_NAMES.get(code, ["", "EUR"])[1]
             key_metrics_list.append({
                 "Zone": code, 
                 "Negative Hours": neg_hours,
-                "Lowest Price": f"{min_price:.2f} {currency}/MWh"
+                "Lowest Price": f"{min_price:.2f} {currency}/MWh",
+                "Lowest Price Time": min_time_str
             })
         st.table(pd.DataFrame(key_metrics_list))
     else:
