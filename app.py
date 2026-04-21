@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 from entsoe import EntsoePandasClient
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # 1. Config & API Setup
 API_KEY = os.environ.get('ENTSOE_TOKEN')
@@ -71,8 +72,8 @@ def fetch_data(codes, start_date, end_date):
     if not codes: return pd.DataFrame()
     start = pd.Timestamp(start_date, tz='Europe/Brussels')
     end = pd.Timestamp(end_date, tz='Europe/Brussels') + pd.Timedelta(days=1)
-    all_data = []
-    for code in codes:
+    
+    def get_price(code):
         try:
             series = client.query_day_ahead_prices(code, start=start, end=end)
             df = series.to_frame(name='Price').reset_index()
@@ -80,8 +81,16 @@ def fetch_data(codes, start_date, end_date):
             df['Price'] = pd.to_numeric(df['Price'], errors='coerce')
             df['Time'] = pd.to_datetime(df['Time']).dt.tz_convert('Europe/Brussels')
             df['Zone'] = code
-            all_data.append(df)
-        except: continue
+            return df
+        except: return None
+
+    all_data = []
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        futures = [executor.submit(get_price, code) for code in codes]
+        for future in as_completed(futures):
+            res = future.result()
+            if res is not None: all_data.append(res)
+            
     return pd.concat(all_data) if all_data else pd.DataFrame()
 
 @st.cache_data(ttl=3600)
@@ -89,8 +98,8 @@ def fetch_gen_data(codes, start_date, end_date):
     if not codes: return pd.DataFrame()
     start = pd.Timestamp(start_date, tz='Europe/Brussels')
     end = pd.Timestamp(end_date, tz='Europe/Brussels') + pd.Timedelta(days=1)
-    all_gen = []
-    for code in codes:
+
+    def get_gen(code):
         try:
             df = client.query_generation(code, start=start, end=end)
             if isinstance(df.columns, pd.MultiIndex):
@@ -99,18 +108,25 @@ def fetch_gen_data(codes, start_date, end_date):
             df = df.reset_index().rename(columns={'index': 'Time'})
             df['Time'] = pd.to_datetime(df['Time']).dt.tz_convert('Europe/Brussels')
             df['Zone'] = code
-            all_gen.append(df)
-        except: continue
+            return df
+        except: return None
+
+    all_gen = []
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        futures = [executor.submit(get_gen, code) for code in codes]
+        for future in as_completed(futures):
+            res = future.result()
+            if res is not None: all_gen.append(res)
+            
     return pd.concat(all_gen) if all_gen else pd.DataFrame()
 
-# New function to handle the overlay data
 @st.cache_data(ttl=3600)
 def fetch_forecast_data(codes, start_date, end_date):
     if not codes: return pd.DataFrame()
     start = pd.Timestamp(start_date, tz='Europe/Brussels')
     end = pd.Timestamp(end_date, tz='Europe/Brussels') + pd.Timedelta(days=1)
-    all_forecast = []
-    for code in codes:
+    
+    def get_forecast(code):
         try:
             df = client.query_wind_and_solar_forecast(code, start=start, end=end)
             if isinstance(df.columns, pd.MultiIndex):
@@ -119,8 +135,16 @@ def fetch_forecast_data(codes, start_date, end_date):
             df = df.reset_index().rename(columns={'index': 'Time'})
             df['Time'] = pd.to_datetime(df['Time']).dt.tz_convert('Europe/Brussels')
             df['Zone'] = code
-            all_forecast.append(df)
-        except: continue
+            return df
+        except: return None
+
+    all_forecast = []
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        futures = [executor.submit(get_forecast, code) for code in codes]
+        for future in as_completed(futures):
+            res = future.result()
+            if res is not None: all_forecast.append(res)
+            
     return pd.concat(all_forecast) if all_forecast else pd.DataFrame()
 
 st.title("⚡ European Electricity Market Explorer")
