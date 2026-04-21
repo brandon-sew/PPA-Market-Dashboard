@@ -7,6 +7,8 @@ import glob
 import numpy as np
 from datetime import datetime, timedelta
 from entsoe import EntsoePandasClient
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 # 1. Config & API Setup
 API_KEY = os.environ.get('ENTSOE_TOKEN')
@@ -58,6 +60,10 @@ with st.sidebar:
     res = st.radio("Resolution", ["60 min", "15 min"], horizontal=True)
     today = datetime.now().date()
     d_range = st.date_input("Date Range", value=(today - timedelta(days=2), today))
+    # Solar, Wind Onshore, and Wind Offshore selector
+st.divider()
+gen_options = ["Solar", "Wind Onshore", "Wind Offshore"]
+selected_gen_types = st.multiselect("Overlay Generation Forecast:", options=gen_options)
 
 @st.cache_data(ttl=3600)
 def fetch_data(codes, start_date, end_date):
@@ -121,13 +127,45 @@ col_chart, col_map = st.columns([2, 1])
 with col_chart:
     st.subheader("Day-Ahead Prices")
     if not plot_df.empty:
-        fig_line = px.line(plot_df, x='Time', y='Price', color='Display', template="plotly_white", custom_data=['Currency'])
-        fig_line.update_layout(legend=dict(orientation="h", y=-0.2), margin=dict(l=0, r=0, b=0, t=20), hovermode="x unified", hoverlabel=dict(bgcolor="black", font_size=18, font_family="Arial"))
-        fig_line.update_traces(hovertemplate="<b>Date:</b> %{x|%b %d %Y}<br><b>Time:</b> %{x|%H:%M}<br><b>Price:</b> %{y:.2f} %{customdata[0]}/MWh<extra></extra>")
-        fig_line.update_xaxes(showspikes=True, spikecolor="grey", spikethickness=1, spikesnap ="cursor", spikemode="across")
-        st.plotly_chart(fig_line, use_container_width=True)
-    else:
-        st.info("Select zones to view price trends.")
+    # 1. Create subplots with secondary axis
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+    # 2. Add Price Lines (Primary Y-Axis)
+    for zone in selected_codes:
+        zone_df = plot_df[plot_df['Zone'] == zone]
+        currency = ZONE_NAMES[zone][1]
+        fig.add_trace(
+            go.Scatter(x=zone_df['Time'], y=zone_df['Price'], 
+                       name=f"{zone} Price ({currency})",
+                       line=dict(width=2)),
+            secondary_y=False
+        )
+
+    # 3. Add Generation Lines (Secondary Y-Axis)
+    if selected_gen_types and not forecast_df.empty:
+        for zone in selected_codes:
+            for g_type in selected_gen_types:
+                z_gen_df = forecast_df[forecast_df['Zone'] == zone]
+                if g_type in z_gen_df.columns:
+                    fig.add_trace(
+                        go.Scatter(x=z_gen_df['Time'], y=z_gen_df[g_type], 
+                                   name=f"{zone} {g_type} (Forecast)",
+                                   line=dict(dash='dot', width=1)),
+                        secondary_y=True
+                    )
+
+    # 4. Styling
+    fig.update_layout(
+        template="plotly_white",
+        hovermode="x unified",
+        legend=dict(orientation="h", y=-0.2),
+        margin=dict(l=0, r=0, b=0, t=20)
+    )
+
+    fig.update_yaxes(title_text="Price [Currency/MWh]", secondary_y=False)
+    fig.update_yaxes(title_text="Generation Forecast [MW]", secondary_y=True)
+
+    st.plotly_chart(fig, use_container_width=True)
 
 with col_map:
     def load_and_get_centers(folder_path):
