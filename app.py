@@ -137,16 +137,27 @@ if len(d_range) == 2:
     
     # Fetch Forecast for the overlay
     if selected_gen_types:
-        forecast_df = fetch_forecast_data(selected_codes, d_range[0], d_range[1])
+        forecast_df_raw = fetch_forecast_data(selected_codes, d_range[0], d_range[1])
+    else:
+        forecast_df_raw = pd.DataFrame()
         
     if not full_price_df.empty:
         freq = '60min' if res == "60 min" else '15min'
+        
+        # Resample Price Data
         full_price_resampled = full_price_df.groupby('Zone').apply(
             lambda x: x.set_index('Time').resample(freq).mean(numeric_only=True).ffill()
         ).reset_index()
+        
         plot_df = full_price_resampled[full_price_resampled['Zone'].isin(selected_codes)].copy()
         plot_df['Currency'] = plot_df['Zone'].apply(lambda x: ZONE_NAMES.get(x, ['', 'EUR'])[1])
         plot_df['Display'] = plot_df['Zone'].apply(lambda x: f"{x} ({ZONE_NAMES.get(x, ['', 'EUR'])[1]}/MWh)")
+
+        # CRITICAL FIX: Resample Forecast Data to match Resolution (Fixes Hover Interval)
+        if not forecast_df_raw.empty:
+            forecast_df = forecast_df_raw.groupby('Zone').apply(
+                lambda x: x.set_index('Time').resample(freq).mean(numeric_only=True).ffill()
+            ).reset_index()
 
 col_chart, col_map = st.columns([2, 1])
 with col_chart:
@@ -183,12 +194,20 @@ with col_chart:
         fig.update_layout(
             template="plotly_white",
             hovermode="x unified",
+            hoverlabel=dict(
+                bgcolor="white",
+                font_size=14,  # Larger font for readability
+                font_family="Arial"
+            ),
             legend=dict(orientation="h", y=-0.2),
             margin=dict(l=0, r=0, b=0, t=20)
         )
 
-        fig.update_yaxes(title_text="Price [Currency/MWh]", secondary_y=False)
-        fig.update_yaxes(title_text="Generation Forecast [MW]", secondary_y=True)
+        # Fix Y-axis scaling and grid lines
+        fig.update_yaxes(title_text="Price [Currency/MWh]", secondary_y=False, rangemode='normal')
+        fig.update_yaxes(title_text="Generation Forecast [MW]", secondary_y=True, 
+                         showgrid=False,  # Remove secondary grid lines
+                         rangemode='normal')
 
         st.plotly_chart(fig, use_container_width=True)
     
@@ -285,9 +304,44 @@ with col_met:
         st.info("Select zones to calculate Capture prices.")
 
 with col_tab:
-    st.subheader("Hourly Price Data")
+    st.subheader("Data Table")
     if not plot_df.empty:
-        plot_df['Date'] = plot_df['Time'].dt.strftime('%d-%m-%Y')
-        plot_df['24h Time'] = plot_df['Time'].dt.strftime('%H:%M')
-        pivot = plot_df.pivot_table(index=['Date', '24h Time'], columns='Display', values='Price')
-        st.dataframe(pivot.style.format("{:.2f}"), use_container_width=True, height=400)
+        # Prepare table data
+        table_df = plot_df.copy()
+        
+        # Merge Forecasts into the table if they exist
+        if not forecast_df.empty:
+            # Flatten forecast_df to join easily
+            for g_type in selected_gen_types:
+                if g_type in forecast_df.columns:
+                    # Create a temporary DF with just Zone, Time, and specific Generation Type
+                    f_sub = forecast_df[['Time', 'Zone', g_type]].copy()
+                    f_sub.columns = ['Time', 'Zone', f'TEMP_GEN_COL']
+                    
+                    # Merge it to plot_df
+                    table_df = pd.merge(table_df, f_sub, on=['Time', 'Zone'], how='left')
+                    
+                    # Rename the column to be Zone-specific
+                    table_df = table_df.rename(columns={'TEMP_GEN_COL': f"{g_type} Forecast (MW)"})
+
+        table_df['Date'] = table_df['Time'].dt.strftime('%d-%m-%Y')
+        table_df['24h Time'] = table_df['Time'].dt.strftime('%H:%M')
+        
+        # Determine value columns (Prices + Forecasts)
+        val_cols = ['Price'] + [c for c in table_df.columns if 'Forecast (MW)' in c]
+        
+        # Create a more complex pivot or melt to handle multiple metrics
+        pivot_base = table_df.melt(id_vars=['Date', '24h Time', 'Zone'], value_vars=val_cols)
+        
+        # Logic to create Display names for the table headers
+        def get_header(row):
+            if row['variable'] == 'Price':
+                return f"{row['Zone']} ({ZONE_NAMES.get(row['Zone'], ['', 'EUR'])[1]}/MWh)"
+            else:
+                return f"{row['Zone']} {row['variable']}"
+        
+        pivot_base['Header'] = pivot_base.apply(get_header, axis=1)
+        
+        final_pivot = pivot_base.pivot_table(index=['Date', '24h Time'], columns='Header', values='value')
+        
+        st.dataframe(final_pivot.style.format("{:.2f}", na_rep="-"), use_container_width=True, height=400)
