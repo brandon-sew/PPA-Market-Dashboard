@@ -187,8 +187,8 @@ with col_chart:
                         if g_type in z_gen_df.columns:
                             fig.add_trace(
                                 go.Scatter(x=z_gen_df['Time'], y=z_gen_df[g_type], 
-                                           name=f"{zone} {g_type} (Forecast)",
-                                           hovertemplate="%{y:.0f} MW",
+                                           name=f"{zone} {g_type} Forecast (MW)",
+                                           hovertemplate="%{y:.0f}",
                                            hoverlabel=dict(namelength=-1), # Prevent clipping
                                            line=dict(dash='dot', width=1)),
                                 secondary_y=True
