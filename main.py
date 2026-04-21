@@ -1,8 +1,8 @@
 import os
-import time
 import pandas as pd
 from datetime import datetime
 from entsoe import EntsoePandasClient
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # 1. Config
 ENTSOE_API_KEY = os.environ.get('ENTSOE_TOKEN')
@@ -28,31 +28,6 @@ countries = [
 end = pd.Timestamp(datetime.now(), tz='Europe/Brussels')
 start = end - pd.Timedelta(days=10)
 
-def fetch_forecast_data(client, codes, start_date, end_date):
-    """Fetches Solar, Wind Onshore, and Wind Offshore forecasts."""
-    if not codes: 
-        return pd.DataFrame()
-    
-    f_start = pd.Timestamp(start_date, tz='Europe/Brussels')
-    f_end = pd.Timestamp(end_date, tz='Europe/Brussels') + pd.Timedelta(days=1)
-    
-    all_forecasts = []
-    for code in codes:
-        try:
-            df = client.query_wind_and_solar_forecast(code, start=f_start, end=f_end)
-            
-            if isinstance(df.columns, pd.MultiIndex):
-                df.columns = df.columns.get_level_values(0)
-            
-            df = df.reset_index().rename(columns={'index': 'Time'})
-            df['Zone'] = code
-            all_forecasts.append(df)
-        except Exception as e:
-            print(f"No forecast data for {code}: {e}")
-            continue
-            
-    return pd.concat(all_forecasts) if all_forecasts else pd.DataFrame()
-
 def process_metrics(price_series, gen_df, country_code):
     if price_series is None or price_series.empty: 
         return pd.DataFrame()
@@ -60,65 +35,49 @@ def process_metrics(price_series, gen_df, country_code):
     price_series.index = pd.to_datetime(price_series.index)
     price_series = price_series[price_series.notna()]
     
-    # Daily Baseload
     baseload = price_series.resample('D').mean()
     data = []
     
-    # Add Baseload to data
     for date, val in baseload.items(): 
         if pd.notna(val): 
             data.append({'Date': date.date(), 'Metric': 'Baseload', 'Price': val})
 
-    # Capture Prices
     if gen_df is not None and not gen_df.empty:
         if isinstance(gen_df.columns, pd.MultiIndex):
             gen_df.columns = gen_df.columns.get_level_values(0)
         
-        # Merge price and generation on time
         combined = pd.merge(price_series.to_frame('Price'), gen_df, left_index=True, right_index=True, how='inner')
         
-        # Solar Capture Price
         if 'Solar' in combined.columns:
             def calc_solar(group):
                 total_gen = group['Solar'].sum()
                 return (group['Price'] * group['Solar']).sum() / total_gen if total_gen > 0 else None
-            
             solar_cap = combined.resample('D').apply(calc_solar)
             for date, val in solar_cap.items():
-                if pd.notna(val): 
-                    data.append({'Date': date.date(), 'Metric': 'Solar Capture', 'Price': val})
+                if pd.notna(val): data.append({'Date': date.date(), 'Metric': 'Solar Capture', 'Price': val})
 
-        # Wind Onshore Capture Price
         if 'Wind Onshore' in combined.columns:
             def calc_onshore(group):
                 total_gen = group['Wind Onshore'].sum()
                 return (group['Price'] * group['Wind Onshore']).sum() / total_gen if total_gen > 0 else None
-            
             onshore_cap = combined.resample('D').apply(calc_onshore)
             for date, val in onshore_cap.items():
-                if pd.notna(val): 
-                    data.append({'Date': date.date(), 'Metric': 'Wind Onshore Capture', 'Price': val})
+                if pd.notna(val): data.append({'Date': date.date(), 'Metric': 'Wind Onshore Capture', 'Price': val})
 
-        # Wind Offshore Capture Price
         if 'Wind Offshore' in combined.columns:
             def calc_offshore(group):
                 total_gen = group['Wind Offshore'].sum()
                 return (group['Price'] * group['Wind Offshore']).sum() / total_gen if total_gen > 0 else None
-            
             offshore_cap = combined.resample('D').apply(calc_offshore)
             for date, val in offshore_cap.items():
-                if pd.notna(val): 
-                    data.append({'Date': date.date(), 'Metric': 'Wind Offshore Capture', 'Price': val})
+                if pd.notna(val): data.append({'Date': date.date(), 'Metric': 'Wind Offshore Capture', 'Price': val})
 
     res = pd.DataFrame(data)
     res['Country'] = country_code
     return res
 
-all_country_data = []
-
-print(f"Starting data fetch for {len(countries)} zones...")
-
-for code in countries:
+def fetch_single_country(code):
+    """Worker function to handle data fetching for one country."""
     try:
         print(f"Fetching {code}...")
         raw_series = client.query_day_ahead_prices(code, start=start, end=end)
@@ -133,12 +92,22 @@ for code in countries:
             gen_df = None
             
         if raw_series is not None and not raw_series.empty:
-            processed = process_metrics(raw_series, gen_df, code)
-            all_country_data.append(processed)
-        
-        time.sleep(1.5) 
+            return process_metrics(raw_series, gen_df, code)
     except Exception as e:
         print(f"Skipping {code}: {str(e)[:75]}...")
+    return pd.DataFrame()
+
+# 2. Parallel Execution
+all_country_data = []
+print(f"Starting parallel data fetch for {len(countries)} zones...")
+
+# We use 5 workers to be respectful of the ENTSO-E API limits while gaining speed
+with ThreadPoolExecutor(max_workers=5) as executor:
+    futures = {executor.submit(fetch_single_country, code): code for code in countries}
+    for future in as_completed(futures):
+        result = future.result()
+        if not result.empty:
+            all_country_data.append(result)
 
 # 3. Export
 if all_country_data:
