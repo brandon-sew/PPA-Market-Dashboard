@@ -46,26 +46,6 @@ st.markdown("""
         padding-top: 2rem !important;
         max-width: 98% !important; 
     }
-    /* 1. Multiselect Tags (Bidding Zones/Forecasts) */
-    span[data-baseweb="tag"] {
-        background-color: #007927 !important;
-    }
-    /* 2. Radio Button: The outer circle border when selected */
-    div[data-testid="stRadio"] [data-baseweb="radio"] > div:first-child {
-        border-color: #007927 !important;
-    }
-    /* 3. Radio Button: The inner dot when selected */
-    div[data-testid="stRadio"] [data-baseweb="radio"] input:checked + div > div {
-        background-color: #007927 !important;
-    }
-    /* 4. Remove the red 'glow' or focus border when clicking */
-    div[data-testid="stRadio"] [data-baseweb="radio"]:focus div {
-        box-shadow: none !important;
-    }
-    /* Text styling */
-    div[data-testid="stMarkdownContainer"] p {
-        font-size: 1rem;
-    }
     </style>
     """, unsafe_allow_html=True)
 
