@@ -52,7 +52,7 @@ st.markdown("""
     div[data-testid="stMarkdownContainer"] p {
     font-size: 1rem;
     }
-    div[data-testid="stRadio"] label [data-baseweb="radio"] div[role="radiogroup"] div[data-testid="stMarkdownContainer"] {
+    div[data-testid="stRadio"] label[data-baseweb="radio"] div[role="radiogroup"] div[data-testid="stMarkdownContainer"] {
     color: white;
     }
     input[type="radio"]:checked + div {
