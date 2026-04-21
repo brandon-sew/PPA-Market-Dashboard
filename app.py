@@ -171,7 +171,7 @@ with col_chart:
             currency = ZONE_NAMES[zone][1]
             fig.add_trace(
                 go.Scatter(x=zone_df['Time'], y=zone_df['Price'], 
-                           name=f"{zone} Price ({currency})",
+                           name=f"{zone} Price ({currency}/MWh)",
                            hovertemplate="%{y:.2f}",
                            hoverlabel=dict(namelength=-1), # Prevent clipping
                            line=dict(width=2)),
@@ -229,7 +229,7 @@ with col_chart:
         )
 
         # Apply Aligned Ranges and Hide Secondary Grid
-        fig.update_yaxes(title_text="Price [Currency/MWh]", secondary_y=False, 
+        fig.update_yaxes(title_text="Price", secondary_y=False, 
                          range=p_range, zeroline=True, zerolinewidth=2, zerolinecolor='rgba(0,0,0,0.3)')
         
         fig.update_yaxes(title_text="Generation Forecast [MW]", secondary_y=True, 
