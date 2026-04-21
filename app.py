@@ -172,6 +172,8 @@ with col_chart:
             fig.add_trace(
                 go.Scatter(x=zone_df['Time'], y=zone_df['Price'], 
                            name=f"{zone} Price ({currency})",
+                           hovertemplate="%{y:.2f}",
+                           hoverlabel=dict(namelength=-1), # Prevent clipping
                            line=dict(width=2)),
                 secondary_y=False
             )
@@ -186,28 +188,53 @@ with col_chart:
                             fig.add_trace(
                                 go.Scatter(x=z_gen_df['Time'], y=z_gen_df[g_type], 
                                            name=f"{zone} {g_type} (Forecast)",
+                                           hovertemplate="%{y:.0f} MW",
+                                           hoverlabel=dict(namelength=-1), # Prevent clipping
                                            line=dict(dash='dot', width=1)),
                                 secondary_y=True
                             )
+
+        # --- Axis Range & Zero Alignment Logic ---
+        p_min, p_max = plot_df['Price'].min(), plot_df['Price'].max()
+        p_padding = (p_max - p_min) * 0.1 if p_max != p_min else 10
+        p_range = [p_min - p_padding, p_max + p_padding]
+        
+        if not forecast_df.empty and selected_gen_types:
+            available_gens = [g for g in selected_gen_types if g in forecast_df.columns]
+            if available_gens:
+                g_max = forecast_df[available_gens].max().max()
+                g_max = g_max * 1.1 if g_max > 0 else 100
+                
+                # To align Zeros: The ratio of (min / max) must be the same for both axes
+                # We calculate a g_min that mirrors the price axis's negative proportion
+                g_min = (p_range[0] / p_range[1]) * g_max if p_range[1] > 0 else 0
+                g_range = [g_min, g_max]
+            else:
+                g_range = [0, 100]
+        else:
+            g_range = [0, 100]
 
         # 4. Styling
         fig.update_layout(
             template="plotly_white",
             hovermode="x unified",
             hoverlabel=dict(
-                bgcolor="white",
-                font_size=14,  # Larger font for readability
+                bgcolor="black", # Black background
+                font_size=12,
+                font_color="white", # White text for contrast
                 font_family="Arial"
             ),
             legend=dict(orientation="h", y=-0.2),
             margin=dict(l=0, r=0, b=0, t=20)
         )
 
-        # Fix Y-axis scaling and grid lines
-        fig.update_yaxes(title_text="Price [Currency/MWh]", secondary_y=False, rangemode='normal')
+        # Apply Aligned Ranges and Hide Secondary Grid
+        fig.update_yaxes(title_text="Price [Currency/MWh]", secondary_y=False, 
+                         range=p_range, zeroline=True, zerolinewidth=2, zerolinecolor='rgba(0,0,0,0.3)')
+        
         fig.update_yaxes(title_text="Generation Forecast [MW]", secondary_y=True, 
-                         showgrid=False,  # Remove secondary grid lines
-                         rangemode='normal')
+                         range=g_range, showgrid=False, # Merge gridlines by hiding secondary
+                         zeroline=True, zerolinewidth=2, zerolinecolor='rgba(0,0,0,0.3)')
 
         st.plotly_chart(fig, use_container_width=True)
     
