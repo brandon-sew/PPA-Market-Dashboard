@@ -61,7 +61,9 @@ with st.sidebar:
     # --- MOVED DROPDOWN ---
     gen_options = ["Solar", "Wind Onshore", "Wind Offshore"]
     selected_gen_types = st.multiselect("Overlay Generation Forecast:", options=gen_options)
-    
+
+    st.divider()
+    exclude_neg = st.checkbox("No Settlement for Negative Prices", help="Treats negative prices as 0 for capture price calculation"
     st.divider()
     res = st.radio("Resolution", ["60 min", "15 min"], horizontal=True)
     today = datetime.now().date()
@@ -347,6 +349,10 @@ with col_met:
             p_sub = plot_df[plot_df['Zone'] == code]
             # 2 use the resampled Actual Generation for the calculation
             g_sub = gen_resampled[gen_resampled['Zone'] == code]
+            #Negative price option logic
+            if exclude_neg:
+                p_sub['Price'] = p_sub['Price'].clip(lower=0)
+                
             m_df = pd.merge(p_sub, g_sub, on='Time', how='inner')
             
             baseload = p_sub['Price'].mean()
