@@ -33,9 +33,9 @@ ZONE_NAMES = {
     "RO": ["Romania", "EUR"], "RS": ["Serbia", "EUR"], 
     "SI": ["Slovenia", "EUR"], "SK": ["Slovakia", "EUR"],
     # Italian Zones
-    "IT_NORD": ["Italy North", "EUR"], "IT_CNOR": ["Italy C-North", "EUR"],
-    "IT_CSUD": ["Italy C-South", "EUR"], "IT_SUD": ["Italy South", "EUR"],
-    "IT_SICI": ["Sicily", "EUR"], "IT_SARD": ["Sardinia", "EUR"]
+    "IT_NORD": ["Italy North", "EUR"], "IT_CNOR": ["Italy Central North", "EUR"],
+    "IT_CSUD": ["Italy Central South", "EUR"], "IT_SUD": ["Italy South", "EUR"],
+    "IT_SICI": ["Italy Sicily", "EUR"], "IT_SARD": ["Italy Sardinia", "EUR"], "IT_CALA": ["Italy Calabria", "EUR"]
 }
 
 st.set_page_config(page_title="Market Explorer", layout="wide", initial_sidebar_state="expanded")
@@ -325,7 +325,7 @@ with col_met:
             currency = ZONE_NAMES.get(code, ["", "EUR"])[1]
             key_metrics_list.append({
                 "Zone": code, 
-                "Number of Negative Hours": neg_hours,
+                "Number of Negative Periods": neg_hours,
                 "Lowest Price": f"{min_price:.2f} {currency}/MWh",
                 "Lowest Price Date & Time": min_time_str
             })
