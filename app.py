@@ -335,11 +335,20 @@ with col_met:
             
     st.subheader("Baseload & Capture Metrics")
     if not plot_df.empty and not gen_df.empty:
+        #1 Ensure Actual Generation matches the Price resolution (60min vs 15min)
+        # This prevents losing 75% of data when calculating capture prices
+        freq = '60min' if res == "60 min" else '15min'
+        gen_resampled = gen_df.groupby('Zone').apply(
+            lambda x: x.set_index('Time').resample(freq).sum(numeric_only=True)
+        ).reset_index()
+    
         metrics_list = []
         for code in selected_codes:
             p_sub = plot_df[plot_df['Zone'] == code]
-            g_sub = gen_df[gen_df['Zone'] == code]
+            # 2 use the resampled Actual Generation for the calculation
+            g_sub = gen_resampled[gen_resampled['Zone'] == code]
             m_df = pd.merge(p_sub, g_sub, on='Time', how='inner')
+            
             baseload = p_sub['Price'].mean()
             currency = ZONE_NAMES[code][1]
             
