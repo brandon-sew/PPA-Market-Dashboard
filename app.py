@@ -63,7 +63,7 @@ with st.sidebar:
     selected_gen_types = st.multiselect("Overlay Generation Forecast:", options=gen_options)
 
     st.divider()
-    exclude_neg = st.checkbox("No Settlement for Negative Prices", help="Treats negative prices as 0 for capture price calculation"
+    exclude_neg = st.checkbox("No Settlement for Negative Prices", help="Treats negative prices as 0 for capture price calculation")
     st.divider()
     res = st.radio("Resolution", ["60 min", "15 min"], horizontal=True)
     today = datetime.now().date()
