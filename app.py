@@ -56,7 +56,16 @@ if 'selected_zones' not in st.session_state:
 with st.sidebar:
     st.title("Configuration")
     display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
-    st.multiselect("Select bidding zones:", options=sorted(display_options.keys()), key="selected_zones")
+    
+    # FIX: Use 'default' instead of 'key' to allow programmatic updates from the map
+    chosen_from_dropdown = st.multiselect("Select bidding zones:", 
+                                         options=sorted(display_options.keys()), 
+                                         default=st.session_state.selected_zones)
+    
+    # Sync session state if the user manually interacts with the dropdown
+    if chosen_from_dropdown != st.session_state.selected_zones:
+        st.session_state.selected_zones = chosen_from_dropdown
+        st.rerun()
     
     # --- MOVED DROPDOWN ---
     gen_options = ["Solar", "Wind Onshore", "Wind Offshore"]
