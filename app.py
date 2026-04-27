@@ -312,14 +312,18 @@ with col_map:
             # --- INTERACTIVE MAP LOGIC ---
             map_event = st.plotly_chart(fig_map, use_container_width=True, config={'displaylogo': False}, on_select="rerun", selection_mode="points")
             
-            if map_event and "selection" in map_event and "points" in map_event["selection"] and map_event["selection"]["points"]:
+            if map_event and "selection" in map_event and map_event["selection"]["points"]:
                 clicked_code = map_event["selection"]["points"][0]["location"]
                 clicked_label = f"{ZONE_NAMES[clicked_code][0]} ({clicked_code})"
+                current_selection = list(st.session_state.selected_zones)
                 
-                if clicked_label not in st.session_state.selected_zones:
-                    st.session_state.selected_zones.append(clicked_label)
-                    st.rerun()
-
+                if clicked_label in current_selection:
+                    current_selection.remove(clicked_label)
+                else:
+                    current_selection.append(clicked_label)
+                st.session_state.selected_zones = current_selection
+                st.rerun()
+                    
 st.divider()
 col_met, col_tab = st.columns([1, 2])
 
