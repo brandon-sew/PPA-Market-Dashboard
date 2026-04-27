@@ -1,5 +1,5 @@
 import streamlit as st
-import pandas as pd
+import pd as pd
 import plotly.express as px
 import os
 import json
@@ -56,6 +56,9 @@ if 'selected_zones' not in st.session_state:
 with st.sidebar:
     st.title("Configuration")
     display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
+    # NEW: Create inverse map to get display name from code
+    inv_display = {v: k for k, v in display_options.items()}
+    
     st.multiselect("Select bidding zones:", options=sorted(display_options.keys()), key="selected_zones")
     
     # --- MOVED DROPDOWN ---
@@ -308,7 +311,17 @@ with col_map:
                 fig_map.add_scattergeo(lat=centers_df['lat'], lon=centers_df['lon'], text=centers_df['Zone'], mode='text', textfont=dict(size=10, color="#FFFFFF", family="Arial Black"), showlegend=False, hoverinfo="skip")
             fig_map.update_geos(center=dict(lon=12, lat=52), projection_scale=7, visible=True, showcountries=True, countrycolor="#262730", lakecolor="white", landcolor="#e0e0e0", projection_type="mercator", bgcolor="rgba(0,0,0,0)")
             fig_map.update_layout(margin={"r":0,"t":0,"l":0,"b":0}, height=500, coloraxis_showscale=False, paper_bgcolor="rgba(0,0,0,0)", autosize=True)
-            st.plotly_chart(fig_map, use_container_width=True, config={'displaylogo': False})
+            
+            # UPDATED: Capture map selection/click events
+            map_event = st.plotly_chart(fig_map, use_container_width=True, config={'displaylogo': False}, on_select="rerun")
+            
+            # NEW: Handle clicks on the map
+            if map_event and "selection" in map_event and map_event["selection"]["points"]:
+                clicked_zone_code = map_event["selection"]["points"][0]["location"]
+                display_name = inv_display.get(clicked_zone_code)
+                if display_name and display_name not in st.session_state.selected_zones:
+                    st.session_state.selected_zones.append(display_name)
+                    st.rerun()
 
 st.divider()
 col_met, col_tab = st.columns([1, 2])
