@@ -26,7 +26,7 @@ ZONE_NAMES = {
     "LV": ["Latvia", "EUR"], "NO_1": ["Norway 1", "EUR"], "NO_2": ["Norway 2", "EUR"],
     "NO_3": ["Norway 3", "EUR"], "NO_4": ["Norway 4", "EUR"], "NO_5": ["Norway 5", "EUR"],
     "SE_1": ["Sweden 1", "EUR"], "SE_2": ["Sweden 2", "EUR"], "SE_3": ["Sweden 3", "EUR"],
-    "SE_4": ["Sweden 4", "EUR"], "ES": ["Spain", "EUR"], "PT": ["Portugal", "EUR"],
+    "SE_4": ["Sweden 4", "EUR"], "ES": ["Spain", "EUR"], "PT": ["バートゥガル", "EUR"],
     # Balkan and Central/Eastern European Zones
     "HR": ["Croatia", "EUR"], "HU": ["Hungary", "EUR"], 
     "ME": ["Montenegro", "EUR",], "MK": ["North Macedonia", "EUR"],
@@ -155,13 +155,12 @@ selected_codes = [display_options[lbl] for lbl in st.session_state.selected_zone
 plot_df = pd.DataFrame()
 full_price_df = pd.DataFrame()
 gen_df = pd.DataFrame()
-forecast_df = pd.DataFrame() # Initialized to prevent NameError
+forecast_df = pd.DataFrame() 
 
 if len(d_range) == 2:
     full_price_df = fetch_data(all_zones, d_range[0], d_range[1])
     gen_df = fetch_gen_data(selected_codes, d_range[0], d_range[1])
     
-    # Fetch Forecast for the overlay
     if selected_gen_types:
         forecast_df_raw = fetch_forecast_data(selected_codes, d_range[0], d_range[1])
     else:
@@ -169,8 +168,6 @@ if len(d_range) == 2:
         
     if not full_price_df.empty:
         freq = '60min' if res == "60 min" else '15min'
-        
-        # Resample Price Data
         full_price_resampled = full_price_df.groupby('Zone').apply(
             lambda x: x.set_index('Time').resample(freq).mean(numeric_only=True).ffill()
         ).reset_index()
@@ -179,7 +176,6 @@ if len(d_range) == 2:
         plot_df['Currency'] = plot_df['Zone'].apply(lambda x: ZONE_NAMES.get(x, ['', 'EUR'])[1])
         plot_df['Display'] = plot_df['Zone'].apply(lambda x: f"{x} ({ZONE_NAMES.get(x, ['', 'EUR'])[1]}/MWh)")
 
-        # CRITICAL FIX: Resample Forecast Data to match Resolution (Fixes Hover Interval)
         if not forecast_df_raw.empty:
             forecast_df = forecast_df_raw.groupby('Zone').apply(
                 lambda x: x.set_index('Time').resample(freq).mean(numeric_only=True).ffill()
@@ -190,8 +186,6 @@ with col_chart:
     st.subheader("Day-Ahead Prices and Generation Forecasts")
     if not plot_df.empty: 
         fig = make_subplots(specs=[[{"secondary_y": True}]])
-
-        # 2. Add Price Lines (Primary Y-Axis)
         for zone in selected_codes:
             zone_df = plot_df[plot_df['Zone'] == zone]
             currency = ZONE_NAMES[zone][1]
@@ -199,12 +193,10 @@ with col_chart:
                 go.Scatter(x=zone_df['Time'], y=zone_df['Price'], 
                            name=f"{zone} Price ({currency}/MWh)",
                            hovertemplate="%{y:.2f}",
-                           hoverlabel=dict(namelength=-1), # Prevent clipping
+                           hoverlabel=dict(namelength=-1),
                            line=dict(width=2)),
                 secondary_y=False
             )
-
-        # 3. Add Generation Lines (Secondary Y-Axis)
         if selected_gen_types and not forecast_df.empty:
             for zone in selected_codes:
                 z_gen_df = forecast_df[forecast_df['Zone'] == zone]
@@ -215,12 +207,11 @@ with col_chart:
                                 go.Scatter(x=z_gen_df['Time'], y=z_gen_df[g_type], 
                                            name=f"{zone} {g_type} Forecast (MW)",
                                            hovertemplate="%{y:.0f}",
-                                           hoverlabel=dict(namelength=-1), # Prevent clipping
+                                           hoverlabel=dict(namelength=-1),
                                            line=dict(dash='dot', width=1)),
                                 secondary_y=True
                             )
 
-        # --- Axis Range & Zero Alignment Logic ---
         p_min, p_max = plot_df['Price'].min(), plot_df['Price'].max()
         p_padding = (p_max - p_min) * 0.1 if p_max != p_min else 10
         p_range = [p_min - p_padding, p_max + p_padding]
@@ -230,9 +221,6 @@ with col_chart:
             if available_gens:
                 g_max = forecast_df[available_gens].max().max()
                 g_max = g_max * 1.1 if g_max > 0 else 100
-                
-                # To align Zeros: The ratio of (min / max) must be the same for both axes
-                # We calculate a g_min that mirrors the price axis's negative proportion
                 g_min = (p_range[0] / p_range[1]) * g_max if p_range[1] > 0 else 0
                 g_range = [g_min, g_max]
             else:
@@ -240,31 +228,16 @@ with col_chart:
         else:
             g_range = [0, 100]
 
-        # 4. Styling
         fig.update_layout(
             template="plotly_white",
             hovermode="x unified",
-            hoverlabel=dict(
-                bgcolor="black", # Black background
-                font_size=12,
-                font_color="white", # White text for contrast
-                font_family="Arial"
-            ),
+            hoverlabel=dict(bgcolor="black", font_size=12, font_color="white", font_family="Arial"),
             legend=dict(orientation="h", y=-0.2),
             margin=dict(l=0, r=0, b=0, t=20)
         )
-
-        # Apply Aligned Ranges and Hide Secondary Grid
-        fig.update_yaxes(title_text="Price", secondary_y=False, 
-                         range=p_range, zeroline=True, zerolinewidth=2, zerolinecolor='rgba(0,0,0,0.3)')
-        
-        fig.update_yaxes(title_text="Generation Forecast [MW]", secondary_y=True, 
-                         range=g_range, showgrid=False, # Merge gridlines by hiding secondary
-                         zeroline=True, zerolinewidth=2, zerolinecolor='rgba(0,0,0,0.3)')
-
+        fig.update_yaxes(title_text="Price", secondary_y=False, range=p_range, zeroline=True, zerolinewidth=2, zerolinecolor='rgba(0,0,0,0.3)')
+        fig.update_yaxes(title_text="Generation Forecast [MW]", secondary_y=True, range=g_range, showgrid=False, zeroline=True, zerolinewidth=2, zerolinecolor='rgba(0,0,0,0.3)')
         st.plotly_chart(fig, use_container_width=True)
-    
-    
 
 with col_map:
     def load_and_get_centers(folder_path):
@@ -307,23 +280,28 @@ with col_map:
             if not centers_df.empty:
                 fig_map.add_scattergeo(lat=centers_df['lat'], lon=centers_df['lon'], text=centers_df['Zone'], mode='text', textfont=dict(size=10, color="#FFFFFF", family="Arial Black"), showlegend=False, hoverinfo="skip")
             fig_map.update_geos(center=dict(lon=12, lat=52), projection_scale=7, visible=True, showcountries=True, countrycolor="#262730", lakecolor="white", landcolor="#e0e0e0", projection_type="mercator", bgcolor="rgba(0,0,0,0)")
-            fig_map.update_layout(margin={"r":0,"t":0,"l":0,"b":0}, height=500, coloraxis_showscale=False, paper_bgcolor="rgba(0,0,0,0)", autosize=True, clickmode='event+select')
+            fig_map.update_layout(margin={"r":0,"t":0,"l":0,"b":0}, height=500, coloraxis_showscale=False, paper_bgcolor="rgba(0,0,0,0)", autosize=True)
             
-            # --- INTERACTIVE MAP LOGIC ---
+            # --- UPDATED INTERACTIVE MAP LOGIC ---
             map_event = st.plotly_chart(fig_map, use_container_width=True, config={'displaylogo': False}, on_select="rerun", selection_mode="points")
             
             if map_event and "selection" in map_event and map_event["selection"]["points"]:
                 clicked_code = map_event["selection"]["points"][0]["location"]
                 clicked_label = f"{ZONE_NAMES[clicked_code][0]} ({clicked_code})"
+                
+                # Copy current selection from session state
                 current_selection = list(st.session_state.selected_zones)
                 
+                # Toggle logic: if in list, remove it; if not, add it
                 if clicked_label in current_selection:
                     current_selection.remove(clicked_label)
                 else:
                     current_selection.append(clicked_label)
+                
+                # Update session state and force rerun to refresh Sidebar Multiselect
                 st.session_state.selected_zones = current_selection
                 st.rerun()
-                    
+
 st.divider()
 col_met, col_tab = st.columns([1, 2])
 
@@ -351,8 +329,6 @@ with col_met:
             
     st.subheader("Baseload & Capture Metrics")
     if not plot_df.empty and not gen_df.empty:
-        #1 Ensure Actual Generation matches the Price resolution (60min vs 15min)
-        # This prevents losing 75% of data when calculating capture prices
         freq = '60min' if res == "60 min" else '15min'
         gen_resampled = gen_df.groupby('Zone').apply(
             lambda x: x.set_index('Time').resample(freq).sum(numeric_only=True)
@@ -361,38 +337,27 @@ with col_met:
         metrics_list = []
         for code in selected_codes:
             p_sub = plot_df[plot_df['Zone'] == code]
-            # 2 use the resampled Actual Generation for the calculation
             g_sub = gen_resampled[gen_resampled['Zone'] == code]
-            #Negative price option logic
             if exclude_neg:
                 p_sub['Price'] = p_sub['Price'].clip(lower=0)
-                
             m_df = pd.merge(p_sub, g_sub, on='Time', how='inner')
-            
             baseload = p_sub['Price'].mean()
             currency = ZONE_NAMES[code][1]
-            
-            # Solar Capture
             sol_cap = "N/A"
             if 'Solar' in m_df.columns:
                 total_sol = m_df['Solar'].sum()
                 if total_sol > 0:
                     sol_cap = f"{(m_df['Price'] * m_df['Solar']).sum() / total_sol:.2f}"
-            
-            # Wind Onshore Capture
             onshore_cap = "N/A"
             if 'Wind Onshore' in m_df.columns:
                 total_onshore = m_df['Wind Onshore'].sum()
                 if total_onshore > 0:
                     onshore_cap = f"{(m_df['Price'] * m_df['Wind Onshore']).sum() / total_onshore:.2f}"
-            
-            # Wind Offshore Capture
             offshore_cap = "N/A"
             if 'Wind Offshore' in m_df.columns:
                 total_offshore = m_df['Wind Offshore'].sum()
                 if total_offshore > 0:
                     offshore_cap = f"{(m_df['Price'] * m_df['Wind Offshore']).sum() / total_offshore:.2f}"
-            
             metrics_list.append({
                 "Zone": code, "Baseload": f"{baseload:.2f}", 
                 "Solar Capture": sol_cap, 
@@ -407,42 +372,23 @@ with col_met:
 with col_tab:
     st.subheader("Data Table")
     if not plot_df.empty:
-        # Prepare table data
         table_df = plot_df.copy()
-        
-        # Merge Forecasts into the table if they exist
         if not forecast_df.empty:
-            # Flatten forecast_df to join easily
             for g_type in selected_gen_types:
                 if g_type in forecast_df.columns:
-                    # Create a temporary DF with just Zone, Time, and specific Generation Type
                     f_sub = forecast_df[['Time', 'Zone', g_type]].copy()
                     f_sub.columns = ['Time', 'Zone', f'TEMP_GEN_COL']
-                    
-                    # Merge it to plot_df
                     table_df = pd.merge(table_df, f_sub, on=['Time', 'Zone'], how='left')
-                    
-                    # Rename the column to be Zone-specific
                     table_df = table_df.rename(columns={'TEMP_GEN_COL': f"{g_type} Forecast (MW)"})
-
         table_df['Date'] = table_df['Time'].dt.strftime('%d-%m-%Y')
         table_df['24h Time'] = table_df['Time'].dt.strftime('%H:%M')
-        
-        # Determine value columns (Prices + Forecasts)
         val_cols = ['Price'] + [c for c in table_df.columns if 'Forecast (MW)' in c]
-        
-        # Create a more complex pivot or melt to handle multiple metrics
         pivot_base = table_df.melt(id_vars=['Date', '24h Time', 'Zone'], value_vars=val_cols)
-        
-        # Logic to create Display names for the table headers
         def get_header(row):
             if row['variable'] == 'Price':
                 return f"{row['Zone']} ({ZONE_NAMES.get(row['Zone'], ['', 'EUR'])[1]}/MWh)"
             else:
                 return f"{row['Zone']} {row['variable']}"
-        
         pivot_base['Header'] = pivot_base.apply(get_header, axis=1)
-        
         final_pivot = pivot_base.pivot_table(index=['Date', '24h Time'], columns='Header', values='value')
-        
         st.dataframe(final_pivot.style.format("{:.2f}", na_rep="-"), use_container_width=True, height=400)
