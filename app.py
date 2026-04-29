@@ -105,7 +105,7 @@ with st.sidebar:
                 st.markdown(f"[{title_display}]({entry.link})")
                 if 'published' in entry:
                     clean_date = " ".join(entry.published.split()[:4])
-                    st.caption)f"{clean_date} | pv Europe")
+                    st.caption(f"{clean_date} | pv Europe")
                 st.divider()
         except Exception as e:
             st.error("News feed currently unavailable.")
