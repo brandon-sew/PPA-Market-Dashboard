@@ -83,29 +83,30 @@ with st.sidebar:
     st.divider()
     st.subheader("Latest PPA and Market News")
     energy_news_url = "https://video.montel.energy/rss/montel-news-energy-insights"
-    PPA_KEYWORDS = ["ppa", "offtake", "corporate", "deal", "financing", "contract", "agreement"]
+    PPA_KEYWORDS = ["ppa", "electricity", "corporate", "deal", "grid", "contract", "agreement"]
     with st.expander("Latest PPA Updates", expanded=True):
         try:
-            headers = {'User-Agent': 'Mozilla/5.0'}
-            response = requests.get(energy_news_url, headers=headers, timeout=10)
-            #Parse the feed
-            feed = feedparser.parse(response.text)
-            if not feed.entries:
-                st.info("No news entries found at the moment.")
-            else:
-                ppa_stories = [
-                    e for e in feed.entries
-                    if any(kw in e.title.lower() or getattr(e, 'summary', '').lower() for kw in PPA_KEYWORDS)
-                ]
-                display_list = ppa_stories + [e for e in feed.entries if e not in ppa_stories]
-            #Display the top 5 most recent articles
-            for entry in feed.entries[:3]:
-                is_ppa = any(kw in entry.title.lower() for kw in ["ppa", "offtake"])
-                title_display = f"🔔 **{entry.title}**" if is_ppa else entry.title
-                st.markdown(f"[{title_display}]({entry.link})")
-                if 'published' in entry:
-                    clean_date = " ".join(entry.published.split()[:4])
-                    st.caption(f"{clean_date} | pv Europe")
+            feed = feedparser.parse(montel_rss)
+            
+            # Filter entries based on keywords
+            electricity_news = [
+                entry for entry in feed.entries 
+                if any(kw in entry.title.lower() or kw in entry.summary.lower() for kw in POWER_KEYWORDS)
+            ]
+
+            if not electricity_news:
+                st.info("No power-specific stories found in recent updates.")
+            
+            # Display the top 5 filtered stories
+            for entry in electricity_news[:5]:
+                date_str = " ".join(entry.published.split()[:4])
+                st.markdown(f"**{date_str}**")
+                st.markdown(f"**[{entry.title}]({entry.link})**")
+                
+                # Show summary snippet
+                if 'summary' in entry:
+                    summary = entry.summary.split('<')[0][:120] + "..."
+                    st.caption(summary)
                 st.divider()
         except Exception as e:
             st.error("News feed currently unavailable.")
