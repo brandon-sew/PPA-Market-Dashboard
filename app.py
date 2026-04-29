@@ -82,7 +82,7 @@ with st.sidebar:
     #NEW GEOPOLITICAL NEWS SECTION
     st.divider()
     st.subheader("Latest PPA and Market News")
-    energy_news_url = "https://www.pveurope.eu/rss_feed/pve-rss-feed-news"
+    energy_news_url = "https://video.montel.energy/rss/montel-news-energy-insights"
     PPA_KEYWORDS = ["ppa", "offtake", "corporate", "deal", "financing", "contract", "agreement"]
     with st.expander("Latest PPA Updates", expanded=True):
         try:
