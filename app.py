@@ -5,6 +5,7 @@ import os
 import json
 import glob
 import numpy as np
+import requests  # NEW IMPORT
 from datetime import datetime, timedelta
 from entsoe import EntsoePandasClient
 import plotly.graph_objects as go
@@ -39,6 +40,25 @@ ZONE_NAMES = {
     "IT_CSUD": ["Italy Central South", "EUR"], "IT_SUD": ["Italy South", "EUR"],
     "IT_SICI": ["Italy Sicily", "EUR"], "IT_SARD": ["Italy Sardinia", "EUR"], "IT_CALA": ["Italy Calabria", "EUR"]
 }
+
+# --- WEATHER HELPER FUNCTION ---
+def get_energy_weather():
+    feeds = {
+        "Severe Weather EU": "https://www.severe-weather.eu/feed/",
+        "Met Office": "https://www.metoffice.gov.uk/about-us/press-office/news/rss"
+    }
+    keywords = ["wind", "storm", "solar", "arctic", "heat", "offshore", "gale", "pressure", "dunkelflaute"]
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    reports = []
+    for name, url in feeds.items():
+        try:
+            r = requests.get(url, headers=headers, timeout=5)
+            feed = feedparser.parse(r.text)
+            for entry in feed.entries[:10]:
+                if any(kw in entry.title.lower() for kw in keywords):
+                    reports.append({"title": entry.title, "link": entry.link, "source": name})
+        except: continue
+    return reports[:6]
 
 st.set_page_config(page_title="Market Explorer", layout="wide", initial_sidebar_state="expanded")
 
@@ -78,6 +98,19 @@ with st.sidebar:
     today = datetime.now().date()
     d_range = st.date_input("Date Range", value=(today - timedelta(days=2), today))
     exclude_neg = st.checkbox("No Settlement for Negative Prices", help="Treats negative prices as 0 for capture price calculation")
+    
+    # --- NEW WEATHER SECTION ---
+    st.divider()
+    st.subheader("🌦️ Energy Weather Intelligence")
+    weather_news = get_energy_weather()
+    with st.expander("Notable Weather Events", expanded=True):
+        if weather_news:
+            for item in weather_news:
+                st.markdown(f"**{item['source']}**")
+                st.markdown(f"[{item['title']}]({item['link']})")
+                st.divider()
+        else:
+            st.info("No major weather events impacting generation detected.")
     
 @st.cache_data(ttl=3600)
 def fetch_data(codes, start_date, end_date):
@@ -393,12 +426,12 @@ with col_tab:
         table_df['Date'] = table_df['Time'].dt.strftime('%d-%m-%Y')
         table_df['24h Time'] = table_df['Time'].dt.strftime('%H:%M')
         val_cols = ['Price'] + [c for c in table_df.columns if 'Forecast (MW)' in c]
-        pivot_base = table_df.melt(id_vars=['Date', '24h Time', 'Zone'], value_vars=val_cols)
+        table_df_melted = table_df.melt(id_vars=['Date', '24h Time', 'Zone'], value_vars=val_cols)
         def get_header(row):
             if row['variable'] == 'Price':
                 return f"{row['Zone']} ({ZONE_NAMES.get(row['Zone'], ['', 'EUR'])[1]}/MWh)"
             else:
                 return f"{row['Zone']} {row['variable']}"
-        pivot_base['Header'] = pivot_base.apply(get_header, axis=1)
-        final_pivot = pivot_base.pivot_table(index=['Date', '24h Time'], columns='Header', values='value')
+        table_df_melted['Header'] = table_df_melted.apply(get_header, axis=1)
+        final_pivot = table_df_melted.pivot_table(index=['Date', '24h Time'], columns='Header', values='value')
         st.dataframe(final_pivot.style.format("{:.2f}", na_rep="-"), use_container_width=True, height=400)
