@@ -83,7 +83,7 @@ with st.sidebar:
     st.divider()
     st.subheader("Latest PPA and Market News")
     energy_news_url = "https://video.montel.energy/rss/montel-news-energy-insights"
-    PPA_KEYWORDS = ["ppa", "electricity", "corporate", "deal", "grid", "contract", "agreement"]
+    PPA_KEYWORDS = ["ppa", "power purchase agreement"]
     with st.expander("Latest PPA Updates", expanded=True):
         try:
             feed = feedparser.parse(energy_news_url)
