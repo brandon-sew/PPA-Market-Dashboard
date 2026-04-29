@@ -78,35 +78,7 @@ with st.sidebar:
     today = datetime.now().date()
     d_range = st.date_input("Date Range", value=(today - timedelta(days=2), today))
     exclude_neg = st.checkbox("No Settlement for Negative Prices", help="Treats negative prices as 0 for capture price calculation")
-    #NEW GEOPOLITICAL NEWS SECTION
-    st.divider()
-    st.subheader("Latest PPA and Market News")
-    energy_news_url = "https://video.montel.energy/rss/montel-news-energy-insights"
-    PPA_KEYWORDS = ["ppa", "power purchase agreement", "electricity", "solar", "offshore", "onshore", "wind"]
-    with st.expander("Latest PPA Updates", expanded=True):
-        try:
-            feed = feedparser.parse(energy_news_url)
-            
-            # Filter entries based on keywords
-            electricity_news = [
-                entry for entry in feed.entries 
-                if any(kw in entry.title.lower() or kw in entry.summary.lower() for kw in PPA_KEYWORDS)
-            ]
-
-            if not electricity_news:
-                st.info("No power-specific stories found in recent updates.")
-            
-            # Display the top 5 filtered stories
-            for entry in electricity_news[:5]:
-                date_str = " ".join(entry.published.split()[:4])
-                st.markdown(f"**{date_str}**")
-                st.markdown(f"**[{entry.title}]({entry.link})**")
-                
-                
-                st.divider()
-        except Exception:
-            st.error("News feed currently unavailable.")
-
+    
 @st.cache_data(ttl=3600)
 def fetch_data(codes, start_date, end_date):
     if not codes: return pd.DataFrame()
