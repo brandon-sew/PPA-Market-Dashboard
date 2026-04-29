@@ -86,12 +86,12 @@ with st.sidebar:
     PPA_KEYWORDS = ["ppa", "electricity", "corporate", "deal", "grid", "contract", "agreement"]
     with st.expander("Latest PPA Updates", expanded=True):
         try:
-            feed = feedparser.parse(montel_rss)
+            feed = feedparser.parse(energy_news_url)
             
             # Filter entries based on keywords
             electricity_news = [
                 entry for entry in feed.entries 
-                if any(kw in entry.title.lower() or kw in entry.summary.lower() for kw in POWER_KEYWORDS)
+                if any(kw in entry.title.lower() or kw in entry.summary.lower() for kw in PPA_KEYWORDS)
             ]
 
             if not electricity_news:
