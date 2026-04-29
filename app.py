@@ -41,24 +41,26 @@ ZONE_NAMES = {
     "IT_SICI": ["Italy Sicily", "EUR"], "IT_SARD": ["Italy Sardinia", "EUR"], "IT_CALA": ["Italy Calabria", "EUR"]
 }
 
-# --- WEATHER HELPER FUNCTION ---
+# --- WEATHER HELPER FUNCTION UPDATED FOR METEOALARM ---
 def get_energy_weather():
     feeds = {
-        "Severe Weather EU": "https://www.severe-weather.eu/feed/",
-        "Met Office": "https://www.metoffice.gov.uk/about-us/press-office/news/rss"
+        "Meteoalarm (Europe)": "https://feeds.meteoalarm.org/rss/en/europe",
+        "Severe Weather EU": "https://www.severe-weather.eu/feed/"
     }
-    keywords = ["wind", "storm", "solar", "arctic", "heat", "offshore", "gale", "pressure", "dunkelflaute"]
+    # Expanded keywords to catch energy-relevant alerts (temperature/wind/snow)
+    keywords = ["wind", "storm", "solar", "heat", "offshore", "gale", "dunkelflaute", "temperature", "cold", "snow", "flood"]
     headers = {'User-Agent': 'Mozilla/5.0'}
     reports = []
     for name, url in feeds.items():
         try:
             r = requests.get(url, headers=headers, timeout=5)
             feed = feedparser.parse(r.text)
-            for entry in feed.entries[:10]:
-                if any(kw in entry.title.lower() for kw in keywords):
+            for entry in feed.entries[:15]:
+                # For Meteoalarm, we often want the alerts directly, for others we filter
+                if name == "Meteoalarm (Europe)" or any(kw in entry.title.lower() for kw in keywords):
                     reports.append({"title": entry.title, "link": entry.link, "source": name})
         except: continue
-    return reports[:6]
+    return reports[:8]
 
 st.set_page_config(page_title="Market Explorer", layout="wide", initial_sidebar_state="expanded")
 
@@ -99,18 +101,18 @@ with st.sidebar:
     d_range = st.date_input("Date Range", value=(today - timedelta(days=2), today))
     exclude_neg = st.checkbox("No Settlement for Negative Prices", help="Treats negative prices as 0 for capture price calculation")
     
-    # --- NEW WEATHER SECTION ---
+    # --- UPDATED WEATHER SECTION ---
     st.divider()
-    st.subheader("🌦️ Energy Weather Intelligence")
+    st.subheader("🌦️ Meteoalarm & Weather Intelligence")
     weather_news = get_energy_weather()
-    with st.expander("Notable Weather Events", expanded=True):
+    with st.expander("Active Weather Warnings", expanded=True):
         if weather_news:
             for item in weather_news:
                 st.markdown(f"**{item['source']}**")
                 st.markdown(f"[{item['title']}]({item['link']})")
                 st.divider()
         else:
-            st.info("No major weather events impacting generation detected.")
+            st.info("No significant alerts impacting generation detected.")
     
 @st.cache_data(ttl=3600)
 def fetch_data(codes, start_date, end_date):
