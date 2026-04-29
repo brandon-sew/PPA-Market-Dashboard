@@ -103,10 +103,7 @@ with st.sidebar:
                 st.markdown(f"**{date_str}**")
                 st.markdown(f"**[{entry.title}]({entry.link})**")
                 
-                # Show summary snippet
-                if 'summary' in entry:
-                    summary = entry.summary.split('<')[0][:120] + "..."
-                    st.caption(summary)
+                
                 st.divider()
         except Exception:
             st.error("News feed currently unavailable.")
