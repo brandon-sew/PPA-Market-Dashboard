@@ -82,19 +82,24 @@ with st.sidebar:
     #NEW GEOPOLITICAL NEWS SECTION
     st.divider()
     st.subheader("Market Intelligence")
-    with st.expander("ENTSO-E General News", expanded=True):
+    montel_rss = "https://video.montel.energy/rss/montel-news-energy-insights"
+    with st.expander("Latest Montel News Updates", expanded=True):
         try:
             #Parse the feed
-            feed = feedparser.parse("https://www.entsoe.eu/feed/")
+            feed = feedparser.parse(montel_rss)
             #Display the top 5 most recent articles
             for entry in feed.entries[:3]:
                 #format the date string (e.g. "Wed, 29th April 2026")
-                date_label = " ".join(entry.published.split()[:4])
-                st.markdown(f"**{date_label}**")
+                date_str = " ".join(entry.published.split()[:4])
+                st.markdown(f"**{date_str}**")
                 st.markdown(f"[{entry.title}]({entry.link})")
-                st.write("---")
+                if 'summary' in entry:
+                    #Clean up HTML tags if any
+                    summary = entry.summary.split('<')[0][:100] + "..."
+                    st.caption(summary)
+                st.divider()
         except Exception:
-            st.info("News feed currently unavailable.")
+            st.error("News feed currently unavailable.")
 
 @st.cache_data(ttl=3600)
 def fetch_data(codes, start_date, end_date):
