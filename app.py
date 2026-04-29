@@ -74,7 +74,6 @@ with st.sidebar:
     gen_options = ["Solar", "Wind Onshore", "Wind Offshore"]
     selected_gen_types = st.multiselect("Overlay Generation Forecast:", options=gen_options)
 
-    st.divider()
     res = st.radio("Resolution", ["60 min", "15 min"], horizontal=True)
     today = datetime.now().date()
     d_range = st.date_input("Date Range", value=(today - timedelta(days=2), today))
