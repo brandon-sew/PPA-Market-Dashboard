@@ -90,18 +90,24 @@ with st.sidebar:
             response = requests.get(energy_news_url, headers=headers, timeout=10)
             #Parse the feed
             feed = feedparser.parse(response.text)
+            if not feed.entries:
+                st.info("No news entries found at the moment.")
+            else:
+                ppa_stories = [
+                    e for e in feed.entries
+                    if any(kw in e.title.lower() or getattr(e, 'summary', '').lower() for kw in PPA_KEYWORDS)
+                ]
+                display_list = ppa_stories + [e for e in feed.entries if e not in ppa_stories]
             #Display the top 5 most recent articles
             for entry in feed.entries[:3]:
-                #format the date string (e.g. "Wed, 29th April 2026")
-                date_str = " ".join(entry.published.split()[:4])
-                st.markdown(f"**{date_str}**")
-                st.markdown(f"[{entry.title}]({entry.link})")
-                if 'summary' in entry:
-                    #Clean up HTML tags if any
-                    summary = entry.summary.split('<')[0][:100] + "..."
-                    st.caption(summary)
+                is_ppa = any(kw in entry.title.lower() for kw in ["ppa", "offtake"])
+                title_display = f"🔔 **{entry.title}**" if is_ppa else entry.title
+                st.markdown(f"[{title_display}]({entry.link})")
+                if 'published' in entry:
+                    clean_date = " ".join(entry.published.split()[:4])
+                    st.caption)f"{clean_date} | pv Europe")
                 st.divider()
-        except Exception:
+        except Exception as e:
             st.error("News feed currently unavailable.")
 
 @st.cache_data(ttl=3600)
