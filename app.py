@@ -82,11 +82,11 @@ with st.sidebar:
     #NEW GEOPOLITICAL NEWS SECTION
     st.divider()
     st.subheader("Market Intelligence")
-    montel_rss = "https://video.montel.energy/rss/montel-news-energy-insights"
+    energy_news_url = "https://www.reuters.com/arc/outboundfeeds/rss/concepts/energy/"
     with st.expander("Latest Montel News Updates", expanded=True):
         try:
             #Parse the feed
-            feed = feedparser.parse(montel_rss)
+            feed = feedparser.parse(energy_news_url)
             #Display the top 5 most recent articles
             for entry in feed.entries[:3]:
                 #format the date string (e.g. "Wed, 29th April 2026")
