@@ -41,26 +41,6 @@ ZONE_NAMES = {
     "IT_SICI": ["Italy Sicily", "EUR"], "IT_SARD": ["Italy Sardinia", "EUR"], "IT_CALA": ["Italy Calabria", "EUR"]
 }
 
-# --- WEATHER HELPER FUNCTION UPDATED FOR METEOALARM ---
-def get_energy_weather():
-    feeds = {
-        "Meteoalarm (Europe)": "https://feeds.meteoalarm.org/rss/en/europe"
-    }
-    # Expanded keywords to catch energy-relevant alerts (temperature/wind/snow)
-    keywords = ["wind", "storm", "solar", "heat", "offshore", "gale", "dunkelflaute", "temperature", "cold", "snow", "flood"]
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    reports = []
-    for name, url in feeds.items():
-        try:
-            r = requests.get(url, headers=headers, timeout=5)
-            feed = feedparser.parse(r.text)
-            for entry in feed.entries[:20]:
-                # For Meteoalarm, we often want the alerts directly, for others we filter
-                if any(kw in entry.title.lower() for kw in keywords):
-                    reports.append({"title": entry.title, "link": entry.link, "source": name})
-        except: continue
-    return reports[:10]
-
 st.set_page_config(page_title="Market Explorer", layout="wide", initial_sidebar_state="expanded")
 
 st.markdown("""
@@ -100,18 +80,6 @@ with st.sidebar:
     d_range = st.date_input("Date Range", value=(today - timedelta(days=2), today))
     exclude_neg = st.checkbox("No Settlement for Negative Prices", help="Treats negative prices as 0 for capture price calculation")
     
-    # --- UPDATED WEATHER SECTION ---
-    st.divider()
-    st.subheader("🌦️ Meteoalarm Alerts")
-    weather_news = get_energy_weather()
-    with st.expander("Active European Warnings", expanded=True):
-        if weather_news:
-            for item in weather_news:
-                st.markdown(f"**{item['source']}**")
-                st.markdown(f"[{item['title']}]({item['link']})")
-                st.divider()
-        else:
-            st.info("No significant alerts impacting generation detected.")
     
 @st.cache_data(ttl=3600)
 def fetch_data(codes, start_date, end_date):
