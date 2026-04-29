@@ -82,7 +82,7 @@ with st.sidebar:
     #NEW GEOPOLITICAL NEWS SECTION
     st.divider()
     st.subheader("PPA News")
-    energy_news_url = "https://www.pveurope.eu/rss_feed/pve-rss-feed-news"
+    energy_news_url = "https://www.energylivenews.com/feed/"
     with st.expander("Latest PPA Updates", expanded=True):
         try:
             #Parse the feed
