@@ -10,6 +10,8 @@ from entsoe import EntsoePandasClient
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from concurrent.futures import ThreadPoolExecutor, as_completed
+#NEW ENTSOE-E MARKET FEED
+import feedparser
 
 # 1. Config & API Setup
 API_KEY = os.environ.get('ENTSOE_TOKEN')
@@ -77,6 +79,22 @@ with st.sidebar:
     res = st.radio("Resolution", ["60 min", "15 min"], horizontal=True)
     today = datetime.now().date()
     d_range = st.date_input("Date Range", value=(today - timedelta(days=2), today))
+    #NEW GEOPOLITICAL NEWS SECTION
+    st.divider()
+    st.subheader("Market Intelligence")
+    with st.expander("ENTSO-E General News", exapnded=True):
+        try:
+            #Parse the feed
+            feed = feedparser.parse("https://www.entsoe.eu/feed/")
+            #Display the top 5 most recent articles
+            for entry in feed.entries[:3]:
+                #format the date string (e.g. "Wed, 29th April 2026")
+                date_label = " ".join(entry.published.split()[:4])
+                st.markdown(f"**{date_label}**")
+                st.markdown(f"[{entry.title}]({entry.link})")
+                st.write("---")
+        except Exception:
+            st.info("News feed currently unavailable.")
 
 @st.cache_data(ttl=3600)
 def fetch_data(codes, start_date, end_date):
