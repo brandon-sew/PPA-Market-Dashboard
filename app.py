@@ -81,9 +81,9 @@ with st.sidebar:
     d_range = st.date_input("Date Range", value=(today - timedelta(days=2), today))
     #NEW GEOPOLITICAL NEWS SECTION
     st.divider()
-    st.subheader("Market Intelligence")
-    energy_news_url = "https://www.reuters.com/arc/outboundfeeds/rss/concepts/energy/"
-    with st.expander("Latest Montel News Updates", expanded=True):
+    st.subheader("PPA News")
+    energy_news_url = "https://renewablesnow.com/projects/corporate-ppa/"
+    with st.expander("Latest PPA Updates", expanded=True):
         try:
             #Parse the feed
             feed = feedparser.parse(energy_news_url)
