@@ -82,7 +82,7 @@ with st.sidebar:
     #NEW GEOPOLITICAL NEWS SECTION
     st.divider()
     st.subheader("Market Intelligence")
-    with st.expander("ENTSO-E General News", exapnded=True):
+    with st.expander("ENTSO-E General News", expanded=True):
         try:
             #Parse the feed
             feed = feedparser.parse("https://www.entsoe.eu/feed/")
