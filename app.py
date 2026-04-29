@@ -81,12 +81,15 @@ with st.sidebar:
     d_range = st.date_input("Date Range", value=(today - timedelta(days=2), today))
     #NEW GEOPOLITICAL NEWS SECTION
     st.divider()
-    st.subheader("PPA News")
+    st.subheader("Latest PPA and Market News")
     energy_news_url = "https://www.pveurope.eu/rss_feed/pve-rss-feed-news"
+    PPA_KEYWORDS = ["ppa", "offtake", "corporate", "deal", "financing", "contract", "agreement"]
     with st.expander("Latest PPA Updates", expanded=True):
         try:
+            headers = {'User-Agent': 'Mozilla/5.0'}
+            response = requests.get(energy_news_url, headers=headers, timeout=10)
             #Parse the feed
-            feed = feedparser.parse(energy_news_url)
+            feed = feedparser.parse(response.text)
             #Display the top 5 most recent articles
             for entry in feed.entries[:3]:
                 #format the date string (e.g. "Wed, 29th April 2026")
