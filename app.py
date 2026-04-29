@@ -79,7 +79,7 @@ with st.sidebar:
     exclude_neg = st.checkbox("No Settlement for Negative Prices", help="Treats negative prices as 0 for capture price calculation")
 
     st.divider()
-    
+    st.subheader("Wood Mackenzie and ICIS Forecasts")
     
     
 @st.cache_data(ttl=3600)
