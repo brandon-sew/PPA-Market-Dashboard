@@ -108,7 +108,7 @@ with st.sidebar:
                     summary = entry.summary.split('<')[0][:120] + "..."
                     st.caption(summary)
                 st.divider()
-        except Exception as e:
+        except Exception:
             st.error("News feed currently unavailable.")
 
 @st.cache_data(ttl=3600)
