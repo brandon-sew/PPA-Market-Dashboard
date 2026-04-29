@@ -44,8 +44,7 @@ ZONE_NAMES = {
 # --- WEATHER HELPER FUNCTION UPDATED FOR METEOALARM ---
 def get_energy_weather():
     feeds = {
-        "Meteoalarm (Europe)": "https://feeds.meteoalarm.org/rss/en/europe",
-        "Severe Weather EU": "https://www.severe-weather.eu/feed/"
+        "Meteoalarm (Europe)": "https://feeds.meteoalarm.org/rss/en/europe"
     }
     # Expanded keywords to catch energy-relevant alerts (temperature/wind/snow)
     keywords = ["wind", "storm", "solar", "heat", "offshore", "gale", "dunkelflaute", "temperature", "cold", "snow", "flood"]
@@ -55,12 +54,12 @@ def get_energy_weather():
         try:
             r = requests.get(url, headers=headers, timeout=5)
             feed = feedparser.parse(r.text)
-            for entry in feed.entries[:15]:
+            for entry in feed.entries[:20]:
                 # For Meteoalarm, we often want the alerts directly, for others we filter
-                if name == "Meteoalarm (Europe)" or any(kw in entry.title.lower() for kw in keywords):
+                if any(kw in entry.title.lower() for kw in keywords):
                     reports.append({"title": entry.title, "link": entry.link, "source": name})
         except: continue
-    return reports[:8]
+    return reports[:10]
 
 st.set_page_config(page_title="Market Explorer", layout="wide", initial_sidebar_state="expanded")
 
@@ -103,9 +102,9 @@ with st.sidebar:
     
     # --- UPDATED WEATHER SECTION ---
     st.divider()
-    st.subheader("🌦️ Meteoalarm & Weather Intelligence")
+    st.subheader("🌦️ Meteoalarm Alerts")
     weather_news = get_energy_weather()
-    with st.expander("Active Weather Warnings", expanded=True):
+    with st.expander("Active European Warnings", expanded=True):
         if weather_news:
             for item in weather_news:
                 st.markdown(f"**{item['source']}**")
