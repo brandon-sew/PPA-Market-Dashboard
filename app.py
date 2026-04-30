@@ -211,7 +211,7 @@ with col_chart:
         for zone in selected_codes:
             zone_df = plot_df[plot_df['Zone'] == zone]
             currency = ZONE_NAMES[zone][1]
-            fig.add.trace(
+            fig.add_trace(
                 go.Scatter(x=zone_df['Time'], y=zone_df['Price'],
                            name=f"{zone} Price ({currency}/MWh)",
                            line=dict(color=zone_color_map[zone], width=2)),
