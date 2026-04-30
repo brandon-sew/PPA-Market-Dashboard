@@ -204,43 +204,39 @@ with col_chart:
     st.subheader("Day-Ahead Prices and Generation Forecasts")
     if not plot_df.empty: 
         fig = make_subplots(specs=[[{"secondary_y": True}]])
-                                    
-        #Define a fixed colour map for bidding zones
+        
+        # 1. Define a fixed colour map
         colors = px.colors.qualitative.Plotly
         zone_color_map = {zone: colors[i % len(colors)] for i, zone in enumerate(selected_codes)}
+        
+        # 2. PLOT PRICES (Single Loop)
         for zone in selected_codes:
             zone_df = plot_df[plot_df['Zone'] == zone]
             currency = ZONE_NAMES[zone][1]
             fig.add_trace(
-                go.Scatter(x=zone_df['Time'], y=zone_df['Price'],
-                           name=f"{zone} Price ({currency}/MWh)",
-                           line=dict(color=zone_color_map[zone], width=2)),
+                go.Scatter(
+                    x=zone_df['Time'], y=zone_df['Price'],
+                    name=f"{zone} Price ({currency}/MWh)",
+                    line=dict(color=zone_color_map[zone], width=2),
+                    hovertemplate="%{y:.2f} " + currency + "/MWh<extra></extra>"
+                ),
                 secondary_y=False
             )
         
-        
+        # 3. PLOT PPA LINE (Separate trace, single addition)
         if ppa_price > 0:
             unique_times = plot_df['Time'].unique()
             fig.add_trace(
-                go.Scatter(x=unique_times, y=[ppa_price]*len(unique_times), 
-                           name="PPA Price", # Short name to prevent truncation
-                           line=dict(color='red', dash='dash', width=2),
-                           # This defines the exact text you see in the hover box:
-                           hovertemplate="PPA Price (EUR/MWh): %{y:.2f}<extra></extra>"),
+                go.Scatter(
+                    x=unique_times, y=[ppa_price]*len(unique_times), 
+                    name="PPA Price",
+                    line=dict(color='red', dash='dash', width=2),
+                    hovertemplate="PPA Price (EUR/MWh): %{y:.2f}<extra></extra>"
+                ),
                 secondary_y=False
             )
         
-        for zone in selected_codes:
-            zone_df = plot_df[plot_df['Zone'] == zone]
-            currency = ZONE_NAMES[zone][1]
-            fig.add_trace(
-                go.Scatter(x=zone_df['Time'], y=zone_df['Price'], 
-                           name=f"{zone} Price ({currency}/MWh)",
-                           hovertemplate="%{y:.2f}",
-                           hoverlabel=dict(namelength=-1),
-                           line=dict(width=2)),
-                secondary_y=False
-            )
+        # 4. PLOT GENERATION (Single Loop)
         if selected_gen_types and not forecast_df.empty:
             for zone in selected_codes:
                 z_gen_df = forecast_df[forecast_df['Zone'] == zone]
@@ -248,30 +244,23 @@ with col_chart:
                     for g_type in selected_gen_types:
                         if g_type in z_gen_df.columns:
                             fig.add_trace(
-                                go.Scatter(x=z_gen_df['Time'], y=z_gen_df[g_type], 
-                                           name=f"{zone} {g_type} Forecast (MW)",
-                                           hovertemplate="%{y:.0f}",
-                                           hoverlabel=dict(namelength=-1),
-                                           line=dict(dash='dot', width=1)),
+                                go.Scatter(
+                                    x=z_gen_df['Time'], y=z_gen_df[g_type], 
+                                    name=f"{zone} {g_type} Forecast (MW)",
+                                    line=dict(color=zone_color_map[zone], dash='dot', width=1),
+                                    hovertemplate="%{y:.0f} MW<extra></extra>"
+                                ),
                                 secondary_y=True
                             )
 
+        # 5. Layout and Y-Axis calculations
         p_min, p_max = plot_df['Price'].min(), plot_df['Price'].max()
+        if ppa_price > 0:
+            p_min, p_max = min(p_min, ppa_price), max(p_max, ppa_price)
         p_padding = (p_max - p_min) * 0.1 if p_max != p_min else 10
         p_range = [p_min - p_padding, p_max + p_padding]
         
-        if not forecast_df.empty and selected_gen_types:
-            available_gens = [g for g in selected_gen_types if g in forecast_df.columns]
-            if available_gens:
-                g_max = forecast_df[available_gens].max().max()
-                g_max = g_max * 1.1 if g_max > 0 else 100
-                g_min = (p_range[0] / p_range[1]) * g_max if p_range[1] > 0 else 0
-                g_range = [g_min, g_max]
-            else:
-                g_range = [0, 100]
-        else:
-            g_range = [0, 100]
-
+        # ... [Rest of your layout code remains the same] ...
         fig.update_layout(
             template="plotly_white",
             hovermode="x unified",
@@ -280,7 +269,8 @@ with col_chart:
             margin=dict(l=0, r=0, b=0, t=20)
         )
         fig.update_yaxes(title_text="Price", secondary_y=False, range=p_range, zeroline=True, zerolinewidth=2, zerolinecolor='rgba(0,0,0,0.3)')
-        fig.update_yaxes(title_text="Generation Forecast [MW]", secondary_y=True, range=g_range, showgrid=False, zeroline=True, zerolinewidth=2, zerolinecolor='rgba(0,0,0,0.3)')
+        fig.update_yaxes(title_text="Generation Forecast [MW]", secondary_y=True, showgrid=False, zeroline=True, zerolinewidth=2, zerolinecolor='rgba(0,0,0,0.3)')
+        
         st.plotly_chart(fig, use_container_width=True)
 
 with col_map:
