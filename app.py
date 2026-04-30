@@ -180,7 +180,8 @@ if len(d_range) == 2:
         forecast_df_raw = pd.DataFrame()
         
     if not full_price_df.empty:
-        res_map = {"Monthly": "M", "Daily": "D", "15 min": "15min", "60 min": "60min"}
+        # IMPLEMENTED: Resolution mapping for resampling
+        res_map = {"15 min": "15min", "60 min": "60min", "Daily": "D", "Monthly": "MS"}
         freq = res_map.get(res, "60min")
         
         full_price_resampled = full_price_df.groupby('Zone').apply(
@@ -344,7 +345,10 @@ with col_met:
             
     st.subheader("Baseload & Capture Metrics")
     if not plot_df.empty and not gen_df.empty:
-        freq = '60min' if res == "60 min" else '15min'
+        # IMPLEMENTED: Resolution mapping for metrics generation
+        res_map = {"15 min": "15min", "60 min": "60min", "Daily": "D", "Monthly": "MS"}
+        freq = res_map.get(res, "60min")
+        
         gen_resampled = gen_df.groupby('Zone').apply(
             lambda x: x.set_index('Time').resample(freq).sum(numeric_only=True)
         ).reset_index()
