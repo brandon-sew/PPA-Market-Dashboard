@@ -412,13 +412,13 @@ with col_tab:
         if market_following and ppa_price > 0:
             # Effective floor is the sum of EUR input and % of PPA input
             if (floor_rate_eur > 0 ^ (floor_rate_pct > 0):
-            eff_floor = floor_rate_eur if floor_rate_eur > 0 else (floor_rate_pct / 100 * ppa_price)
+                eff_floor = floor_rate_eur if floor_rate_eur > 0 else (floor_rate_pct / 100 * ppa_price)
             # Logic: If Price > PPA -> gain is Floor. If Price < PPA -> loss is Price - PPA.
-            table_df['Market following settlement'] = np.where(
-                table_df['Price'] > ppa_price, 
-                eff_floor, 
-                table_df['Price'] - ppa_price
-            )
+                table_df['Market following settlement'] = np.where(
+                    table_df['Price'] > ppa_price, 
+                    eff_floor, 
+                    table_df['Price'] - ppa_price
+                )
         
         if not forecast_df.empty:
             for g_type in selected_gen_types:
