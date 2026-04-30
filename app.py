@@ -225,7 +225,7 @@ with col_chart:
                 go.Scatter(x=unique_times, y=[ppa_price]*len(unique_times),
                            name="PPA Price",
                            line=dict(color='red', dash='dash', width=2)), 
-                           hover template="PPA Price (EUR/MWh): %{y: .2f}<extra></extra>"),
+                           hover template="PPA Price (EUR/MWh): %{y: .2f}<extra></extra>",
                 secondary_y=False
             )
         
