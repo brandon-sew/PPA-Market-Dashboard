@@ -73,7 +73,7 @@ with st.sidebar:
     # --- MOVED DROPDOWN ---
     gen_options = ["Solar", "Wind Onshore", "Wind Offshore"]
     selected_gen_types = st.multiselect("Overlay Generation Forecast:", options=gen_options)
-    res = st.radio("Resolution", ["60 min", "15 min"], horizontal=True)
+    res = st.radio("Resolution", ["Monthly", "Daily", "60 min", "15 min"], horizontal=True)
     today = datetime.now().date()
     d_range = st.date_input("Date Range", value=(today - timedelta(days=2), today))
     exclude_neg = st.checkbox("No Settlement for Negative Prices", help="Treats negative prices as 0 for capture price calculation")
@@ -180,7 +180,9 @@ if len(d_range) == 2:
         forecast_df_raw = pd.DataFrame()
         
     if not full_price_df.empty:
-        freq = '60min' if res == "60 min" else '15min'
+        res_map = {"Monthly": "M", "Daily": "D", "15 min": "15min", "60 min": "60min"}
+        freq = res_map.get(res, "60min")
+        
         full_price_resampled = full_price_df.groupby('Zone').apply(
             lambda x: x.set_index('Time').resample(freq).mean(numeric_only=True).ffill()
         ).reset_index()
