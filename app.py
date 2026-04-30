@@ -222,10 +222,11 @@ with col_chart:
         if ppa_price > 0:
             unique_times = plot_df['Time'].unique()
             fig.add_trace(
-                go.Scatter(x=unique_times, y=[ppa_price]*len(unique_times),
-                           name="PPA Price",
-                           line=dict(color='red', dash='dash', width=2)), 
-                           hover template="PPA Price (EUR/MWh): %{y: .2f}<extra></extra>",
+                go.Scatter(x=unique_times, y=[ppa_price]*len(unique_times), 
+                           name="PPA Price", # Short name to prevent truncation
+                           line=dict(color='red', dash='dash', width=2),
+                           # This defines the exact text you see in the hover box:
+                           hovertemplate="PPA Price (EUR/MWh): %{y:.2f}<extra></extra>"),
                 secondary_y=False
             )
         
