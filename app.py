@@ -5,7 +5,7 @@ import os
 import json
 import glob
 import numpy as np
-import requests  # NEW IMPORT
+import requests
 from datetime import datetime, timedelta
 from entsoe import EntsoePandasClient
 import plotly.graph_objects as go
@@ -60,28 +60,26 @@ with st.sidebar:
     st.title("Configuration")
     display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
     
-    # FIX: Use 'default' instead of 'key' to allow programmatic updates from the map
     chosen_from_dropdown = st.multiselect("Select bidding zones:", 
                                          options=sorted(display_options.keys()), 
                                          default=st.session_state.selected_zones)
     
-    # Sync session state if the user manually interacts with the dropdown
     if chosen_from_dropdown != st.session_state.selected_zones:
         st.session_state.selected_zones = chosen_from_dropdown
         st.rerun()
     
-    # --- MOVED DROPDOWN ---
     gen_options = ["Solar", "Wind Onshore", "Wind Offshore"]
-    selected_gen_types = st.multiselect("Overlay Generation Forecast:", options=gen_options)
-    res = st.radio("Resolution", ["Monthly", "Daily", "60 min", "15 min"], horizontal=True)
+    # ADDED KEYS TO ALL WIDGETS BELOW TO PRESERVE STATE ON RERUN
+    selected_gen_types = st.multiselect("Overlay Generation Forecast:", options=gen_options, key="gen_forecast_select")
+    res = st.radio("Resolution", ["Monthly", "Daily", "60 min", "15 min"], horizontal=True, key="res_radio")
     today = datetime.now().date()
-    d_range = st.date_input("Date Range", value=(today - timedelta(days=2), today))
-    exclude_neg = st.checkbox("No Settlement for Negative Prices", help="Treats negative prices as 0 for capture price calculation")
+    d_range = st.date_input("Date Range", value=(today - timedelta(days=2), today), key="date_range_input")
+    exclude_neg = st.checkbox("No Settlement for Negative Prices", help="Treats negative prices as 0 for capture price calculation", key="neg_price_check")
 
     st.divider()
     st.subheader("PPA Configuration")
-    ppa_price = st.number_input("PPA Price (EUR/MWh)", value=0.0, step = 1.0)
-    fixed_floating = st.checkbox("Fixed for Floating Price Structure")
+    ppa_price = st.number_input("PPA Price (EUR/MWh)", value=0.0, step = 1.0, key="ppa_price_input")
+    fixed_floating = st.checkbox("Fixed for Floating Price Structure", key="fixed_float_check")
     
     
 @st.cache_data(ttl=3600)
@@ -105,8 +103,8 @@ def fetch_data(codes, start_date, end_date):
     with ThreadPoolExecutor(max_workers=10) as executor:
         futures = [executor.submit(get_price, code) for code in codes]
         for future in as_completed(futures):
-            res = future.result()
-            if res is not None: all_data.append(res)
+            res_data = future.result()
+            if res_data is not None: all_data.append(res_data)
             
     return pd.concat(all_data) if all_data else pd.DataFrame()
 
@@ -132,8 +130,8 @@ def fetch_gen_data(codes, start_date, end_date):
     with ThreadPoolExecutor(max_workers=10) as executor:
         futures = [executor.submit(get_gen, code) for code in codes]
         for future in as_completed(futures):
-            res = future.result()
-            if res is not None: all_gen.append(res)
+            res_data = future.result()
+            if res_data is not None: all_gen.append(res_data)
             
     return pd.concat(all_gen) if all_gen else pd.DataFrame()
 
@@ -159,8 +157,8 @@ def fetch_forecast_data(codes, start_date, end_date):
     with ThreadPoolExecutor(max_workers=10) as executor:
         futures = [executor.submit(get_forecast, code) for code in codes]
         for future in as_completed(futures):
-            res = future.result()
-            if res is not None: all_forecast.append(res)
+            res_data = future.result()
+            if res_data is not None: all_forecast.append(res_data)
             
     return pd.concat(all_forecast) if all_forecast else pd.DataFrame()
 
@@ -182,7 +180,6 @@ if len(d_range) == 2:
         forecast_df_raw = pd.DataFrame()
         
     if not full_price_df.empty:
-        # IMPLEMENTED: Resolution mapping for resampling
         res_map = {"15 min": "15min", "60 min": "60min", "Daily": "D", "Monthly": "MS"}
         freq = res_map.get(res, "60min")
         
@@ -205,11 +202,9 @@ with col_chart:
     if not plot_df.empty: 
         fig = make_subplots(specs=[[{"secondary_y": True}]])
         
-        # 1. Define a fixed colour map
         colors = px.colors.qualitative.Plotly
         zone_color_map = {zone: colors[i % len(colors)] for i, zone in enumerate(selected_codes)}
         
-        # 2. PLOT PRICES (Single Loop)
         for zone in selected_codes:
             zone_df = plot_df[plot_df['Zone'] == zone]
             currency = ZONE_NAMES[zone][1]
@@ -223,7 +218,6 @@ with col_chart:
                 secondary_y=False
             )
         
-        # 3. PLOT PPA LINE (Separate trace, single addition)
         if ppa_price > 0:
             unique_times = plot_df['Time'].unique()
             fig.add_trace(
@@ -236,7 +230,6 @@ with col_chart:
                 secondary_y=False
             )
         
-        # 4. PLOT GENERATION (Single Loop)
         if selected_gen_types and not forecast_df.empty:
             for zone in selected_codes:
                 z_gen_df = forecast_df[forecast_df['Zone'] == zone]
@@ -253,14 +246,12 @@ with col_chart:
                                 secondary_y=True
                             )
 
-        # 5. Layout and Y-Axis calculations
         p_min, p_max = plot_df['Price'].min(), plot_df['Price'].max()
         if ppa_price > 0:
             p_min, p_max = min(p_min, ppa_price), max(p_max, ppa_price)
         p_padding = (p_max - p_min) * 0.1 if p_max != p_min else 10
         p_range = [p_min - p_padding, p_max + p_padding]
         
-        # ... [Rest of your layout code remains the same] ...
         fig.update_layout(
             template="plotly_white",
             hovermode="x unified",
@@ -316,23 +307,19 @@ with col_map:
             fig_map.update_geos(center=dict(lon=12, lat=52), projection_scale=7, visible=True, showcountries=True, countrycolor="#262730", lakecolor="white", landcolor="#e0e0e0", projection_type="mercator", bgcolor="rgba(0,0,0,0)")
             fig_map.update_layout(margin={"r":0,"t":0,"l":0,"b":0}, height=500, coloraxis_showscale=False, paper_bgcolor="rgba(0,0,0,0)", autosize=True)
             
-            # --- UPDATED INTERACTIVE MAP LOGIC ---
             map_event = st.plotly_chart(fig_map, use_container_width=True, config={'displaylogo': False}, on_select="rerun", selection_mode="points")
             
             if map_event and "selection" in map_event and map_event["selection"]["points"]:
                 clicked_code = map_event["selection"]["points"][0]["location"]
                 clicked_label = f"{ZONE_NAMES[clicked_code][0]} ({clicked_code})"
                 
-                # Copy current selection from session state
                 current_selection = list(st.session_state.selected_zones)
                 
-                # Toggle logic: if in list, remove it; if not, add it
                 if clicked_label in current_selection:
                     current_selection.remove(clicked_label)
                 else:
                     current_selection.append(clicked_label)
                 
-                # Update session state and force rerun to refresh Sidebar Multiselect
                 st.session_state.selected_zones = current_selection
                 st.rerun()
 
@@ -363,7 +350,6 @@ with col_met:
             
     st.subheader("Baseload & Capture Metrics")
     if not plot_df.empty and not gen_df.empty:
-        # IMPLEMENTED: Resolution mapping for metrics generation
         res_map = {"15 min": "15min", "60 min": "60min", "Daily": "D", "Monthly": "MS"}
         freq = res_map.get(res, "60min")
         
@@ -373,7 +359,7 @@ with col_met:
     
         metrics_list = []
         for code in selected_codes:
-            p_sub = plot_df[plot_df['Zone'] == code]
+            p_sub = plot_df[plot_df['Zone'] == code].copy()
             g_sub = gen_resampled[gen_resampled['Zone'] == code]
             if exclude_neg:
                 p_sub['Price'] = p_sub['Price'].clip(lower=0)
