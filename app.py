@@ -81,6 +81,13 @@ with st.sidebar:
     ppa_price = st.number_input("PPA Price (EUR/MWh)", value=0.0, step = 1.0, key="ppa_price_input")
     fixed_floating = st.checkbox("Fixed for Floating Price Structure", key="fixed_float_check")
     
+    market_following = st.checkbox("Market Following with floor", key="mkt_follow_check")
+    if market_following:
+        floor_rate_eur = st.number_input("Floor Rate (EUR/MWh)", value=0.0, step=0.1, key="floor_eur_input")
+        floor_rate_pct = st.number_input("Floor Rate (% of PPA Price)", value=0.0, step=1.0, key="floor_pct_input")
+        if floor_rate_eur == 0 and floor_rate_pct == 0:
+            st.warning("Please enter a floor rate for Market Following.")
+    
     
 @st.cache_data(ttl=3600)
 def fetch_data(codes, start_date, end_date):
@@ -397,8 +404,20 @@ with col_tab:
     if not plot_df.empty:
         table_df = plot_df.copy()
         
+        # Fixed for Floating Logic
         if fixed_floating and ppa_price > 0:
-            table_df['PPA Settlement'] = table_df['Price'] - ppa_price
+            table_df['Fixed for Floating settlement'] = table_df['Price'] - ppa_price
+            
+        # Market Following logic
+        if market_following and ppa_price > 0:
+            # Effective floor is the sum of EUR input and % of PPA input
+            eff_floor = floor_rate_eur + (floor_rate_pct / 100 * ppa_price)
+            # Logic: If Price > PPA -> gain is Floor. If Price < PPA -> loss is Price - PPA.
+            table_df['Market following settlement'] = np.where(
+                table_df['Price'] > ppa_price, 
+                eff_floor, 
+                table_df['Price'] - ppa_price
+            )
         
         if not forecast_df.empty:
             for g_type in selected_gen_types:
@@ -407,11 +426,15 @@ with col_tab:
                     f_sub.columns = ['Time', 'Zone', f'TEMP_GEN_COL']
                     table_df = pd.merge(table_df, f_sub, on=['Time', 'Zone'], how='left')
                     table_df = table_df.rename(columns={'TEMP_GEN_COL': f"{g_type} Forecast (MW)"})
+        
         table_df['Date'] = table_df['Time'].dt.strftime('%d-%m-%Y')
         table_df['24h Time'] = table_df['Time'].dt.strftime('%H:%M')
+        
         val_cols = ['Price'] + [c for c in table_df.columns if 'Forecast (MW)' in c]
-        if 'PPA Settlement' in table_df.columns:
-            val_cols.append('PPA Settlement')
+        if 'Fixed for Floating settlement' in table_df.columns:
+            val_cols.append('Fixed for Floating settlement')
+        if 'Market following settlement' in table_df.columns:
+            val_cols.append('Market following settlement')
             
         table_df_melted = table_df.melt(id_vars=['Date', '24h Time', 'Zone'], value_vars=val_cols)
         def get_header(row):
