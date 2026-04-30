@@ -203,14 +203,29 @@ col_chart, col_map = st.columns([2, 1])
 with col_chart:
     st.subheader("Day-Ahead Prices and Generation Forecasts")
     if not plot_df.empty: 
-        fig = make_subplots(specs=[[{"secondary_y": True}]])
+        fig = make_subplots(specs=[[{"secondary_y": True
+                                    
+        #Define a fixed colour map for bidding zones
+        colors = px.colors.qualitative,Plotly
+        zone_color_map = {zone: colors[i % len(colors)] for i, zone in enumerate(selected_codes)}
+        for zone in selected_codes:
+            zone_df = plot_df[plot_df['Zone'] == zone]
+            currency = ZONE_NAMES[zone][1]
+            fig.add.trace(
+                go.Scatter(x=zone_df['Time'], y=zone_df['Price'],
+                           name=f"{zone} Price ({currency}/MWh)",
+                           line=dict(color=zone_color_map[zone], width=2)),
+                secondary_y=False
+            )
+        
         
         if ppa_price > 0:
             unique_times = plot_df['Time'].unique()
             fig.add_trace(
                 go.Scatter(x=unique_times, y=[ppa_price]*len(unique_times),
-                           name=f"PPA Price ({ppa_price} EUR/MWh)",
+                           name="PPA Price",
                            line=dict(color='red', dash='dash', width=2)), 
+                           hover template="PPA Price (EUR/MWh): %{y: .2f}<extra></extra>"),
                 secondary_y=False
             )
         
