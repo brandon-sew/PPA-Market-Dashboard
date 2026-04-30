@@ -90,6 +90,10 @@ with st.sidebar:
             st.error("⚠️ Please specify either a Floor Rate (EUR) OR a Floor Rate (%), not both.")
         elif floor_rate_eur == 0 and floor_rate_pct == 0:
             st.warning("Please enter a floor rate for Market Following.")
+            
+    # Resolution error check
+    if (fixed_floating or market_following) and res != "Monthly":
+        st.error("⚠️ Settlement not available on a Daily/60min/15min basis, please select Monthly.")
     
     
 @st.cache_data(ttl=3600)
@@ -407,12 +411,12 @@ with col_tab:
     if not plot_df.empty:
         table_df = plot_df.copy()
         
-        # Fixed for Floating Logic
-        if fixed_floating and ppa_price > 0:
+        # Fixed for Floating Logic - ONLY if resolution is Monthly
+        if fixed_floating and ppa_price > 0 and res == "Monthly":
             table_df['Fixed for Floating settlement'] = table_df['Price'] - ppa_price
             
-        # Market Following logic - Only calculate if one (and only one) floor input is populated
-        if market_following and ppa_price > 0:
+        # Market Following logic - ONLY if resolution is Monthly
+        if market_following and ppa_price > 0 and res == "Monthly":
             # Check for conflict
             if (floor_rate_eur > 0) ^ (floor_rate_pct > 0):  # XOR operator
                 eff_floor = floor_rate_eur if floor_rate_eur > 0 else (floor_rate_pct / 100 * ppa_price)
