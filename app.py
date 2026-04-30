@@ -203,7 +203,7 @@ col_chart, col_map = st.columns([2, 1])
 with col_chart:
     st.subheader("Day-Ahead Prices and Generation Forecasts")
     if not plot_df.empty: 
-        fig = make_subplots(specs=[[{"secondary_y": True
+        fig = make_subplots(specs=[[{"secondary_y": True}]])
                                     
         #Define a fixed colour map for bidding zones
         colors = px.colors.qualitative,Plotly
