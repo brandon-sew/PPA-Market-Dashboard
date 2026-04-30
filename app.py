@@ -79,7 +79,9 @@ with st.sidebar:
     exclude_neg = st.checkbox("No Settlement for Negative Prices", help="Treats negative prices as 0 for capture price calculation")
 
     st.divider()
-    st.subheader("Wood Mackenzie and ICIS Forecasts")
+    st.subheader("PPA Configuration")
+    ppa_price = st.number_input("PPA Price (EUR/MWh)", value=0.0, step = 1.0)
+    fixed_floating = st.checkbox("Fixed for Floating Price Structure")
     
     
 @st.cache_data(ttl=3600)
@@ -202,6 +204,16 @@ with col_chart:
     st.subheader("Day-Ahead Prices and Generation Forecasts")
     if not plot_df.empty: 
         fig = make_subplots(specs=[[{"secondary_y": True}]])
+        
+        if ppa_price > 0:
+            unique_times = plot_df['Time'].unique()
+            fig.add_trace(
+                go.Scatter(x=unique_times, y=[ppa_price]*len(unique_times),
+                           name=f"PPA Price ({ppa_price} EUR/MWh)",
+                           line=dict(color='red', dash='dash', width=2)), 
+                secondary_y=False
+            )
+        
         for zone in selected_codes:
             zone_df = plot_df[plot_df['Zone'] == zone]
             currency = ZONE_NAMES[zone][1]
@@ -392,6 +404,10 @@ with col_tab:
     st.subheader("Data Table")
     if not plot_df.empty:
         table_df = plot_df.copy()
+        
+        if fixed_floating and ppa_price > 0:
+            table_df['PPA Settlement'] = table_df['Price'] - ppa_price
+        
         if not forecast_df.empty:
             for g_type in selected_gen_types:
                 if g_type in forecast_df.columns:
@@ -402,6 +418,9 @@ with col_tab:
         table_df['Date'] = table_df['Time'].dt.strftime('%d-%m-%Y')
         table_df['24h Time'] = table_df['Time'].dt.strftime('%H:%M')
         val_cols = ['Price'] + [c for c in table_df.columns if 'Forecast (MW)' in c]
+        if 'PPA Settlement' in table_df.columns:
+            val_cols.append('PPA Settlement')
+            
         table_df_melted = table_df.melt(id_vars=['Date', '24h Time', 'Zone'], value_vars=val_cols)
         def get_header(row):
             if row['variable'] == 'Price':
