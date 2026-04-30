@@ -206,7 +206,7 @@ with col_chart:
         fig = make_subplots(specs=[[{"secondary_y": True}]])
                                     
         #Define a fixed colour map for bidding zones
-        colors = px.colors.qualitative,Plotly
+        colors = px.colors.qualitative.Plotly
         zone_color_map = {zone: colors[i % len(colors)] for i, zone in enumerate(selected_codes)}
         for zone in selected_codes:
             zone_df = plot_df[plot_df['Zone'] == zone]
