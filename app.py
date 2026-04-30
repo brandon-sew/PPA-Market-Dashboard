@@ -411,7 +411,8 @@ with col_tab:
         # Market Following logic
         if market_following and ppa_price > 0:
             # Effective floor is the sum of EUR input and % of PPA input
-            eff_floor = floor_rate_eur + (floor_rate_pct / 100 * ppa_price)
+            if (floor_rate_eur > 0 ^ (floor_rate_pct > 0):
+            eff_floor = floor_rate_eur if floor_rate_eur > 0 else (floor_rate_pct / 100 * ppa_price)
             # Logic: If Price > PPA -> gain is Floor. If Price < PPA -> loss is Price - PPA.
             table_df['Market following settlement'] = np.where(
                 table_df['Price'] > ppa_price, 
