@@ -218,7 +218,7 @@ with col_chart:
                     x=zone_df['Time'], y=zone_df['Price'],
                     name=f"{zone} Price ({currency}/MWh)",
                     line=dict(color=zone_color_map[zone], width=2),
-                    hovertemplate="%{y:.2f} " + currency + "/MWh<extra></extra>"
+                    hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"
                 ),
                 secondary_y=False
             )
@@ -248,7 +248,7 @@ with col_chart:
                                     x=z_gen_df['Time'], y=z_gen_df[g_type], 
                                     name=f"{zone} {g_type} Forecast (MW)",
                                     line=dict(color=zone_color_map[zone], dash='dot', width=1),
-                                    hovertemplate="%{y:.0f} MW<extra></extra>"
+                                    hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"
                                 ),
                                 secondary_y=True
                             )
