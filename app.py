@@ -85,7 +85,10 @@ with st.sidebar:
     if market_following:
         floor_rate_eur = st.number_input("Floor Rate (EUR/MWh)", value=0.0, step=0.1, key="floor_eur_input")
         floor_rate_pct = st.number_input("Floor Rate (% of PPA Price)", value=0.0, step=1.0, key="floor_pct_input")
-        if floor_rate_eur == 0 and floor_rate_pct == 0:
+        
+        if floor_rate_eur > 0 and floor_rate_pct > 0:
+            st.error("⚠️ Please specify either a Floor Rate (EUR) OR a Floor Rate (%), not both.")
+        elif floor_rate_eur == 0 and floor_rate_pct == 0:
             st.warning("Please enter a floor rate for Market Following.")
     
     
@@ -408,12 +411,11 @@ with col_tab:
         if fixed_floating and ppa_price > 0:
             table_df['Fixed for Floating settlement'] = table_df['Price'] - ppa_price
             
-        # Market Following logic
+        # Market Following logic - Only calculate if one (and only one) floor input is populated
         if market_following and ppa_price > 0:
-            # Effective floor is the sum of EUR input and % of PPA input
-            if (floor_rate_eur > 0 ^ (floor_rate_pct > 0):
+            # Check for conflict
+            if (floor_rate_eur > 0) ^ (floor_rate_pct > 0):  # XOR operator
                 eff_floor = floor_rate_eur if floor_rate_eur > 0 else (floor_rate_pct / 100 * ppa_price)
-            # Logic: If Price > PPA -> gain is Floor. If Price < PPA -> loss is Price - PPA.
                 table_df['Market following settlement'] = np.where(
                     table_df['Price'] > ppa_price, 
                     eff_floor, 
