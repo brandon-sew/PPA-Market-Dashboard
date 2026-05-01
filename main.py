@@ -1,6 +1,5 @@
 import os
 import pandas as pd
-import time
 from datetime import datetime
 from entsoe import EntsoePandasClient
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -17,49 +16,53 @@ countries = [
     'IT_CNOR', 'IT_CSUD', 'IT_SUD', 'IT_SICI', 'IT_SARD', 'IT_CALA'
 ]
 
-# --- CHANGE FOR HEAVY LIFTING ---
+# --- SET FOR 5-YEAR HEAVY LIFT ---
 end = pd.Timestamp(datetime.now(), tz='Europe/Brussels')
-# Set to 5 years (5 * 365 days)
-start = end - pd.Timedelta(days=10) 
-# --------------------------------
+start = end - pd.Timedelta(days=5*365) 
+csv_filename = 'market_prices.csv'
+# ---------------------------------
 
 def process_metrics(price_series, gen_df, country_code):
     if price_series is None or price_series.empty: 
         return pd.DataFrame()
     
     price_series.index = pd.to_datetime(price_series.index)
-    price_series = price_series[price_series.notna()]
-    
-    baseload = price_series.resample('D').mean()
     data = []
     
-    for date, val in baseload.items(): 
-        if pd.notna(val): 
-            data.append({'Date': date.date(), 'Metric': 'Baseload', 'Price': val})
+    # 1. Baseload Price
+    baseload = price_series.resample('D').mean()
+    for date, val in baseload.items():
+        if pd.notna(val): data.append({'Date': date.date(), 'Metric': 'Baseload', 'Price': val})
 
     if gen_df is not None and not gen_df.empty:
         if isinstance(gen_df.columns, pd.MultiIndex):
             gen_df.columns = gen_df.columns.get_level_values(0)
         
+        # Aggregate duplicates (some zones have multiple categories for same fuel)
+        gen_df = gen_df.T.groupby(level=0).sum().T
         combined = pd.merge(price_series.to_frame('Price'), gen_df, left_index=True, right_index=True, how='inner')
         
-        # Generation capture price logic
-        gen_types = {
-            'Solar': 'Solar Capture', 
-            'Wind Onshore': 'Wind Onshore Capture', 
-            'Wind Offshore': 'Wind Offshore Capture'
+        mapping = {
+            'Solar': 'Solar',
+            'Wind Onshore': 'Wind Onshore',
+            'Wind Offshore': 'Wind Offshore'
         }
         
-        for g_col, g_metric in gen_types.items():
-            if g_col in combined.columns:
+        for fuel, label in mapping.items():
+            if fuel in combined.columns:
+                # 2. Add Generation Volume (MWh)
+                daily_gen = combined[fuel].resample('D').sum()
+                for date, val in daily_gen.items():
+                    if pd.notna(val): data.append({'Date': date.date(), 'Metric': f'{label} Generation', 'Price': val})
+                
+                # 3. Add Capture Price (€/MWh)
                 def calc_cap(group):
-                    total_gen = group[g_col].sum()
-                    return (group['Price'] * group[g_col]).sum() / total_gen if total_gen > 0 else None
+                    total_mwh = group[fuel].sum()
+                    return (group['Price'] * group[fuel]).sum() / total_mwh if total_mwh > 0 else None
                 
                 cap_series = combined.resample('D').apply(calc_cap)
                 for date, val in cap_series.items():
-                    if pd.notna(val): 
-                        data.append({'Date': date.date(), 'Metric': g_metric, 'Price': val})
+                    if pd.notna(val): data.append({'Date': date.date(), 'Metric': f'{label} Capture', 'Price': val})
 
     res = pd.DataFrame(data)
     res['Country'] = country_code
@@ -67,39 +70,32 @@ def process_metrics(price_series, gen_df, country_code):
 
 def fetch_single_country(code):
     try:
-        # entsoe-py automatically splits 5 years into 1-year chunks for you
-        raw_series = client.query_day_ahead_prices(code, start=start, end=end)
-        
+        print(f"Fetching {code}...")
+        # Prices
+        prices = client.query_day_ahead_prices(code, start=start, end=end)
+        # Actual Generation (used for historical Capture Prices)
         try:
-            gen_df = client.query_generation(code, start=start, end=end)
+            gen = client.query_generation(code, start=start, end=end)
         except:
-            gen_df = None
-            
-        if raw_series is not None and not raw_series.empty:
-            return process_metrics(raw_series, gen_df, code)
+            gen = None
+        return process_metrics(prices, gen, code)
     except Exception as e:
-        print(f"Error fetching {code}: {str(e)[:50]}")
-    return pd.DataFrame()
+        print(f"Error {code}: {str(e)[:50]}")
+        return pd.DataFrame()
 
-# 2. Parallel Execution
+# Parallel Execution
 all_country_data = []
-print(f"🚀 INITIALIZING 5-YEAR BULK FETCH (from {start.date()} to {end.date()})")
-print("This may take 1-2 hours depending on API congestion...")
-
-# Using 3 workers for the 5-year fetch to avoid hitting rate limits on massive transfers
 with ThreadPoolExecutor(max_workers=3) as executor:
     futures = {executor.submit(fetch_single_country, code): code for code in countries}
     for i, future in enumerate(as_completed(futures)):
         result = future.result()
         if not result.empty:
             all_country_data.append(result)
-        print(f"Progress: {i+1}/{len(countries)} zones completed.")
+        print(f"Progress: {i+1}/{len(countries)} zones finished.")
 
-# 3. Export
+# Export (Overwrite the old price-only CSV)
 if all_country_data:
     final_df = pd.concat(all_country_data, ignore_index=True)
     final_df['Price'] = final_df['Price'].round(2)
-    final_df.to_csv('market_prices.csv', index=False)
-    print(f"\n✅ SUCCESS: 5 years of data saved to market_prices.csv.")
-else:
-    print("\n❌ FAILED: No data collected.")
+    final_df.to_csv(csv_filename, index=False)
+    print(f"✅ Success: 5-year complete data saved to {csv_filename}")
