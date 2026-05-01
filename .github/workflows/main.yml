@@ -25,5 +25,8 @@ jobs:
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
           git add market_prices.csv
+          # The commit will fail if there are no changes, '|| exit 0' handles that
           git commit -m "Update market prices" || exit 0
+          # This pulls your latest changes (like the 10-day revert) and puts the CSV on top
+          git pull --rebase origin main
           git push
