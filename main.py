@@ -25,8 +25,21 @@ countries = [
     'IT_CALA'
 ]
 
+# --- HYBRID LOGIC START ---
+csv_filename = 'market_prices.csv'
 end = pd.Timestamp(datetime.now(), tz='Europe/Brussels')
-start = end - pd.Timedelta(days=10)
+
+if os.path.exists(csv_filename):
+    # Load existing long-term data
+    existing_df = pd.read_csv(csv_filename)
+    existing_df['Date'] = pd.to_datetime(existing_df['Date']).dt.date
+    # API "Deep Dive" starts from the last available date in CSV
+    start = pd.Timestamp(existing_df['Date'].max(), tz='Europe/Brussels')
+else:
+    existing_df = pd.DataFrame()
+    # Initial "Long-term" fetch (e.g., 365 days)
+    start = end - pd.Timedelta(days=365)
+# --- HYBRID LOGIC END ---
 
 def process_metrics(price_series, gen_df, country_code):
     if price_series is None or price_series.empty: 
@@ -101,7 +114,6 @@ def fetch_single_country(code):
 all_country_data = []
 print(f"Starting parallel data fetch for {len(countries)} zones...")
 
-# We use 5 workers to be respectful of the ENTSO-E API limits while gaining speed
 with ThreadPoolExecutor(max_workers=5) as executor:
     futures = {executor.submit(fetch_single_country, code): code for code in countries}
     for future in as_completed(futures):
@@ -109,11 +121,20 @@ with ThreadPoolExecutor(max_workers=5) as executor:
         if not result.empty:
             all_country_data.append(result)
 
-# 3. Export
+# 3. Export with Merge Logic
 if all_country_data:
-    final_df = pd.concat(all_country_data, ignore_index=True)
+    new_df = pd.concat(all_country_data, ignore_index=True)
+    
+    # Combine new API data with old CSV data
+    final_df = pd.concat([existing_df, new_df], ignore_index=True)
+    
+    # Ensure Date format consistency and drop overlaps
+    final_df['Date'] = pd.to_datetime(final_df['Date']).dt.date
+    final_df = final_df.drop_duplicates(subset=['Date', 'Metric', 'Country'], keep='last')
+    final_df = final_df.sort_values(by=['Country', 'Date'])
+    
     final_df['Price'] = final_df['Price'].round(2)
-    final_df.to_csv('market_prices.csv', index=False)
-    print(f"\nSuccess: market_prices.csv updated.")
+    final_df.to_csv(csv_filename, index=False)
+    print(f"\nSuccess: {csv_filename} updated with recent API data.")
 else:
-    print("\nNo data collected.")
+    print("\nNo new data collected.")
