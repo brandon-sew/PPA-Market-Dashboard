@@ -20,7 +20,7 @@ countries = [
 # --- CHANGE FOR HEAVY LIFTING ---
 end = pd.Timestamp(datetime.now(), tz='Europe/Brussels')
 # Set to 5 years (5 * 365 days)
-start = end - pd.Timedelta(days=5*365) 
+start = end - pd.Timedelta(days=10) 
 # --------------------------------
 
 def process_metrics(price_series, gen_df, country_code):
