@@ -95,7 +95,15 @@ with st.sidebar:
     if (fixed_floating or market_following) and res != "Monthly":
         st.error("⚠️ Settlement not available on a Daily/60min/15min basis, please select Monthly.")
     
-    
+# --- NEW: LOAD CSV DATA ---
+@st.cache_data
+def load_local_csv():
+    if os.path.exists('market_prices.csv'):
+        df = pd.read_csv('market_prices.csv')
+        df['Date'] = pd.to_datetime(df['Date']).dt.date
+        return df
+    return pd.DataFrame()
+
 @st.cache_data(ttl=3600)
 def fetch_data(codes, start_date, end_date):
     if not codes: return pd.DataFrame()
@@ -185,14 +193,42 @@ gen_df = pd.DataFrame()
 forecast_df = pd.DataFrame() 
 
 if len(d_range) == 2:
-    full_price_df = fetch_data(all_zones, d_range[0], d_range[1])
-    gen_df = fetch_gen_data(selected_codes, d_range[0], d_range[1])
-    
-    if selected_gen_types:
-        forecast_df_raw = fetch_forecast_data(selected_codes, d_range[0], d_range[1])
+    # --- LOGIC BRANCH: CSV VS API ---
+    if res in ["Daily", "Monthly"]:
+        csv_raw = load_local_csv()
+        if not csv_raw.empty:
+            mask = (csv_raw['Date'] >= d_range[0]) & (csv_raw['Date'] <= d_range[1])
+            data_subset = csv_raw[mask]
+            
+            # 1. Reconstruct full_price_df
+            full_price_df = data_subset[data_subset['Metric'] == 'Baseload'].copy()
+            full_price_df = full_price_df.rename(columns={'Date': 'Time', 'Country': 'Zone'})
+            full_price_df['Time'] = pd.to_datetime(full_price_df['Time']).dt.tz_localize('Europe/Brussels')
+            
+            # 2. Reconstruct gen_df & forecast_df
+            gen_subset = data_subset[data_subset['Metric'].str.contains('Generation')].copy()
+            if not gen_subset.empty:
+                gen_subset['Metric'] = gen_subset['Metric'].str.replace(' Generation', '')
+                gen_pivot = gen_subset.pivot_table(index=['Date', 'Country'], columns='Metric', values='Price').reset_index()
+                gen_pivot = gen_pivot.rename(columns={'Date': 'Time', 'Country': 'Zone'})
+                gen_pivot['Time'] = pd.to_datetime(gen_pivot['Time']).dt.tz_localize('Europe/Brussels')
+                
+                gen_df = gen_pivot[gen_pivot['Zone'].isin(selected_codes)]
+                forecast_df_raw = gen_df.copy() # Use generation actuals as forecast proxy for historical CSV
+            else:
+                forecast_df_raw = pd.DataFrame()
+        else:
+            st.error("Historical CSV not found. Please run data extraction.")
     else:
-        forecast_df_raw = pd.DataFrame()
-        
+        # Standard API route for high resolution
+        full_price_df = fetch_data(all_zones, d_range[0], d_range[1])
+        gen_df = fetch_gen_data(selected_codes, d_range[0], d_range[1])
+        if selected_gen_types:
+            forecast_df_raw = fetch_forecast_data(selected_codes, d_range[0], d_range[1])
+        else:
+            forecast_df_raw = pd.DataFrame()
+
+    # --- SHARED POST-PROCESSING ---
     if not full_price_df.empty:
         res_map = {"15 min": "15min", "60 min": "60min", "Daily": "D", "Monthly": "MS"}
         freq = res_map.get(res, "60min")
