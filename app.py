@@ -210,16 +210,23 @@ if len(d_range) == 2:
             full_price_df = full_price_df.rename(columns={'Date': 'Time', 'Country': 'Zone'})
             full_price_df['Time'] = pd.to_datetime(full_price_df['Time']).dt.tz_localize('Europe/Brussels')
             
-            # 2. Reconstruct gen_df & forecast_df
+            # 2. Reconstruct gen_df
             gen_subset = data_subset[data_subset['Metric'].str.contains('Generation')].copy()
             if not gen_subset.empty:
                 gen_subset['Metric'] = gen_subset['Metric'].str.replace(' Generation', '')
                 gen_pivot = gen_subset.pivot_table(index=['Date', 'Country'], columns='Metric', values='Price').reset_index()
                 gen_pivot = gen_pivot.rename(columns={'Date': 'Time', 'Country': 'Zone'})
                 gen_pivot['Time'] = pd.to_datetime(gen_pivot['Time']).dt.tz_localize('Europe/Brussels')
-                
                 gen_df = gen_pivot[gen_pivot['Zone'].isin(selected_codes)]
-                forecast_df_raw = gen_df.copy() # Use generation actuals as forecast proxy for historical CSV
+                
+            # 3. Reconstruct forecast_df from CSV
+            forecast_subset = data_subset[data_subset['Metric'].str.contains('Forecast')].copy()
+            if not forecast_subset.empty:
+                forecast_subset['Metric'] = forecast_subset['Metric'].str.replace(' Forecast', '')
+                fc_pivot = forecast_subset.pivot_table(index=['Date', 'Country'], columns='Metric', values='Price').reset_index()
+                fc_pivot = fc_pivot.rename(columns={'Date': 'Time', 'Country': 'Zone'})
+                fc_pivot['Time'] = pd.to_datetime(fc_pivot['Time']).dt.tz_localize('Europe/Brussels')
+                forecast_df_raw = fc_pivot[fc_pivot['Zone'].isin(selected_codes)]
         else:
             st.error("Historical CSV not found. Please run data extraction.")
     else:
