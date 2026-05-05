@@ -9,7 +9,7 @@ ENTSOE_API_KEY = os.environ.get('ENTSOE_TOKEN')
 client = EntsoePandasClient(api_key=ENTSOE_API_KEY)
 
 # --- TOGGLE THIS VALUE ---
-DAYS_TO_FETCH = 1825 # Set to 1825 for 5-year heavy lift
+DAYS_TO_FETCH = 10 # Set to 1825 for 5-year heavy lift
 # -------------------------
 
 countries = [
