@@ -22,7 +22,7 @@ start = end - pd.Timedelta(days=10)
 csv_filename = 'market_prices.csv'
 # ---------------------------------
 
-def process_metrics(price_series, gen_df, country_code):
+def process_metrics(price_series, gen_df, forecast_df, country_code):
     if price_series is None or price_series.empty: 
         return pd.DataFrame()
     
@@ -34,28 +34,20 @@ def process_metrics(price_series, gen_df, country_code):
     for date, val in baseload.items():
         if pd.notna(val): data.append({'Date': date.date(), 'Metric': 'Baseload', 'Price': val})
 
+    # 2. Actual Generation & Capture Prices
     if gen_df is not None and not gen_df.empty:
         if isinstance(gen_df.columns, pd.MultiIndex):
             gen_df.columns = gen_df.columns.get_level_values(0)
-        
-        # Aggregate duplicates (some zones have multiple categories for same fuel)
         gen_df = gen_df.T.groupby(level=0).sum().T
         combined = pd.merge(price_series.to_frame('Price'), gen_df, left_index=True, right_index=True, how='inner')
         
-        mapping = {
-            'Solar': 'Solar',
-            'Wind Onshore': 'Wind Onshore',
-            'Wind Offshore': 'Wind Offshore'
-        }
-        
+        mapping = {'Solar': 'Solar', 'Wind Onshore': 'Wind Onshore', 'Wind Offshore': 'Wind Offshore'}
         for fuel, label in mapping.items():
             if fuel in combined.columns:
-                # 2. Add Generation Volume (MWh)
                 daily_gen = combined[fuel].resample('D').sum()
                 for date, val in daily_gen.items():
                     if pd.notna(val): data.append({'Date': date.date(), 'Metric': f'{label} Generation', 'Price': val})
                 
-                # 3. Add Capture Price (€/MWh)
                 def calc_cap(group):
                     total_mwh = group[fuel].sum()
                     return (group['Price'] * group[fuel]).sum() / total_mwh if total_mwh > 0 else None
@@ -64,6 +56,17 @@ def process_metrics(price_series, gen_df, country_code):
                 for date, val in cap_series.items():
                     if pd.notna(val): data.append({'Date': date.date(), 'Metric': f'{label} Capture', 'Price': val})
 
+    # 3. Forecasts (New logic for Requirement 1)
+    if forecast_df is not None and not forecast_df.empty:
+        if isinstance(forecast_df.columns, pd.MultiIndex):
+            forecast_df.columns = forecast_df.columns.get_level_values(0)
+        forecast_df = forecast_df.T.groupby(level=0).sum().T
+        for col in forecast_df.columns:
+            if col in ['Solar', 'Wind Onshore', 'Wind Offshore']:
+                daily_fore = forecast_df[col].resample('D').mean() # Storing daily average MW for CSV
+                for date, val in daily_fore.items():
+                    if pd.notna(val): data.append({'Date': date.date(), 'Metric': f'{col} Forecast', 'Price': val})
+
     res = pd.DataFrame(data)
     res['Country'] = country_code
     return res
@@ -71,14 +74,16 @@ def process_metrics(price_series, gen_df, country_code):
 def fetch_single_country(code):
     try:
         print(f"Fetching {code}...")
-        # Prices
         prices = client.query_day_ahead_prices(code, start=start, end=end)
-        # Actual Generation (used for historical Capture Prices)
         try:
             gen = client.query_generation(code, start=start, end=end)
         except:
             gen = None
-        return process_metrics(prices, gen, code)
+        try:
+            fore = client.query_wind_and_solar_forecast(code, start=start, end=end)
+        except:
+            fore = None
+        return process_metrics(prices, gen, fore, code)
     except Exception as e:
         print(f"Error {code}: {str(e)[:50]}")
         return pd.DataFrame()
@@ -93,9 +98,8 @@ with ThreadPoolExecutor(max_workers=3) as executor:
             all_country_data.append(result)
         print(f"Progress: {i+1}/{len(countries)} zones finished.")
 
-# Export (Overwrite the old price-only CSV)
 if all_country_data:
     final_df = pd.concat(all_country_data, ignore_index=True)
     final_df['Price'] = final_df['Price'].round(2)
     final_df.to_csv(csv_filename, index=False)
-    print(f"✅ Success: 5-year complete data saved to {csv_filename}")
+    print(f"✅ Success: Data (including forecasts) saved to {csv_filename}")
