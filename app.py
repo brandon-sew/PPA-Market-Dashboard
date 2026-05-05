@@ -205,23 +205,16 @@ if len(d_range) == 2:
             full_price_df = full_price_df.rename(columns={'Date': 'Time', 'Country': 'Zone'})
             full_price_df['Time'] = pd.to_datetime(full_price_df['Time']).dt.tz_localize('Europe/Brussels')
             
-            # 2. Reconstruct gen_df
+            # 2. Reconstruct gen_df & forecast_df
             gen_subset = data_subset[data_subset['Metric'].str.contains('Generation')].copy()
             if not gen_subset.empty:
                 gen_subset['Metric'] = gen_subset['Metric'].str.replace(' Generation', '')
                 gen_pivot = gen_subset.pivot_table(index=['Date', 'Country'], columns='Metric', values='Price').reset_index()
                 gen_pivot = gen_pivot.rename(columns={'Date': 'Time', 'Country': 'Zone'})
                 gen_pivot['Time'] = pd.to_datetime(gen_pivot['Time']).dt.tz_localize('Europe/Brussels')
+                
                 gen_df = gen_pivot[gen_pivot['Zone'].isin(selected_codes)]
-            
-            # 3. Reconstruct forecast_df
-            fore_subset = data_subset[data_subset['Metric'].str.contains('Forecast')].copy()
-            if not fore_subset.empty:
-                fore_subset['Metric'] = fore_subset['Metric'].str.replace(' Forecast', '')
-                fore_pivot = fore_subset.pivot_table(index=['Date', 'Country'], columns='Metric', values='Price').reset_index()
-                fore_pivot = fore_pivot.rename(columns={'Date': 'Time', 'Country': 'Zone'})
-                fore_pivot['Time'] = pd.to_datetime(fore_pivot['Time']).dt.tz_localize('Europe/Brussels')
-                forecast_df_raw = fore_pivot[fore_pivot['Zone'].isin(selected_codes)]
+                forecast_df_raw = gen_df.copy() # Use generation actuals as forecast proxy for historical CSV
             else:
                 forecast_df_raw = pd.DataFrame()
         else:
@@ -420,10 +413,7 @@ with col_met:
             g_sub = gen_resampled[gen_resampled['Zone'] == code]
             if exclude_neg:
                 p_sub['Price'] = p_sub['Price'].clip(lower=0)
-            
-            # --- FIX: Merge on Zone and Time to ensure data alignment ---
-            m_df = pd.merge(p_sub, g_sub, on=['Time', 'Zone'], how='inner')
-            
+            m_df = pd.merge(p_sub, g_sub, on='Time', how='inner')
             baseload = p_sub['Price'].mean()
             currency = ZONE_NAMES[code][1]
             sol_cap = "N/A"
