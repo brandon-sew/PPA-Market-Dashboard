@@ -8,6 +8,10 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 ENTSOE_API_KEY = os.environ.get('ENTSOE_TOKEN')
 client = EntsoePandasClient(api_key=ENTSOE_API_KEY)
 
+# --- TOGGLE THIS VALUE ---
+DAYS_TO_FETCH = 1825 # Set to 1825 for 5-year heavy lift
+# -------------------------
+
 countries = [
     'AT', 'BE', 'CH', 'CZ', 'DE_LU', 'FR', 'GB', 'IE_SEM', 'NL', 'PL',
     'DK_1', 'DK_2', 'EE', 'FI', 'LT', 'LV', 'NO_1', 'NO_2', 'NO_3', 
@@ -16,12 +20,7 @@ countries = [
     'IT_CNOR', 'IT_CSUD', 'IT_SUD', 'IT_SICI', 'IT_SARD', 'IT_CALA'
 ]
 
-# --- SET FOR 5-YEAR HEAVY LIFT ---
-# Changed: Added +1 day to 'end' to capture future forecasts
-end = pd.Timestamp(datetime.now(), tz='Europe/Brussels') + pd.Timedelta(days=1)
-start = end - pd.Timedelta(days=10) 
 csv_filename = 'market_prices.csv'
-# ---------------------------------
 
 def process_metrics(price_series, gen_df, forecast_df, country_code):
     if price_series is None or price_series.empty: 
@@ -63,7 +62,7 @@ def process_metrics(price_series, gen_df, forecast_df, country_code):
                 for date, val in cap_series.items():
                     if pd.notna(val): data.append({'Date': date.date(), 'Metric': f'{label} Capture', 'Price': val})
 
-    # 3. Process Forecasts (Added logic)
+    # 3. Process Forecasts
     if forecast_df is not None and not forecast_df.empty:
         if isinstance(forecast_df.columns, pd.MultiIndex):
             forecast_df.columns = forecast_df.columns.get_level_values(0)
@@ -79,42 +78,54 @@ def process_metrics(price_series, gen_df, forecast_df, country_code):
     res['Country'] = country_code
     return res
 
-def fetch_single_country(code):
+def fetch_single_country(code, start_date, end_date):
     try:
-        print(f"Fetching {code}...")
-        # Prices
-        prices = client.query_day_ahead_prices(code, start=start, end=end)
-        
-        # Actual Generation
+        prices = client.query_day_ahead_prices(code, start=start_date, end=end_date)
         try:
-            gen = client.query_generation(code, start=start, end=end)
+            gen = client.query_generation(code, start=start_date, end=end_date)
         except:
             gen = None
-
-        # Forecasted Generation (Added call)
         try:
-            forecast = client.query_wind_and_solar_forecast(code, start=start, end=end)
+            forecast = client.query_wind_and_solar_forecast(code, start=start_date, end=end_date)
         except:
             forecast = None
-
         return process_metrics(prices, gen, forecast, code)
     except Exception as e:
         print(f"Error {code}: {str(e)[:50]}")
         return pd.DataFrame()
 
-# Parallel Execution
-all_country_data = []
-with ThreadPoolExecutor(max_workers=3) as executor:
-    futures = {executor.submit(fetch_single_country, code): code for code in countries}
-    for i, future in enumerate(as_completed(futures)):
-        result = future.result()
-        if not result.empty:
-            all_country_data.append(result)
-        print(f"Progress: {i+1}/{len(countries)} zones finished.")
+# --- Chunking Logic ---
+chunks = []
+current_end = pd.Timestamp(datetime.now(), tz='Europe/Brussels') + pd.Timedelta(days=1)
+remaining = DAYS_TO_FETCH
 
-# Export
-if all_country_data:
-    final_df = pd.concat(all_country_data, ignore_index=True)
-    final_df['Price'] = final_df['Price'].round(2)
-    final_df.to_csv(csv_filename, index=False)
-    print(f"✅ Success: Data with forecasts saved to {csv_filename}")
+while remaining > 0:
+    step = min(remaining, 365)
+    start_date = current_end - pd.Timedelta(days=step)
+    chunks.append((start_date, current_end))
+    current_end = start_date
+    remaining -= step
+
+# Execution Loop
+if os.path.exists(csv_filename):
+    os.remove(csv_filename)
+
+for start_date, end_date in chunks:
+    print(f"\nProcessing window: {start_date.date()} to {end_date.date()}")
+    all_country_data = []
+    
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        futures = {executor.submit(fetch_single_country, code, start_date, end_date): code for code in countries}
+        for i, future in enumerate(as_completed(futures)):
+            result = future.result()
+            if not result.empty:
+                all_country_data.append(result)
+            print(f"Progress: {i+1}/{len(countries)} zones finished.")
+
+    if all_country_data:
+        final_df = pd.concat(all_country_data, ignore_index=True)
+        final_df['Price'] = final_df['Price'].round(2)
+        file_exists = os.path.isfile(csv_filename)
+        final_df.to_csv(csv_filename, mode='a', index=False, header=not file_exists)
+
+print(f"\n✅ Success: Data saved to {csv_filename}")
