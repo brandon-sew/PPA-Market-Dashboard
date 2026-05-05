@@ -139,10 +139,12 @@ def fetch_gen_data(codes, start_date, end_date):
     def get_gen(code):
         try:
             df = client.query_generation(code, start=start, end=end)
+            if isinstance(df, pd.Series): df = df.to_frame()
             if isinstance(df.columns, pd.MultiIndex):
                 df.columns = df.columns.get_level_values(0)
             df = df.T.groupby(level=0).sum().T 
-            df = df.reset_index().rename(columns={'index': 'Time'})
+            df.index.name = 'Time'
+            df = df.reset_index()
             df['Time'] = pd.to_datetime(df['Time']).dt.tz_convert('Europe/Brussels')
             df['Zone'] = code
             return df
@@ -166,10 +168,12 @@ def fetch_forecast_data(codes, start_date, end_date):
     def get_forecast(code):
         try:
             df = client.query_wind_and_solar_forecast(code, start=start, end=end)
+            if isinstance(df, pd.Series): df = df.to_frame()
             if isinstance(df.columns, pd.MultiIndex):
                 df.columns = df.columns.get_level_values(0)
             df = df.T.groupby(level=0).sum().T 
-            df = df.reset_index().rename(columns={'index': 'Time'})
+            df.index.name = 'Time'
+            df = df.reset_index()
             df['Time'] = pd.to_datetime(df['Time']).dt.tz_convert('Europe/Brussels')
             df['Zone'] = code
             return df
@@ -191,6 +195,7 @@ plot_df = pd.DataFrame()
 full_price_df = pd.DataFrame()
 gen_df = pd.DataFrame()
 forecast_df = pd.DataFrame() 
+forecast_df_raw = pd.DataFrame()
 
 if len(d_range) == 2:
     # --- LOGIC BRANCH: CSV VS API ---
@@ -215,8 +220,6 @@ if len(d_range) == 2:
                 
                 gen_df = gen_pivot[gen_pivot['Zone'].isin(selected_codes)]
                 forecast_df_raw = gen_df.copy() # Use generation actuals as forecast proxy for historical CSV
-            else:
-                forecast_df_raw = pd.DataFrame()
         else:
             st.error("Historical CSV not found. Please run data extraction.")
     else:
@@ -225,8 +228,6 @@ if len(d_range) == 2:
         gen_df = fetch_gen_data(selected_codes, d_range[0], d_range[1])
         if selected_gen_types:
             forecast_df_raw = fetch_forecast_data(selected_codes, d_range[0], d_range[1])
-        else:
-            forecast_df_raw = pd.DataFrame()
 
     # --- SHARED POST-PROCESSING ---
     if not full_price_df.empty:
