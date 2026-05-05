@@ -26,7 +26,7 @@ ZONE_NAMES = {
     "NL": ["Netherlands", "EUR"], "PL": ["Poland", "PLN"], 
     "DK_1": ["Denmark West", "EUR"], "DK_2": ["Denmark East", "EUR"],
     "EE": ["Estonia", "EUR"], "FI": ["Finland", "EUR"], "LT": ["Lithuania", "EUR"],
-    "LV": ["Latvia", "EUR"], "NO_1": ["Norway East", "EUR"], "NO_2": ["Norway South", "EUR"],
+    "LV": ["Update Latvia", "EUR"], "NO_1": ["Norway East", "EUR"], "NO_2": ["Norway South", "EUR"],
     "NO_3": ["Norway Central", "EUR"], "NO_4": ["Norway Northern", "EUR"], "NO_5": ["Norway West", "EUR"],
     "SE_1": ["Sweden Luleå", "EUR"], "SE_2": ["Sweden Sundsvall", "EUR"], "SE_3": ["Sweden Stockholm", "EUR"],
     "SE_4": ["Sweden Malmö", "EUR"], "ES": ["Spain", "EUR"], "PT": ["Portugal", "EUR"],
@@ -202,28 +202,31 @@ if len(d_range) == 2:
     if res in ["Daily", "Monthly"]:
         csv_raw = load_local_csv()
         if not csv_raw.empty:
+            # Check which column contains the numeric data
+            val_col = 'Price' if 'Price' in csv_raw.columns else ('Value' if 'Value' in csv_raw.columns else 'MW')
+            
             mask = (csv_raw['Date'] >= d_range[0]) & (csv_raw['Date'] <= d_range[1])
-            data_subset = csv_raw[mask]
+            data_subset = csv_raw[mask].copy()
             
             # 1. Reconstruct full_price_df
             full_price_df = data_subset[data_subset['Metric'] == 'Baseload'].copy()
-            full_price_df = full_price_df.rename(columns={'Date': 'Time', 'Country': 'Zone'})
+            full_price_df = full_price_df.rename(columns={'Date': 'Time', 'Country': 'Zone', val_col: 'Price'})
             full_price_df['Time'] = pd.to_datetime(full_price_df['Time']).dt.tz_localize('Europe/Brussels')
             
-            # 2. Reconstruct gen_df
-            gen_subset = data_subset[data_subset['Metric'].str.contains('Generation')].copy()
+            # 2. Reconstruct gen_df (Solar Generation, etc.)
+            gen_subset = data_subset[data_subset['Metric'].str.contains(' Generation', na=False)].copy()
             if not gen_subset.empty:
-                gen_subset['Metric'] = gen_subset['Metric'].str.replace(' Generation', '')
-                gen_pivot = gen_subset.pivot_table(index=['Date', 'Country'], columns='Metric', values='Price').reset_index()
+                gen_subset['Metric'] = gen_subset['Metric'].str.replace(' Generation', '', regex=False).str.strip()
+                gen_pivot = gen_subset.pivot_table(index=['Date', 'Country'], columns='Metric', values=val_col).reset_index()
                 gen_pivot = gen_pivot.rename(columns={'Date': 'Time', 'Country': 'Zone'})
                 gen_pivot['Time'] = pd.to_datetime(gen_pivot['Time']).dt.tz_localize('Europe/Brussels')
                 gen_df = gen_pivot[gen_pivot['Zone'].isin(selected_codes)]
                 
-            # 3. Reconstruct forecast_df from CSV
-            forecast_subset = data_subset[data_subset['Metric'].str.contains('Forecast')].copy()
+            # 3. Reconstruct forecast_df from CSV (Solar Forecast, etc.)
+            forecast_subset = data_subset[data_subset['Metric'].str.contains(' Forecast', na=False)].copy()
             if not forecast_subset.empty:
-                forecast_subset['Metric'] = forecast_subset['Metric'].str.replace(' Forecast', '')
-                fc_pivot = forecast_subset.pivot_table(index=['Date', 'Country'], columns='Metric', values='Price').reset_index()
+                forecast_subset['Metric'] = forecast_subset['Metric'].str.replace(' Forecast', '', regex=False).str.strip()
+                fc_pivot = forecast_subset.pivot_table(index=['Date', 'Country'], columns='Metric', values=val_col).reset_index()
                 fc_pivot = fc_pivot.rename(columns={'Date': 'Time', 'Country': 'Zone'})
                 fc_pivot['Time'] = pd.to_datetime(fc_pivot['Time']).dt.tz_localize('Europe/Brussels')
                 forecast_df_raw = fc_pivot[fc_pivot['Zone'].isin(selected_codes)]
