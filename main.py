@@ -18,7 +18,7 @@ countries = [
 
 # --- SET FOR 5-YEAR HEAVY LIFT ---
 end = pd.Timestamp(datetime.now(), tz='Europe/Brussels')
-start = end - pd.Timedelta(days=5*365) 
+start = end - pd.Timedelta(days=10) 
 csv_filename = 'market_prices.csv'
 # ---------------------------------
 
