@@ -101,7 +101,7 @@ def load_local_csv():
     if os.path.exists('market_prices.csv'):
         df = pd.read_csv('market_prices.csv')
         # FIX: Added dayfirst=True to handle DD/MM/YYYY format
-        df['Date'] = pd.to_datetime(df['Date'], dayfirst=True).dt.date
+        df['Date'] = pd.to_datetime(df['Date'], dayfirst=True, format='mixed').dt.date
         return df
     return pd.DataFrame()
 
