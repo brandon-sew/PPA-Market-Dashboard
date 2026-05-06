@@ -391,7 +391,7 @@ with col_tab:
     if not plot_df.empty:
         table_df = plot_df.copy()
         
-        # 1. Calculate settlement columns if applicable
+        # 1. Calculate settlement columns if applicable (performed on long format)
         if fixed_floating and ppa_price > 0 and res == "Monthly":
             table_df['Fixed for Floating settlement'] = table_df['Price'] - ppa_price
         if market_following and ppa_price > 0 and res == "Monthly":
@@ -402,31 +402,37 @@ with col_tab:
         table_df['Date'] = table_df['Time'].dt.strftime('%d-%m-%Y')
         table_df['24h Time'] = table_df['Time'].dt.strftime('%H:%M')
         
-        # 3. Determine the dynamic Price header based on selected zones
-        selected_currencies = list(set([ZONE_NAMES[code][1] for code in selected_codes]))
-        if len(selected_currencies) == 1:
-            price_header = f"Bidding Zone Price ({selected_currencies[0]}/MWh)"
-        else:
-            price_header = "Bidding Zone Price (Local Currency/MWh)"
-            
-        # 4. Rename and reorganize columns
-        table_df = table_df.rename(columns={
-            'Zone': 'Bidding Zone',
-            'Price': price_header
-        })
-        
-        # Define base columns
-        cols_to_show = ['Date', '24h Time', 'Bidding Zone', price_header]
-        
-        # Append settlement columns if they were created
+        # 3. Pivot the table to create dynamic columns per Bidding Zone
+        # We pivot Price and any settlement columns that were calculated
+        value_vars = ['Price']
         if 'Fixed for Floating settlement' in table_df.columns:
-            cols_to_show.append('Fixed for Floating settlement')
+            value_vars.append('Fixed for Floating settlement')
         if 'Market following settlement' in table_df.columns:
-            cols_to_show.append('Market following settlement')
+            value_vars.append('Market following settlement')
+
+        # Pivot: Index is Time/Date, Columns are the Zones, Values are Price/Settlements
+        wide_df = table_df.pivot(index=['Time', 'Date', '24h Time'], columns='Zone', values=value_vars)
+
+        # 4. Flatten the MultiIndex columns and format headers
+        # Resulting headers will look like "FR Price (EUR/MWh)" or "FR Fixed for Floating settlement"
+        new_columns = []
+        for col in wide_df.columns:
+            metric, zone = col
+            currency = ZONE_NAMES[zone][1]
+            if metric == 'Price':
+                new_columns.append(f"{zone} Price ({currency}/MWh)")
+            else:
+                new_columns.append(f"{zone} {metric}")
+        
+        wide_df.columns = new_columns
+        wide_df = wide_df.reset_index().sort_values('Time')
+
+        # 5. Define final display order: Date and Time first, then all dynamic columns
+        cols_to_show = ['Date', '24h Time'] + [c for c in wide_df.columns if c not in ['Time', 'Date', '24h Time']]
             
-        # 5. Display the table without the index
+        # 6. Display the table
         st.dataframe(
-            table_df[cols_to_show].style.format(precision=2, na_rep="-"), 
+            wide_df[cols_to_show].style.format(precision=2, na_rep="-"), 
             width='stretch', 
             height=400,
             hide_index=True
