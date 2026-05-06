@@ -390,10 +390,44 @@ with col_tab:
     st.subheader("Data Table")
     if not plot_df.empty:
         table_df = plot_df.copy()
+        
+        # 1. Calculate settlement columns if applicable
         if fixed_floating and ppa_price > 0 and res == "Monthly":
             table_df['Fixed for Floating settlement'] = table_df['Price'] - ppa_price
         if market_following and ppa_price > 0 and res == "Monthly":
             eff_floor = floor_rate_eur if floor_rate_eur > 0 else (floor_rate_pct / 100 * ppa_price)
             table_df['Market following settlement'] = np.where(table_df['Price'] > ppa_price, eff_floor, table_df['Price'] - ppa_price)
+        
+        # 2. Create new time and date columns
         table_df['Date'] = table_df['Time'].dt.strftime('%d-%m-%Y')
-        st.dataframe(table_df.drop(columns=['Time']).style.format(precision=2, na_rep="-"), width='stretch', height=400)
+        table_df['24h Time'] = table_df['Time'].dt.strftime('%H:%M')
+        
+        # 3. Determine the dynamic Price header based on selected zones
+        selected_currencies = list(set([ZONE_NAMES[code][1] for code in selected_codes]))
+        if len(selected_currencies) == 1:
+            price_header = f"Bidding Zone Price ({selected_currencies[0]}/MWh)"
+        else:
+            price_header = "Bidding Zone Price (Local Currency/MWh)"
+            
+        # 4. Rename and reorganize columns
+        table_df = table_df.rename(columns={
+            'Zone': 'Bidding Zone',
+            'Price': price_header
+        })
+        
+        # Define base columns
+        cols_to_show = ['Date', '24h Time', 'Bidding Zone', price_header]
+        
+        # Append settlement columns if they were created
+        if 'Fixed for Floating settlement' in table_df.columns:
+            cols_to_show.append('Fixed for Floating settlement')
+        if 'Market following settlement' in table_df.columns:
+            cols_to_show.append('Market following settlement')
+            
+        # 5. Display the table without the index
+        st.dataframe(
+            table_df[cols_to_show].style.format(precision=2, na_rep="-"), 
+            width='stretch', 
+            height=400,
+            hide_index=True
+        )
