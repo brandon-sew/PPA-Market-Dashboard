@@ -406,9 +406,9 @@ with col_tab:
         table_df['Date'] = table_df['Time'].dt.strftime('%d-%m-%Y')
         table_df['24h Time'] = table_df['Time'].dt.strftime('%H:%M')
         
-        # 4. Determine value variables for pivoting
-        # Get dynamic list of generation types selected
-        gen_cols = [c for c in forecast_df.columns if c not in ['Time', 'Zone']]
+        # 4. Determine value variables for pivoting, filtering only for selected generation types
+        # This filters the available forecast columns against your 'selected_gen_types' selection
+        gen_cols = [c for c in forecast_df.columns if c in selected_gen_types]
         value_vars = ['Price'] + gen_cols
         if 'Fixed for Floating settlement' in table_df.columns:
             value_vars.append('Fixed for Floating settlement')
