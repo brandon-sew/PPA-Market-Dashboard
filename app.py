@@ -335,4 +335,4 @@ with col_tab:
             eff_floor = floor_rate_eur if floor_rate_eur > 0 else (floor_rate_pct / 100 * ppa_price)
             table_df['Market following settlement'] = np.where(table_df['Price'] > ppa_price, eff_floor, table_df['Price'] - ppa_price)
         table_df['Date'] = table_df['Time'].dt.strftime('%d-%m-%Y')
-        st.dataframe(table_df.drop(columns=['Time']).style.format("{:.2f}", na_rep="-"), use_container_width=True, height=400)
+        st.dataframe(table_df.drop(columns=['Time']).style.format(precision=2, na_rep="-"), use_container_width=True, height=400)
