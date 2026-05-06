@@ -63,7 +63,7 @@ with st.sidebar:
     # Use key="selected_zones" directly to sync with session state automatically
     st.session_state.selected_zones = st.multiselect("Select bidding zones:", 
                    options=sorted(display_options.keys()), 
-                   default="st.session_state.selected_zones")
+                   default=st.session_state.selected_zones)
     
     gen_options = ["Solar", "Wind Onshore", "Wind Offshore"]
     selected_gen_types = st.multiselect("Overlay Generation Forecast:", options=gen_options, key="gen_forecast_select")
