@@ -61,9 +61,9 @@ with st.sidebar:
     display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
     
     # Use key="selected_zones" directly to sync with session state automatically
-    st.multiselect("Select bidding zones:", 
+    st.session_state.selected_zones = st.multiselect("Select bidding zones:", 
                    options=sorted(display_options.keys()), 
-                   key="selected_zones")
+                   default="st.session_state.selected_zones")
     
     gen_options = ["Solar", "Wind Onshore", "Wind Offshore"]
     selected_gen_types = st.multiselect("Overlay Generation Forecast:", options=gen_options, key="gen_forecast_select")
@@ -271,7 +271,7 @@ with col_chart:
                             fig.add_trace(go.Scatter(x=z_gen_df['Time'], y=z_gen_df[g_type], name=f"{zone} {g_type} Forecast (MW)", line=dict(color=zone_color_map[zone], dash='dot', width=1), hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), secondary_y=True)
 
         fig.update_layout(template="plotly_white", hovermode="x unified", legend=dict(orientation="h", y=-0.2), margin=dict(l=0, r=0, b=0, t=20))
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
 
 with col_map:
     def load_and_get_centers(folder_path):
@@ -300,11 +300,11 @@ with col_map:
         if geojson_data["features"]:
             avg_prices = full_price_resampled.groupby('Zone')['Price'].mean().to_dict() if not full_price_resampled.empty else {}
             map_df = pd.DataFrame([{"Zone": k, "Selected": 1 if k in selected_codes else 0, "AvgPrice": f"{avg_prices.get(k, 0):.2f}", "Currency": ZONE_NAMES.get(k, ["", "EUR"])[1]} for k in all_found_codes])
-            fig_map = px.choropleth(map_df, geojson=geojson_data, locations="Zone", featureidkey="properties.zoneName", color="Selected", color_continuous_scale=["#262730", "#007927"], custom_data=["AvgPrice", "Currency"])
+            fig_map = px.choropleth(map_df, geojson=geojson_data, locations="Zone", featureidkey="properties.zoneName", color="Selected", color_continuous_scale=["#262730", "#007927"], custom_data=["AvgPrice", "Currency"], hover_name="Zone")
             fig_map.update_geos(center=dict(lon=12, lat=52), projection_scale=7, projection_type="mercator", bgcolor="rgba(0,0,0,0)")
             fig_map.update_layout(margin={"r":0,"t":0,"l":0,"b":0}, height=500, coloraxis_showscale=False, paper_bgcolor="rgba(0,0,0,0)")
             
-            map_event = st.plotly_chart(fig_map, use_container_width=True, on_select="rerun", selection_mode="points")
+            map_event = st.plotly_chart(fig_map, width='stretch', on_select="rerun", selection_mode="points")
             if map_event and "selection" in map_event and map_event["selection"]["points"]:
                 clicked_code = map_event["selection"]["points"][0]["location"]
                 clicked_label = f"{ZONE_NAMES[clicked_code][0]} ({clicked_code})"
@@ -335,4 +335,4 @@ with col_tab:
             eff_floor = floor_rate_eur if floor_rate_eur > 0 else (floor_rate_pct / 100 * ppa_price)
             table_df['Market following settlement'] = np.where(table_df['Price'] > ppa_price, eff_floor, table_df['Price'] - ppa_price)
         table_df['Date'] = table_df['Time'].dt.strftime('%d-%m-%Y')
-        st.dataframe(table_df.drop(columns=['Time']).style.format(precision=2, na_rep="-"), use_container_width=True, height=400)
+        st.dataframe(table_df.drop(columns=['Time']).style.format(precision=2, na_rep="-"), width='stretch', height=400)
