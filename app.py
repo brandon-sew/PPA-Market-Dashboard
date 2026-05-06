@@ -75,6 +75,7 @@ with st.sidebar:
     d_range = st.date_input("Date Range", value=default_d_range, key="date_range_input")
     
     exclude_neg = st.checkbox("Hard floor at 0", help="Treats negative prices as 0 for capture price calculation", key="neg_price_check")
+    no_settle_neg = st.checkbox("No settlement for negative", help="Treats generation as 0 when prices are negative", key="no_settle_check")
 
     st.divider()
     st.subheader("PPA Configuration")
@@ -354,12 +355,21 @@ with col_met:
         # 1. Filter raw price data to selected zones and merge with raw gen data
         p_raw = full_price_df[full_price_df['Zone'].isin(selected_codes)].copy()
         
+        # Track original negative hours for the "No settlement" logic
+        p_raw['is_negative_hour'] = p_raw['Price'] < 0
+        
         # 2. Apply the Hard Floor (clipping) to the hourly price before weighting
         if exclude_neg:
             p_raw['Price'] = p_raw['Price'].clip(lower=0)
             
         # 3. Merge at the highest resolution available (Hourly/15min)
         m_df_raw = pd.merge(p_raw, gen_df, on=['Time', 'Zone'], how='inner')
+        
+        # Apply No settlement for negative (Generation = 0)
+        if no_settle_neg:
+            for col in ['Solar', 'Wind Onshore', 'Wind Offshore']:
+                if col in m_df_raw.columns:
+                    m_df_raw.loc[m_df_raw['is_negative_hour'], col] = 0
     
         metrics_list = []
         for code in selected_codes:
