@@ -74,7 +74,7 @@ with st.sidebar:
     default_d_range = st.session_state.get("date_range_input", (today - timedelta(days=2), today))
     d_range = st.date_input("Date Range", value=default_d_range, key="date_range_input")
     
-    exclude_neg = st.checkbox("No Settlement for Negative Prices", help="Treats negative prices as 0 for capture price calculation", key="neg_price_check")
+    exclude_neg = st.checkbox("Hard floor at 0", help="Treats negative prices as 0 for capture price calculation", key="neg_price_check")
 
     st.divider()
     st.subheader("PPA Configuration")
