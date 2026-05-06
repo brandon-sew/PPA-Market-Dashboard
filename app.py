@@ -300,19 +300,36 @@ with col_map:
         if geojson_data["features"]:
             avg_prices = full_price_resampled.groupby('Zone')['Price'].mean().to_dict() if not full_price_resampled.empty else {}
             map_df = pd.DataFrame([{"Zone": k, "Selected": 1 if k in selected_codes else 0, "AvgPrice": f"{avg_prices.get(k, 0):.2f}", "Currency": ZONE_NAMES.get(k, ["", "EUR"])[1]} for k in all_found_codes])
+            
             fig_map = px.choropleth(map_df, geojson=geojson_data, locations="Zone", featureidkey="properties.zoneName", color="Selected", color_continuous_scale=["#262730", "#007927"], custom_data=["AvgPrice", "Currency"], hover_name="Zone")
+            
+            # NEW: Add text labels to the map using the calculated centers
+            if not centers_df.empty:
+                label_df = centers_df[centers_df['Zone'].isin(all_found_codes)]
+                fig_map.add_trace(go.Scattergeo(
+                    lon=label_df['lon'],
+                    lat=label_df['lat'],
+                    text=label_df['Zone'],
+                    mode='text',
+                    textfont=dict(size=10, color="white"),
+                    showlegend=False,
+                    hoverinfo='skip'
+                ))
+
             fig_map.update_geos(center=dict(lon=12, lat=52), projection_scale=7, projection_type="mercator", bgcolor="rgba(0,0,0,0)")
             fig_map.update_layout(margin={"r":0,"t":0,"l":0,"b":0}, height=500, coloraxis_showscale=False, paper_bgcolor="rgba(0,0,0,0)")
             
             map_event = st.plotly_chart(fig_map, width='stretch', on_select="rerun", selection_mode="points")
             if map_event and "selection" in map_event and map_event["selection"]["points"]:
-                clicked_code = map_event["selection"]["points"][0]["location"]
-                clicked_label = f"{ZONE_NAMES[clicked_code][0]} ({clicked_code})"
-                curr = list(st.session_state.selected_zones)
-                if clicked_label in curr: curr.remove(clicked_label)
-                else: curr.append(clicked_label)
-                st.session_state.selected_zones = curr
-                st.rerun()
+                # Mapbox/Geo selection usually returns location for choropleth points
+                clicked_code = map_event["selection"]["points"][0].get("location")
+                if clicked_code:
+                    clicked_label = f"{ZONE_NAMES[clicked_code][0]} ({clicked_code})"
+                    curr = list(st.session_state.selected_zones)
+                    if clicked_label in curr: curr.remove(clicked_label)
+                    else: curr.append(clicked_label)
+                    st.session_state.selected_zones = curr
+                    st.rerun()
 
 st.divider()
 col_met, col_tab = st.columns([1, 2])
