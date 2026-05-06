@@ -342,6 +342,50 @@ with col_met:
             metrics.append({"Zone": code, "Negative Periods": len(z_df[z_df['Price'] < 0]), "Lowest Price": f"{z_df['Price'].min():.2f} {ZONE_NAMES[code][1]}/MWh"})
         st.table(pd.DataFrame(metrics))
 
+    st.subheader("Baseload & Capture Metrics")
+    if not plot_df.empty and not gen_df.empty:
+        res_map = {"15 min": "15min", "60 min": "60min", "Daily": "D", "Monthly": "MS"}
+        freq = res_map.get(res, "60min")
+        
+        gen_resampled = gen_df.groupby('Zone').apply(
+            lambda x: x.set_index('Time').resample(freq).sum(numeric_only=True)
+        ).reset_index()
+    
+        metrics_list = []
+        for code in selected_codes:
+            p_sub = plot_df[plot_df['Zone'] == code].copy()
+            g_sub = gen_resampled[gen_resampled['Zone'] == code]
+            if exclude_neg:
+                p_sub['Price'] = p_sub['Price'].clip(lower=0)
+            m_df = pd.merge(p_sub, g_sub, on='Time', how='inner')
+            baseload = p_sub['Price'].mean()
+            currency = ZONE_NAMES[code][1]
+            sol_cap = "N/A"
+            if 'Solar' in m_df.columns:
+                total_sol = m_df['Solar'].sum()
+                if total_sol > 0:
+                    sol_cap = f"{(m_df['Price'] * m_df['Solar']).sum() / total_sol:.2f}"
+            onshore_cap = "N/A"
+            if 'Wind Onshore' in m_df.columns:
+                total_onshore = m_df['Wind Onshore'].sum()
+                if total_onshore > 0:
+                    onshore_cap = f"{(m_df['Price'] * m_df['Wind Onshore']).sum() / total_onshore:.2f}"
+            offshore_cap = "N/A"
+            if 'Wind Offshore' in m_df.columns:
+                total_offshore = m_df['Wind Offshore'].sum()
+                if total_offshore > 0:
+                    offshore_cap = f"{(m_df['Price'] * m_df['Wind Offshore']).sum() / total_offshore:.2f}"
+            metrics_list.append({
+                "Zone": code, "Baseload": f"{baseload:.2f}", 
+                "Solar Capture": sol_cap, 
+                "Wind Onshore": onshore_cap,
+                "Wind Offshore": offshore_cap, 
+                "Unit": f"{currency}/MWh"
+            })
+        st.table(pd.DataFrame(metrics_list))
+    else:
+        st.info("Select zones to calculate Capture prices.")
+
 with col_tab:
     st.subheader("Data Table")
     if not plot_df.empty:
