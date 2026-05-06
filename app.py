@@ -400,7 +400,8 @@ with col_tab:
             table_df['Fixed for Floating settlement'] = table_df['Price'] - ppa_price
         if market_following and ppa_price > 0 and res == "Monthly":
             eff_floor = floor_rate_eur if floor_rate_eur > 0 else (floor_rate_pct / 100 * ppa_price)
-            table_df['Market following settlement'] = np.where(table_df['Price'] > ppa_price, eff_floor, table_df['Price'] - ppa_price)
+            diff = table_df['Price'] - ppa_price
+            table_df['Market following settlement'] = np.where(table_df['Price'] > ppa_price, np.minimum(diff, eff_floor), diff)
         
         # 3. Create new time and date columns
         table_df['Date'] = table_df['Time'].dt.strftime('%d-%m-%Y')
