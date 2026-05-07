@@ -33,7 +33,7 @@ ZONE_NAMES = {
     "NL": ["Netherlands", "EUR"], "PL": ["Poland", "PLN"], 
     "DK_1": ["Denmark West", "EUR"], "DK_2": ["Denmark East", "EUR"],
     "EE": ["Estonia", "EUR"], "FI": ["Finland", "EUR"], "LT": ["Lithuania", "EUR"],
-    "LV": ["Update Latvia", "EUR"], "NO_1": ["Norway East", "EUR"], "NO_2": ["Norway South", "EUR"],
+    "LV": ["Latvia", "EUR"], "NO_1": ["Norway East", "EUR"], "NO_2": ["Norway South", "EUR"],
     "NO_3": ["Norway Central", "EUR"], "NO_4": ["Norway Northern", "EUR"], "NO_5": ["Norway West", "EUR"],
     "SE_1": ["Sweden Luleå", "EUR"], "SE_2": ["Sweden Sundsvall", "EUR"], "SE_3": ["Sweden Stockholm", "EUR"],
     "SE_4": ["Sweden Malmö", "EUR"], "ES": ["Spain", "EUR"], "PT": ["Portugal", "EUR"],
@@ -143,10 +143,13 @@ def fetch_weather_data(codes, start_date, end_date):
             response = responses[0]
             hourly = response.Hourly()
             
+            # FIXED: Correct calculation of periods (Total seconds / Interval)
+            num_periods = int((hourly.TimeEnd() - hourly.Time()) / hourly.Interval())
+            
             data = {
                 "Time": pd.date_range(
                     start=pd.to_datetime(hourly.Time(), unit="s", utc=True),
-                    periods=hourly.TimeEnd() - hourly.Time(),
+                    periods=num_periods,
                     freq=pd.Timedelta(seconds=hourly.Interval()),
                     inclusive="left"
                 ),
@@ -355,7 +358,7 @@ with col_chart:
                     for w_type in selected_weather_types:
                         if w_type in z_weather_df.columns:
                             unit = "W/m²" if w_type == "Solar Radiation" else "m/s"
-                            fig.add_trace(go.Scatter(x=z_weather_df['Time'], y=z_weather_df[w_type], name=f"{zone} {w_type} ({unit})", line=dict(color=zone_color_map[zone], dash='dashdot', width=1), opacity=0.6, hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), secondary_y=True)
+                            fig.add_trace(go.Scatter(x=z_weather_df['Time'], y=z_weather_df[w_type], name=f"{zone} {w_type} ({unit})", line=dict(color=zone_color_map[zone], dash='dashdot', width=1.5), opacity=0.8, hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), secondary_y=True)
 
         fig.update_layout(template="plotly_white", hovermode="x unified", legend=dict(orientation="h", y=-0.2), margin=dict(l=0, r=0, b=0, t=20))
         st.plotly_chart(fig, width='stretch')
@@ -485,11 +488,15 @@ with col_tab:
     st.subheader("Data Table")
     if not plot_df.empty:
         table_df = plot_df.copy()
+        # Normalizing timezone for all merge operations
+        table_df['Time'] = table_df['Time'].dt.tz_convert('Europe/Brussels')
+
         if not forecast_df.empty:
+            forecast_df['Time'] = forecast_df['Time'].dt.tz_convert('Europe/Brussels')
             table_df = table_df.merge(forecast_df, on=['Time', 'Zone'], how='outer')
         
-        # Add weather to table
         if not weather_df.empty:
+            weather_df['Time'] = weather_df['Time'].dt.tz_convert('Europe/Brussels')
             table_df = table_df.merge(weather_df, on=['Time', 'Zone'], how='outer')
 
         if fixed_floating and ppa_price > 0 and res == "Monthly":
