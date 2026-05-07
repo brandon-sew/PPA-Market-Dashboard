@@ -143,7 +143,6 @@ def fetch_weather_data(codes, start_date, end_date):
             response = responses[0]
             hourly = response.Hourly()
             
-            # FIXED: Correct calculation of periods (Total seconds / Interval)
             num_periods = int((hourly.TimeEnd() - hourly.Time()) / hourly.Interval())
             
             data = {
@@ -266,9 +265,13 @@ gen_df = pd.DataFrame()
 forecast_df = pd.DataFrame() 
 forecast_df_raw = pd.DataFrame()
 weather_df = pd.DataFrame()
-weather_df_raw = pd.DataFrame() # Initialize early to avoid NameError
+weather_df_raw = pd.DataFrame() 
 
+# --- DATA PROCESSING ---
 if len(d_range) == 2:
+    res_map = {"15 min": "15min", "60 min": "60min", "Daily": "D", "Monthly": "MS"}
+    freq = res_map.get(res, "60min")
+
     if res in ["Daily", "Monthly"]:
         csv_raw = load_local_csv()
         if not csv_raw.empty:
@@ -302,45 +305,44 @@ if len(d_range) == 2:
         if selected_gen_types:
             forecast_df_raw = fetch_forecast_data(selected_codes, d_range[0], d_range[1])
 
-    # FETCH WEATHER REGARDLESS OF PRICE SOURCE
+    # FETCH WEATHER
     if selected_weather_types:
         weather_df_raw = fetch_weather_data(selected_codes, d_range[0], d_range[1])
 
+    # RESAMPLE EVERYTHING CONSISTENTLY
     if not full_price_df.empty:
-        res_map = {"15 min": "15min", "60 min": "60min", "Daily": "D", "Monthly": "MS"}
-        freq = res_map.get(res, "60min")
-        
         full_price_resampled = full_price_df.groupby('Zone').apply(
             lambda x: x.set_index('Time').resample(freq).mean(numeric_only=True).ffill()
         ).reset_index()
-        
         plot_df = full_price_resampled[full_price_resampled['Zone'].isin(selected_codes)].copy()
         
-        if not forecast_df_raw.empty:
-            forecast_df = forecast_df_raw.groupby('Zone').apply(
-                lambda x: x.set_index('Time').resample(freq).mean(numeric_only=True).ffill()
-            ).reset_index()
+    if not forecast_df_raw.empty:
+        forecast_df = forecast_df_raw.groupby('Zone').apply(
+            lambda x: x.set_index('Time').resample(freq).mean(numeric_only=True).ffill()
+        ).reset_index()
             
-        if selected_weather_types and not weather_df_raw.empty:
-            weather_df = weather_df_raw.groupby('Zone').apply(
-                lambda x: x.set_index('Time').resample(freq).mean(numeric_only=True).ffill()
-            ).reset_index()
+    if selected_weather_types and not weather_df_raw.empty:
+        weather_df = weather_df_raw.groupby('Zone').apply(
+            lambda x: x.set_index('Time').resample(freq).mean(numeric_only=True).ffill()
+        ).reset_index()
 
 col_chart, col_map = st.columns([2, 1])
 with col_chart:
     st.subheader("Day-Ahead Prices, Generation & Weather")
-    if not plot_df.empty: 
+    if not plot_df.empty or not weather_df.empty: 
         fig = make_subplots(specs=[[{"secondary_y": True}]])
         colors = px.colors.qualitative.Plotly
         zone_color_map = {zone: colors[i % len(colors)] for i, zone in enumerate(selected_codes)}
         
-        for zone in selected_codes:
-            zone_df = plot_df[plot_df['Zone'] == zone]
-            currency = ZONE_NAMES[zone][1]
-            fig.add_trace(go.Scatter(x=zone_df['Time'], y=zone_df['Price'], name=f"{zone} Price ({currency}/MWh)", line=dict(color=zone_color_map[zone], width=2), hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), secondary_y=False)
-        
-        if ppa_price > 0:
-            fig.add_trace(go.Scatter(x=plot_df['Time'].unique(), y=[ppa_price]*len(plot_df['Time'].unique()), name="PPA Price", line=dict(color='red', dash='dash', width=2), hovertemplate="PPA Price (EUR/MWh): %{y:.2f}<extra></extra>"), secondary_y=False)
+        if not plot_df.empty:
+            for zone in selected_codes:
+                zone_df = plot_df[plot_df['Zone'] == zone]
+                if not zone_df.empty:
+                    currency = ZONE_NAMES[zone][1]
+                    fig.add_trace(go.Scatter(x=zone_df['Time'], y=zone_df['Price'], name=f"{zone} Price ({currency}/MWh)", line=dict(color=zone_color_map[zone], width=2), hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), secondary_y=False)
+            
+            if ppa_price > 0:
+                fig.add_trace(go.Scatter(x=plot_df['Time'].unique(), y=[ppa_price]*len(plot_df['Time'].unique()), name="PPA Price", line=dict(color='red', dash='dash', width=2), hovertemplate="PPA Price (EUR/MWh): %{y:.2f}<extra></extra>"), secondary_y=False)
         
         if selected_gen_types and not forecast_df.empty:
             for zone in selected_codes:
@@ -350,7 +352,6 @@ with col_chart:
                         if g_type in z_gen_df.columns:
                             fig.add_trace(go.Scatter(x=z_gen_df['Time'], y=z_gen_df[g_type], name=f"{zone} {g_type} Forecast (MW)", line=dict(color=zone_color_map[zone], dash='dot', width=1), hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), secondary_y=True)
 
-        # Plot Weather Traces
         if selected_weather_types and not weather_df.empty:
             for zone in selected_codes:
                 z_weather_df = weather_df[weather_df['Zone'] == zone]
@@ -388,7 +389,7 @@ with col_map:
     if os.path.exists(geojson_folder):
         geojson_data, centers_df, all_found_codes = load_and_get_centers(geojson_folder)
         if geojson_data["features"]:
-            avg_prices = full_price_resampled.groupby('Zone')['Price'].mean().to_dict() if not full_price_resampled.empty else {}
+            avg_prices = plot_df.groupby('Zone')['Price'].mean().to_dict() if not plot_df.empty else {}
             map_df = pd.DataFrame([{"Zone": k, "Selected": 1 if k in selected_codes else 0, "AvgPrice": f"{avg_prices.get(k, 0):.2f}", "Currency": ZONE_NAMES.get(k, ["", "EUR"])[1]} for k in all_found_codes])
             
             fig_map = px.choropleth(map_df, geojson=geojson_data, locations="Zone", featureidkey="properties.zoneName", color="Selected", color_continuous_scale=["#262730", "#007927"], custom_data=["AvgPrice", "Currency"])
@@ -486,22 +487,19 @@ with col_met:
 
 with col_tab:
     st.subheader("Data Table")
-    if not plot_df.empty:
-        table_df = plot_df.copy()
-        # Normalizing timezone for all merge operations
-        table_df['Time'] = table_df['Time'].dt.tz_convert('Europe/Brussels')
-
+    if not plot_df.empty or not weather_df.empty:
+        # Use price as base if available, else weather
+        table_df = plot_df.copy() if not plot_df.empty else weather_df[['Time', 'Zone']].copy()
+        
         if not forecast_df.empty:
-            forecast_df['Time'] = forecast_df['Time'].dt.tz_convert('Europe/Brussels')
             table_df = table_df.merge(forecast_df, on=['Time', 'Zone'], how='outer')
         
         if not weather_df.empty:
-            weather_df['Time'] = weather_df['Time'].dt.tz_convert('Europe/Brussels')
             table_df = table_df.merge(weather_df, on=['Time', 'Zone'], how='outer')
 
-        if fixed_floating and ppa_price > 0 and res == "Monthly":
+        if fixed_floating and ppa_price > 0 and res == "Monthly" and 'Price' in table_df.columns:
             table_df['Fixed for Floating settlement'] = table_df['Price'] - ppa_price
-        if market_following and ppa_price > 0 and res == "Monthly":
+        if market_following and ppa_price > 0 and res == "Monthly" and 'Price' in table_df.columns:
             eff_floor = floor_rate_eur if floor_rate_eur > 0 else (floor_rate_pct / 100 * ppa_price)
             diff = table_df['Price'] - ppa_price
             table_df['Market following settlement'] = np.where(table_df['Price'] > ppa_price, np.minimum(diff, eff_floor), diff)
@@ -511,12 +509,13 @@ with col_tab:
         
         gen_cols = [c for c in forecast_df.columns if c in selected_gen_types]
         weather_cols = [c for c in weather_df.columns if c in selected_weather_types]
-        value_vars = ['Price'] + gen_cols + weather_cols
         
-        if 'Fixed for Floating settlement' in table_df.columns:
-            value_vars.append('Fixed for Floating settlement')
-        if 'Market following settlement' in table_df.columns:
-            value_vars.append('Market following settlement')
+        value_vars = []
+        if 'Price' in table_df.columns: value_vars.append('Price')
+        value_vars += gen_cols + weather_cols
+        
+        if 'Fixed for Floating settlement' in table_df.columns: value_vars.append('Fixed for Floating settlement')
+        if 'Market following settlement' in table_df.columns: value_vars.append('Market following settlement')
 
         wide_df = table_df.pivot(index=['Time', 'Date', '24h Time'], columns='Zone', values=value_vars)
 
