@@ -11,12 +11,19 @@ from entsoe import EntsoePandasClient
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from concurrent.futures import ThreadPoolExecutor, as_completed
-#NEW ENTSOE-E MARKET FEED
-import feedparser
+# NEW WEATHER INTEGRATION
+import openmeteo_requests
+import requests_cache
+from retry_requests import retry
 
 # 1. Config & API Setup
 API_KEY = os.environ.get('ENTSOE_TOKEN')
 client = EntsoePandasClient(api_key=API_KEY)
+
+# Setup the Open-Meteo API client with cache
+cache_session = requests_cache.CachedSession('.cache', expire_after=3600)
+retry_session = retry(cache_session, retries=5, backoff_factor=0.2)
+open_meteo_client = openmeteo_requests.Client(session=retry_session)
 
 ZONE_NAMES = {
     "AT": ["Austria", "EUR"], "BE": ["Belgium", "EUR"], "BG": ["Bulgaria", "EUR"],
@@ -30,15 +37,28 @@ ZONE_NAMES = {
     "NO_3": ["Norway Central", "EUR"], "NO_4": ["Norway Northern", "EUR"], "NO_5": ["Norway West", "EUR"],
     "SE_1": ["Sweden Luleå", "EUR"], "SE_2": ["Sweden Sundsvall", "EUR"], "SE_3": ["Sweden Stockholm", "EUR"],
     "SE_4": ["Sweden Malmö", "EUR"], "ES": ["Spain", "EUR"], "PT": ["Portugal", "EUR"],
-    # Balkan and Central/Eastern European Zones
     "HR": ["Croatia", "EUR"], "HU": ["Hungary", "EUR"], 
     "ME": ["Montenegro", "EUR",], "MK": ["North Macedonia", "EUR"],
     "RO": ["Romania", "EUR"], "RS": ["Serbia", "EUR"], 
     "SI": ["Slovenia", "EUR"], "SK": ["Slovakia", "EUR"],
-    # Italian Zones
     "IT_NORD": ["Italy North", "EUR"], "IT_CNOR": ["Italy Central North", "EUR"],
     "IT_CSUD": ["Italy Central South", "EUR"], "IT_SUD": ["Italy South", "EUR"],
     "IT_SICI": ["Italy Sicily", "EUR"], "IT_SARD": ["Italy Sardinia", "EUR"], "IT_CALA": ["Italy Calabria", "EUR"]
+}
+
+# Coordinate Mapping for Weather Data
+ZONE_COORDS = {
+    "AT": [47.51, 14.55], "BE": [50.85, 4.35], "BG": [42.73, 25.48], "CH": [46.81, 8.22],
+    "CZ": [49.81, 15.47], "DE_LU": [51.16, 10.45], "FR": [46.22, 2.21], "GB": [55.37, -3.43],
+    "IE_SEM": [53.14, -7.69], "NL": [52.13, 5.29], "PL": [51.91, 19.14], "DK_1": [56.26, 9.50],
+    "DK_2": [55.67, 12.00], "EE": [58.59, 25.01], "FI": [61.92, 25.74], "LT": [55.16, 23.88],
+    "LV": [56.87, 24.60], "NO_1": [59.91, 10.75], "NO_2": [58.15, 8.00], "NO_3": [63.43, 10.39],
+    "NO_4": [67.28, 14.40], "NO_5": [60.39, 5.32], "SE_1": [65.58, 22.15], "SE_2": [62.39, 17.30],
+    "SE_3": [59.32, 18.06], "SE_4": [55.60, 13.00], "ES": [40.46, -3.74], "PT": [39.39, -8.22],
+    "HR": [45.10, 15.20], "HU": [47.16, 19.50], "ME": [42.70, 19.37], "MK": [41.60, 21.74],
+    "RO": [45.94, 24.96], "RS": [44.01, 21.00], "SI": [46.15, 14.99], "SK": [48.66, 19.69],
+    "IT_NORD": [45.46, 9.19], "IT_CNOR": [43.76, 11.25], "IT_CSUD": [41.87, 12.49],
+    "IT_SUD": [40.85, 14.26], "IT_SICI": [37.59, 14.01], "IT_SARD": [40.12, 9.01], "IT_CALA": [38.90, 16.58]
 }
 
 st.set_page_config(page_title="Market Explorer", layout="wide", initial_sidebar_state="expanded")
@@ -60,17 +80,20 @@ with st.sidebar:
     st.title("Configuration")
     display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
     
-    # Use key="selected_zones" directly to sync with session state automatically
     st.session_state.selected_zones = st.multiselect("Select bidding zones:", 
                    options=sorted(display_options.keys()), 
                    default=st.session_state.selected_zones)
     
     gen_options = ["Solar", "Wind Onshore", "Wind Offshore"]
     selected_gen_types = st.multiselect("Overlay Generation Forecast:", options=gen_options, key="gen_forecast_select")
+    
+    # NEW: Weather Overlays
+    weather_options = ["Solar Radiation", "Wind Speed (100m)"]
+    selected_weather_types = st.multiselect("Overlay Weather Data:", options=weather_options, key="weather_select")
+    
     res = st.radio("Resolution", ["Monthly", "Daily", "60 min", "15 min"], horizontal=True, key="res_radio")
     
     today = datetime.now().date()
-    # Ensure d_range defaults to the session state if it exists to prevent reset on rerun
     default_d_range = st.session_state.get("date_range_input", (today - timedelta(days=2), today))
     d_range = st.date_input("Date Range", value=default_d_range, key="date_range_input")
     
@@ -94,13 +117,55 @@ with st.sidebar:
             
     if (fixed_floating or market_following) and res != "Monthly":
         st.error("⚠️ Settlement not available on a Daily/60min/15min basis, please select Monthly.")
+
+# --- WEATHER FETCHING ---
+@st.cache_data(ttl=3600)
+def fetch_weather_data(codes, start_date, end_date):
+    if not codes: return pd.DataFrame()
+    all_weather = []
     
+    for code in codes:
+        if code not in ZONE_COORDS: continue
+        lat, lon = ZONE_COORDS[code]
+        
+        url = "https://api.open-meteo.com/v1/forecast"
+        params = {
+            "latitude": lat,
+            "longitude": lon,
+            "hourly": ["shortwave_radiation", "wind_speed_100m"],
+            "start_date": start_date.strftime('%Y-%m-%d'),
+            "end_date": end_date.strftime('%Y-%m-%d'),
+            "timezone": "UTC"
+        }
+        
+        try:
+            responses = open_meteo_client.weather_api(url, params=params)
+            response = responses[0]
+            hourly = response.Hourly()
+            
+            data = {
+                "Time": pd.date_range(
+                    start=pd.to_datetime(hourly.Time(), unit="s", utc=True),
+                    periods=hourly.TimeEnd() - hourly.Time(),
+                    freq=pd.Timedelta(seconds=hourly.Interval()),
+                    inclusive="left"
+                ),
+                "Solar Radiation": hourly.Variables(0).ValuesAsNumpy(),
+                "Wind Speed (100m)": hourly.Variables(1).ValuesAsNumpy(),
+                "Zone": code
+            }
+            df = pd.DataFrame(data)
+            df['Time'] = df['Time'].dt.tz_convert('Europe/Brussels')
+            all_weather.append(df)
+        except: continue
+        
+    return pd.concat(all_weather) if all_weather else pd.DataFrame()
+
 # --- LOAD CSV DATA ---
 @st.cache_data
 def load_local_csv():
     if os.path.exists('market_prices.csv'):
         df = pd.read_csv('market_prices.csv')
-        # FIX: Added format='mixed' and dayfirst=True for robust date parsing
         df['Date'] = pd.to_datetime(df['Date'], dayfirst=True, format='mixed').dt.date
         return df
     return pd.DataFrame()
@@ -197,6 +262,7 @@ full_price_df = pd.DataFrame()
 gen_df = pd.DataFrame()
 forecast_df = pd.DataFrame() 
 forecast_df_raw = pd.DataFrame()
+weather_df = pd.DataFrame()
 
 if len(d_range) == 2:
     if res in ["Daily", "Monthly"]:
@@ -231,6 +297,9 @@ if len(d_range) == 2:
         gen_df = fetch_gen_data(selected_codes, d_range[0], d_range[1])
         if selected_gen_types:
             forecast_df_raw = fetch_forecast_data(selected_codes, d_range[0], d_range[1])
+        # Fetch weather data
+        if selected_weather_types:
+            weather_df_raw = fetch_weather_data(selected_codes, d_range[0], d_range[1])
 
     if not full_price_df.empty:
         res_map = {"15 min": "15min", "60 min": "60min", "Daily": "D", "Monthly": "MS"}
@@ -246,10 +315,15 @@ if len(d_range) == 2:
             forecast_df = forecast_df_raw.groupby('Zone').apply(
                 lambda x: x.set_index('Time').resample(freq).mean(numeric_only=True).ffill()
             ).reset_index()
+            
+        if selected_weather_types and not weather_df_raw.empty:
+            weather_df = weather_df_raw.groupby('Zone').apply(
+                lambda x: x.set_index('Time').resample(freq).mean(numeric_only=True).ffill()
+            ).reset_index()
 
 col_chart, col_map = st.columns([2, 1])
 with col_chart:
-    st.subheader("Day-Ahead Prices and Generation Forecasts")
+    st.subheader("Day-Ahead Prices, Generation & Weather")
     if not plot_df.empty: 
         fig = make_subplots(specs=[[{"secondary_y": True}]])
         colors = px.colors.qualitative.Plotly
@@ -271,8 +345,18 @@ with col_chart:
                         if g_type in z_gen_df.columns:
                             fig.add_trace(go.Scatter(x=z_gen_df['Time'], y=z_gen_df[g_type], name=f"{zone} {g_type} Forecast (MW)", line=dict(color=zone_color_map[zone], dash='dot', width=1), hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), secondary_y=True)
 
+        # NEW: Plot Weather Traces
+        if selected_weather_types and not weather_df.empty:
+            for zone in selected_codes:
+                z_weather_df = weather_df[weather_df['Zone'] == zone]
+                if not z_weather_df.empty:
+                    for w_type in selected_weather_types:
+                        if w_type in z_weather_df.columns:
+                            unit = "W/m²" if w_type == "Solar Radiation" else "m/s"
+                            fig.add_trace(go.Scatter(x=z_weather_df['Time'], y=z_weather_df[w_type], name=f"{zone} {w_type} ({unit})", line=dict(color=zone_color_map[zone], dash='dashdot', width=1), opacity=0.6, hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), secondary_y=True)
+
         fig.update_layout(template="plotly_white", hovermode="x unified", legend=dict(orientation="h", y=-0.2), margin=dict(l=0, r=0, b=0, t=20))
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, use_container_width=True)
 
 with col_map:
     def load_and_get_centers(folder_path):
@@ -304,7 +388,6 @@ with col_map:
             
             fig_map = px.choropleth(map_df, geojson=geojson_data, locations="Zone", featureidkey="properties.zoneName", color="Selected", color_continuous_scale=["#262730", "#007927"], custom_data=["AvgPrice", "Currency"])
             
-            # NEW: Add text labels to the map using the calculated centers
             if not centers_df.empty:
                 label_df = centers_df[centers_df['Zone'].isin(all_found_codes)]
                 fig_map.add_trace(go.Scattergeo(
@@ -320,9 +403,8 @@ with col_map:
             fig_map.update_geos(center=dict(lon=12, lat=52), projection_scale=7, projection_type="mercator", bgcolor="rgba(0,0,0,0)")
             fig_map.update_layout(margin={"r":0,"t":0,"l":0,"b":0}, height=500, coloraxis_showscale=False, paper_bgcolor="rgba(0,0,0,0)")
             
-            map_event = st.plotly_chart(fig_map, width='stretch', on_select="rerun", selection_mode="points")
+            map_event = st.plotly_chart(fig_map, use_container_width=True, on_select="rerun", selection_mode="points")
             if map_event and "selection" in map_event and map_event["selection"]["points"]:
-                # Mapbox/Geo selection usually returns location for choropleth points
                 clicked_code = map_event["selection"]["points"][0].get("location")
                 if clicked_code:
                     clicked_label = f"{ZONE_NAMES[clicked_code][0]} ({clicked_code})"
@@ -339,8 +421,6 @@ with col_met:
     if not full_price_df.empty:
         metrics = []
         for code in selected_codes:
-            # Logic Change: Use full_price_df (raw) instead of plot_df (resampled)
-            # to count every negative hour, not just negative months.
             z_raw = full_price_df[full_price_df['Zone'] == code]
             metrics.append({
                 "Zone": code, 
@@ -350,22 +430,15 @@ with col_met:
         st.table(pd.DataFrame(metrics))
 
     st.subheader("Baseload & Capture Metrics")
-    # Logic Change: Perform math on granular raw data to avoid "smoothing" errors
     if not full_price_df.empty and not gen_df.empty:
-        # 1. Filter raw price data to selected zones and merge with raw gen data
         p_raw = full_price_df[full_price_df['Zone'].isin(selected_codes)].copy()
-        
-        # Track original negative hours for the "No settlement" logic
         p_raw['is_negative_hour'] = p_raw['Price'] < 0
         
-        # 2. Apply the Hard Floor (clipping) to the hourly price before weighting
         if exclude_neg:
             p_raw['Price'] = p_raw['Price'].clip(lower=0)
             
-        # 3. Merge at the highest resolution available (Hourly/15min)
         m_df_raw = pd.merge(p_raw, gen_df, on=['Time', 'Zone'], how='inner')
         
-        # Apply No settlement for negative (Generation = 0)
         if no_settle_neg:
             for col in ['Solar', 'Wind Onshore', 'Wind Offshore']:
                 if col in m_df_raw.columns:
@@ -373,14 +446,10 @@ with col_met:
     
         metrics_list = []
         for code in selected_codes:
-            # Filter the merged granular data for the specific zone
             zone_m = m_df_raw[m_df_raw['Zone'] == code]
-            
-            # Baseload calculation (Average of clipped raw prices)
             baseload = p_raw[p_raw['Zone'] == code]['Price'].mean()
             currency = ZONE_NAMES[code][1]
             
-            # Capture Price calculation: Sum(Price * Gen) / Sum(Gen)
             sol_cap = "N/A"
             if 'Solar' in zone_m.columns:
                 total_sol = zone_m['Solar'].sum()
@@ -413,13 +482,14 @@ with col_met:
 with col_tab:
     st.subheader("Data Table")
     if not plot_df.empty:
-        # 1. Merge Prices and Forecasts
         table_df = plot_df.copy()
         if not forecast_df.empty:
-            # Merge on Time and Zone to align all data
             table_df = table_df.merge(forecast_df, on=['Time', 'Zone'], how='outer')
+        
+        # Add weather to table
+        if not weather_df.empty:
+            table_df = table_df.merge(weather_df, on=['Time', 'Zone'], how='outer')
 
-        # 2. Calculate settlement columns (performed on combined long format)
         if fixed_floating and ppa_price > 0 and res == "Monthly":
             table_df['Fixed for Floating settlement'] = table_df['Price'] - ppa_price
         if market_following and ppa_price > 0 and res == "Monthly":
@@ -427,23 +497,20 @@ with col_tab:
             diff = table_df['Price'] - ppa_price
             table_df['Market following settlement'] = np.where(table_df['Price'] > ppa_price, np.minimum(diff, eff_floor), diff)
         
-        # 3. Create new time and date columns
         table_df['Date'] = table_df['Time'].dt.strftime('%d-%m-%Y')
         table_df['24h Time'] = table_df['Time'].dt.strftime('%H:%M')
         
-        # 4. Determine value variables for pivoting, filtering only for selected generation types
-        # This filters the available forecast columns against your 'selected_gen_types' selection
         gen_cols = [c for c in forecast_df.columns if c in selected_gen_types]
-        value_vars = ['Price'] + gen_cols
+        weather_cols = [c for c in weather_df.columns if c in selected_weather_types]
+        value_vars = ['Price'] + gen_cols + weather_cols
+        
         if 'Fixed for Floating settlement' in table_df.columns:
             value_vars.append('Fixed for Floating settlement')
         if 'Market following settlement' in table_df.columns:
             value_vars.append('Market following settlement')
 
-        # 5. Pivot: Index is Time/Date, Columns are the Zones, Values are Price/Gen/Settlements
         wide_df = table_df.pivot(index=['Time', 'Date', '24h Time'], columns='Zone', values=value_vars)
 
-        # 6. Flatten the MultiIndex columns and format headers
         new_columns = []
         for col in wide_df.columns:
             metric, zone = col
@@ -452,19 +519,20 @@ with col_tab:
                 new_columns.append(f"{zone} Price ({currency}/MWh)")
             elif metric in gen_cols:
                 new_columns.append(f"{zone} {metric} (MW)")
+            elif metric in weather_cols:
+                unit = "W/m²" if metric == "Solar Radiation" else "m/s"
+                new_columns.append(f"{zone} {metric} ({unit})")
             else:
                 new_columns.append(f"{zone} {metric}")
         
         wide_df.columns = new_columns
         wide_df = wide_df.reset_index().sort_values('Time')
 
-        # 7. Define final display order: Date and Time first, then all dynamic columns
         cols_to_show = ['Date', '24h Time'] + [c for c in wide_df.columns if c not in ['Time', 'Date', '24h Time']]
             
-        # 8. Display the table
         st.dataframe(
             wide_df[cols_to_show].style.format(precision=2, na_rep="-"), 
-            width='stretch', 
+            use_container_width=True, 
             height=400,
             hide_index=True
         )
