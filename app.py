@@ -263,6 +263,7 @@ gen_df = pd.DataFrame()
 forecast_df = pd.DataFrame() 
 forecast_df_raw = pd.DataFrame()
 weather_df = pd.DataFrame()
+weather_df_raw = pd.DataFrame() # Initialize early to avoid NameError
 
 if len(d_range) == 2:
     if res in ["Daily", "Monthly"]:
@@ -297,9 +298,10 @@ if len(d_range) == 2:
         gen_df = fetch_gen_data(selected_codes, d_range[0], d_range[1])
         if selected_gen_types:
             forecast_df_raw = fetch_forecast_data(selected_codes, d_range[0], d_range[1])
-        # Fetch weather data
-        if selected_weather_types:
-            weather_df_raw = fetch_weather_data(selected_codes, d_range[0], d_range[1])
+
+    # FETCH WEATHER REGARDLESS OF PRICE SOURCE
+    if selected_weather_types:
+        weather_df_raw = fetch_weather_data(selected_codes, d_range[0], d_range[1])
 
     if not full_price_df.empty:
         res_map = {"15 min": "15min", "60 min": "60min", "Daily": "D", "Monthly": "MS"}
@@ -345,7 +347,7 @@ with col_chart:
                         if g_type in z_gen_df.columns:
                             fig.add_trace(go.Scatter(x=z_gen_df['Time'], y=z_gen_df[g_type], name=f"{zone} {g_type} Forecast (MW)", line=dict(color=zone_color_map[zone], dash='dot', width=1), hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), secondary_y=True)
 
-        # NEW: Plot Weather Traces
+        # Plot Weather Traces
         if selected_weather_types and not weather_df.empty:
             for zone in selected_codes:
                 z_weather_df = weather_df[weather_df['Zone'] == zone]
@@ -356,7 +358,7 @@ with col_chart:
                             fig.add_trace(go.Scatter(x=z_weather_df['Time'], y=z_weather_df[w_type], name=f"{zone} {w_type} ({unit})", line=dict(color=zone_color_map[zone], dash='dashdot', width=1), opacity=0.6, hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), secondary_y=True)
 
         fig.update_layout(template="plotly_white", hovermode="x unified", legend=dict(orientation="h", y=-0.2), margin=dict(l=0, r=0, b=0, t=20))
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
 
 with col_map:
     def load_and_get_centers(folder_path):
@@ -403,7 +405,7 @@ with col_map:
             fig_map.update_geos(center=dict(lon=12, lat=52), projection_scale=7, projection_type="mercator", bgcolor="rgba(0,0,0,0)")
             fig_map.update_layout(margin={"r":0,"t":0,"l":0,"b":0}, height=500, coloraxis_showscale=False, paper_bgcolor="rgba(0,0,0,0)")
             
-            map_event = st.plotly_chart(fig_map, use_container_width=True, on_select="rerun", selection_mode="points")
+            map_event = st.plotly_chart(fig_map, width='stretch', on_select="rerun", selection_mode="points")
             if map_event and "selection" in map_event and map_event["selection"]["points"]:
                 clicked_code = map_event["selection"]["points"][0].get("location")
                 if clicked_code:
@@ -532,7 +534,7 @@ with col_tab:
             
         st.dataframe(
             wide_df[cols_to_show].style.format(precision=2, na_rep="-"), 
-            use_container_width=True, 
+            width='stretch', 
             height=400,
             hide_index=True
         )
