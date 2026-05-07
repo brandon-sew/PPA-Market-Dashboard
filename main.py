@@ -9,7 +9,7 @@ ENTSOE_API_KEY = os.environ.get('ENTSOE_TOKEN')
 client = EntsoePandasClient(api_key=ENTSOE_API_KEY)
 
 # --- TOGGLE THIS VALUE ---
-DAYS_TO_FETCH = 1825 # Set to 1825 for 5-year heavy lift
+DAYS_TO_FETCH = 1825 # Set to 1825 for 5-year heavy lift, 10 for daily updates
 # -------------------------
 
 countries = [
@@ -107,8 +107,7 @@ while remaining > 0:
     remaining -= step
 
 # Execution Loop
-if os.path.exists(csv_filename):
-    os.remove(csv_filename)
+# REMOVED: The os.remove() block that was deleting your historical data.
 
 for start_date, end_date in chunks:
     print(f"\nProcessing window: {start_date.date()} to {end_date.date()}")
@@ -122,10 +121,21 @@ for start_date, end_date in chunks:
                 all_country_data.append(result)
             print(f"Progress: {i+1}/{len(countries)} zones finished.")
 
+    # We still append chunk-by-chunk to keep memory low and prevent crash-loss during the 5-year run
     if all_country_data:
         final_df = pd.concat(all_country_data, ignore_index=True)
         final_df['Price'] = final_df['Price'].round(2)
         file_exists = os.path.isfile(csv_filename)
         final_df.to_csv(csv_filename, mode='a', index=False, header=not file_exists)
 
-print(f"\n✅ Success: Data saved to {csv_filename}")
+# NEW: Cleanup and Deduplication Phase
+if os.path.exists(csv_filename):
+    print("\nCleaning up overlapping dates to prevent CSV bloat...")
+    # Read the full file
+    full_df = pd.read_csv(csv_filename)
+    # Drop duplicates based on Date, Metric, and Country, keeping the most recently fetched row ('last')
+    full_df = full_df.drop_duplicates(subset=['Date', 'Metric', 'Country'], keep='last')
+    # Save it cleanly back over the file
+    full_df.to_csv(csv_filename, index=False)
+
+print(f"\n✅ Success: Data saved and deduplicated in {csv_filename}")
