@@ -282,14 +282,14 @@ if len(d_range) == 2:
             full_price_df = data_subset[data_subset['Metric'] == 'Baseload'].copy()
             if not full_price_df.empty:
                 full_price_df = full_price_df.rename(columns={'Date': 'Time', 'Country': 'Zone', val_col: 'Price'})
-                full_price_df['Time'] = pd.to_datetime(full_price_df['Time']).dt.tz_localize('Europe/Brussels', ambiguous='infer'))
+                full_price_df['Time'] = pd.to_datetime(full_price_df['Time']).dt.tz_localize('Europe/Brussels', ambiguous='infer')
             
             gen_subset = data_subset[data_subset['Metric'].str.contains(' Generation', na=False)].copy()
             if not gen_subset.empty:
                 gen_subset['Metric'] = gen_subset['Metric'].str.replace(' Generation', '', regex=False).str.strip()
                 gen_pivot = gen_subset.pivot_table(index=['Date', 'Country'], columns='Metric', values=val_col).reset_index()
                 gen_pivot = gen_pivot.rename(columns={'Date': 'Time', 'Country': 'Zone'})
-                gen_pivot['Time'] = pd.to_datetime(gen_pivot['Time']).dt.tz_localize('Europe/Brussels')
+                gen_pivot['Time'] = pd.to_datetime(gen_pivot['Time']).dt.tz_localize('Europe/Brussels', ambiguous='infer')
                 gen_df = gen_pivot[gen_pivot['Zone'].isin(selected_codes)]
                 
             forecast_subset = data_subset[data_subset['Metric'].str.contains(' Forecast', na=False)].copy()
@@ -297,7 +297,7 @@ if len(d_range) == 2:
                 forecast_subset['Metric'] = forecast_subset['Metric'].str.replace(' Forecast', '', regex=False).str.strip()
                 fc_pivot = forecast_subset.pivot_table(index=['Date', 'Country'], columns='Metric', values=val_col).reset_index()
                 fc_pivot = fc_pivot.rename(columns={'Date': 'Time', 'Country': 'Zone'})
-                fc_pivot['Time'] = pd.to_datetime(fc_pivot['Time']).dt.tz_localize('Europe/Brussels')
+                fc_pivot['Time'] = pd.to_datetime(fc_pivot['Time']).dt.tz_localize('Europe/Brussels', ambiguous='infer')
                 forecast_df_raw = fc_pivot[fc_pivot['Zone'].isin(selected_codes)]
     else:
         full_price_df = fetch_data(all_zones, d_range[0], d_range[1])
