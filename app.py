@@ -164,12 +164,12 @@ def fetch_weather_data(codes, start_date, end_date):
     return pd.concat(all_weather) if all_weather else pd.DataFrame()
 
 # --- LOAD CSV DATA ---
-@st.cache_data
+@st.cache_data(ttl=300)
 def load_local_csv():
     if os.path.exists('market_prices.csv'):
         df = pd.read_csv('market_prices.csv')
-        df['Date'] = pd.to_datetime(df['Date'], dayfirst=True, format='mixed').dt.date
-        return df
+        df['Date'] = pd.to_datetime(df['Date'], errors='coerce').dt.date
+        return df.dropna(subset=['Date']) # Ensure we don't process garbage/header rows
     return pd.DataFrame()
 
 @st.cache_data(ttl=3600)
@@ -282,7 +282,7 @@ if len(d_range) == 2:
             full_price_df = data_subset[data_subset['Metric'] == 'Baseload'].copy()
             if not full_price_df.empty:
                 full_price_df = full_price_df.rename(columns={'Date': 'Time', 'Country': 'Zone', val_col: 'Price'})
-                full_price_df['Time'] = pd.to_datetime(full_price_df['Time']).dt.tz_localize('Europe/Brussels')
+                full_price_df['Time'] = pd.to_datetime(full_price_df['Time']).dt.tz_localize('Europe/Brussels', ambiguous='infer'))
             
             gen_subset = data_subset[data_subset['Metric'].str.contains(' Generation', na=False)].copy()
             if not gen_subset.empty:
