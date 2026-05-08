@@ -330,7 +330,14 @@ col_chart, col_map = st.columns([2, 1])
 with col_chart:
     st.subheader("Day-Ahead Prices, Generation & Weather")
     if not plot_df.empty or not weather_df.empty: 
-        fig = make_subplots(specs=[[{"secondary_y": True}]])
+        # 1. Setup subplots: 3 rows, 1 column, shared X-axis
+        fig = make_subplots(
+            rows=3, cols=1, 
+            shared_xaxes=True, 
+            vertical_spacing=0.05,
+            subplot_titles=("Market Prices", "Generation Forecasts", "Weather Data")
+        )
+        
         colors = px.colors.qualitative.Plotly
         zone_color_map = {zone: colors[i % len(colors)] for i, zone in enumerate(selected_codes)}
         
@@ -339,10 +346,12 @@ with col_chart:
                 zone_df = plot_df[plot_df['Zone'] == zone]
                 if not zone_df.empty:
                     currency = ZONE_NAMES[zone][1]
-                    fig.add_trace(go.Scatter(x=zone_df['Time'], y=zone_df['Price'], name=f"{zone} Price ({currency}/MWh)", line=dict(color=zone_color_map[zone], width=2), hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), secondary_y=False)
+                    # Row 1: Prices
+                    fig.add_trace(go.Scatter(x=zone_df['Time'], y=zone_df['Price'], name=f"{zone} Price ({currency}/MWh)", line=dict(color=zone_color_map[zone], width=2), hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), row=1, col=1)
             
             if ppa_price > 0:
-                fig.add_trace(go.Scatter(x=plot_df['Time'].unique(), y=[ppa_price]*len(plot_df['Time'].unique()), name="PPA Price", line=dict(color='red', dash='dash', width=2), hovertemplate="PPA Price (EUR/MWh): %{y:.2f}<extra></extra>"), secondary_y=False)
+                # Row 1: PPA Price
+                fig.add_trace(go.Scatter(x=plot_df['Time'].unique(), y=[ppa_price]*len(plot_df['Time'].unique()), name="PPA Price", line=dict(color='red', dash='dash', width=2), hovertemplate="PPA Price (EUR/MWh): %{y:.2f}<extra></extra>"), row=1, col=1)
         
         if selected_gen_types and not forecast_df.empty:
             for zone in selected_codes:
@@ -350,7 +359,8 @@ with col_chart:
                 if not z_gen_df.empty:
                     for g_type in selected_gen_types:
                         if g_type in z_gen_df.columns:
-                            fig.add_trace(go.Scatter(x=z_gen_df['Time'], y=z_gen_df[g_type], name=f"{zone} {g_type} Forecast (MW)", line=dict(color=zone_color_map[zone], dash='dot', width=1), hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), secondary_y=True)
+                            # Row 2: Generation
+                            fig.add_trace(go.Scatter(x=z_gen_df['Time'], y=z_gen_df[g_type], name=f"{zone} {g_type} Forecast (MW)", line=dict(color=zone_color_map[zone], dash='dot', width=1), hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), row=2, col=1)
 
         if selected_weather_types and not weather_df.empty:
             for zone in selected_codes:
@@ -359,10 +369,24 @@ with col_chart:
                     for w_type in selected_weather_types:
                         if w_type in z_weather_df.columns:
                             unit = "W/m²" if w_type == "Solar Radiation" else "m/s"
-                            fig.add_trace(go.Scatter(x=z_weather_df['Time'], y=z_weather_df[w_type], name=f"{zone} {w_type} ({unit})", line=dict(color=zone_color_map[zone], dash='dashdot', width=1.5), opacity=0.8, hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), secondary_y=True)
+                            # Row 3: Weather
+                            fig.add_trace(go.Scatter(x=z_weather_df['Time'], y=z_weather_df[w_type], name=f"{zone} {w_type} ({unit})", line=dict(color=zone_color_map[zone], dash='dashdot', width=1.5), opacity=0.8, hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), row=3, col=1)
 
-        fig.update_layout(template="plotly_white", hovermode="x unified", legend=dict(orientation="h", y=-0.2), margin=dict(l=0, r=0, b=0, t=20))
-        st.plotly_chart(fig, width='stretch')
+        # Update layout for height and axis labels
+        fig.update_layout(
+            height=800, # Increased height to accommodate 3 rows
+            template="plotly_white", 
+            hovermode="x unified", 
+            legend=dict(orientation="h", y=-0.1), 
+            margin=dict(l=0, r=0, b=0, t=40)
+        )
+        
+        # Add Y-Axis Labels
+        fig.update_yaxes(title_text="Price (€/MWh)", row=1, col=1)
+        fig.update_yaxes(title_text="Generation (MW)", row=2, col=1)
+        fig.update_yaxes(title_text="Weather Units", row=3, col=1)
+        
+        st.plotly_chart(fig, use_container_width=True)
 
 with col_map:
     def load_and_get_centers(folder_path):
