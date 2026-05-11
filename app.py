@@ -315,16 +315,22 @@ if len(d_range) == 2:
             lambda x: x.set_index('Time').resample(freq).mean(numeric_only=True).ffill()
         ).reset_index()
         plot_df = full_price_resampled[full_price_resampled['Zone'].isin(selected_codes)].copy()
+        # FIX: Filter out timezone-induced extra days
+        plot_df = plot_df[plot_df['Time'].dt.date <= d_range[1]]
         
     if not forecast_df_raw.empty:
         forecast_df = forecast_df_raw.groupby('Zone').apply(
             lambda x: x.set_index('Time').resample(freq).mean(numeric_only=True).ffill()
         ).reset_index()
+        # FIX: Filter out timezone-induced extra days
+        forecast_df = forecast_df[forecast_df['Time'].dt.date <= d_range[1]]
             
     if selected_weather_types and not weather_df_raw.empty:
         weather_df = weather_df_raw.groupby('Zone').apply(
             lambda x: x.set_index('Time').resample(freq).mean(numeric_only=True).ffill()
         ).reset_index()
+        # FIX: Filter out timezone-induced extra days
+        weather_df = weather_df[weather_df['Time'].dt.date <= d_range[1]]
 
 col_chart, col_map = st.columns([2, 1])
 with col_chart:
