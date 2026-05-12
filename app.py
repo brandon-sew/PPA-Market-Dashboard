@@ -673,6 +673,7 @@ with col_chart:
     n_rows = len(active_rows)
 
     if n_rows > 0:
+        # Create mapping for row indices
         row_map_idx = {name: i + 1 for i, name in enumerate(active_rows)}
 
         fig = make_subplots(
@@ -685,20 +686,17 @@ with col_chart:
         colors = px.colors.qualitative.Plotly
         zone_color_map = {zone: colors[i % len(colors)] for i, zone in enumerate(selected_codes)}
 
-        # --- THE CHANGE: Add traces with independent hover labels ---
         if "Prices" in row_map_idx:
             curr_row = row_map_idx["Prices"]
             for zone in selected_codes:
                 zone_df = plot_df[plot_df['Zone'] == zone]
                 if not zone_df.empty:
                     currency = ZONE_NAMES[zone][1]
-                    fig.add_trace(go.Scatter(
-                        x=zone_df['Time'], 
-                        y=zone_df['Price'], 
-                        name=f"{zone} Price", 
-                        line=dict(color=zone_color_map[zone], width=2),
-                        hovertemplate=f"Price: %{{y:.2f}} {currency}/MWh<extra></extra>"
-                    ), row=curr_row, col=1)
+                    # ADDED xaxis='x'
+                    fig.add_trace(go.Scatter(x=zone_df['Time'], y=zone_df['Price'], name=f"{zone} Price ({currency}/MWh)", xaxis='x', line=dict(color=zone_color_map[zone], width=2), hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), row=curr_row, col=1)
+            if ppa_price > 0:
+                # ADDED xaxis='x'
+                fig.add_trace(go.Scatter(x=plot_df['Time'].unique(), y=[ppa_price]*len(plot_df['Time'].unique()), name="PPA Price", xaxis='x', line=dict(color='red', dash='dash', width=2), hovertemplate="PPA Price (EUR/MWh): %{y:.2f}<extra></extra>"), row=curr_row, col=1)
             fig.update_yaxes(title_text="Price (€/MWh)", row=curr_row, col=1)
 
         if "Generation" in row_map_idx:
@@ -708,13 +706,8 @@ with col_chart:
                 if not z_gen_df.empty:
                     for g_type in selected_gen_types:
                         if g_type in z_gen_df.columns:
-                            fig.add_trace(go.Scatter(
-                                x=z_gen_df['Time'], 
-                                y=z_gen_df[g_type], 
-                                name=f"{zone} {g_type}", 
-                                line=dict(color=zone_color_map[zone], dash='dot', width=1),
-                                hovertemplate=f"{g_type}: %{{y:.2f}} MW<extra></extra>"
-                            ), row=curr_row, col=1)
+                            # ADDED xaxis='x'
+                            fig.add_trace(go.Scatter(x=z_gen_df['Time'], y=z_gen_df[g_type], name=f"{zone} {g_type} Forecast (MW)", xaxis='x', line=dict(color=zone_color_map[zone], dash='dot', width=1), hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), row=curr_row, col=1)
             fig.update_yaxes(title_text="Generation (MW)", row=curr_row, col=1)
 
         if "Weather" in row_map_idx:
@@ -725,14 +718,43 @@ with col_chart:
                     for w_type in selected_weather_types:
                         if w_type in z_weather_df.columns:
                             unit = "W/m²" if w_type == "Solar Radiation" else "m/s"
-                            fig.add_trace(go.Scatter(
-                                x=z_weather_df['Time'], 
-                                y=z_weather_df[w_type], 
-                                name=f"{zone} {w_type}", 
-                                line=dict(color=zone_color_map[zone], dash='dashdot', width=1.5),
-                                hovertemplate=f"{w_type}: %{{y:.2f}} {unit}<extra></extra>"
-                            ), row=curr_row, col=1)
+                            # ADDED xaxis='x'
+                            fig.add_trace(go.Scatter(x=z_weather_df['Time'], y=z_weather_df[w_type], name=f"{zone} {w_type} ({unit})", xaxis='x', line=dict(color=zone_color_map[zone], dash='dashdot', width=1.5), opacity=0.8, hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), row=curr_row, col=1)
             fig.update_yaxes(title_text="Weather Units", row=curr_row, col=1)
+
+        dynamic_height = 300 + (n_rows * 170)
+
+        fig.update_layout(
+            height=dynamic_height,
+            template="plotly_dark", 
+            hovermode="x unified", 
+            hoverdistance=-1,
+            spikedistance=-1,
+            legend=dict(orientation="h", y=-0.15 if n_rows > 1 else -0.3), 
+            margin=dict(l=0, r=0, b=0, t=40)
+        )
+
+        # Force all Y-axes to anchor to the single X-axis 'x'
+        for i in range(1, n_rows + 1):
+            y_axis_key = f"yaxis{i if i > 1 else ''}"
+            if y_axis_key in fig.layout:
+                fig.layout[y_axis_key]["anchor"] = "x"
+
+        fig.update_xaxes(
+            showticklabels=True,
+            showspikes=True,
+            spikemode='across',
+            spikesnap='cursor',
+            spikethickness=1,
+            spikecolor="#999999",
+            spikedash="dot"
+        )
+        
+        # Hide tick labels for all but the last row
+        for i in range(1, n_rows):
+            fig.update_xaxes(showticklabels=False, row=i, col=1)
+
+        st.plotly_chart(fig, use_container_width=True)
 
         dynamic_height = 300 + (n_rows * 170)
 
