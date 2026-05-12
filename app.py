@@ -803,7 +803,7 @@ with col_chart:
             spikemode='across',
             spikesnap='cursor',
             spikethickness=1,
-            spikecolor="999999",
+            spikecolor="#999999",
             spikedash="dot"
         )
         
