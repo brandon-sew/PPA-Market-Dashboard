@@ -886,7 +886,7 @@ with col_chart:
         )
 
         for i in range(1, n_rows):
-            fig.update_xaxes(showticklabels=False,row-i, col=1)
+            fig.update_xaxes(showticklabels=False,row=i, col=1)
 
         st.plotly_chart(fig, use_container_width=True)
 
