@@ -795,14 +795,18 @@ with col_chart:
 
         )
 
+        fig.update_xaxes(
+            showticklabels+True,
+            row=n_rows, 
+            col=1,
+            showspikes=True,
+            spikemode='across',
+            spikesnap='cursor',
+            spikethickness=1,
+            spikecolor="999999",
+            spikedash="dot"
+        )
         
-
-        # Ensure the bottom-most x-axis is always visible
-
-        fig.update_xaxes(showticklabels=True, row=n_rows, col=1)
-
-        
-
         st.plotly_chart(fig, use_container_width=True)
 
 
