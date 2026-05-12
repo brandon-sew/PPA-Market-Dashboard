@@ -229,14 +229,7 @@ with st.sidebar:
         elif floor_rate_eur == 0 and floor_rate_pct == 0:
 
             st.warning("Please enter a floor rate for Market Following.")
-
             
-
-    if (fixed_floating or market_following) and res != "Monthly":
-
-        st.error("⚠️ Settlement not available on a Daily/60min/15min basis, please select Monthly.")
-
-
 
 # --- WEATHER FETCHING ---
 
