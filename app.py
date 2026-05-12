@@ -796,7 +796,7 @@ with col_chart:
         )
 
         fig.update_xaxes(
-            showticklabels+True,
+            showticklabels=True,
             row=n_rows, 
             col=1,
             showspikes=True,
