@@ -941,8 +941,6 @@ with col_chart:
 
             spikedash="dot",
 
-            showhovercast=True
-
         )
 
         fig.update_traces(xaxis='x1')
