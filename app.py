@@ -800,7 +800,7 @@ with col_chart:
             spikesnap='cursor',
             spikethickness=1,
             spikecolor="#999999",
-            spikedash="dot"
+            spikedash="dot",
             showhovercast=True
         )
         
