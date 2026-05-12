@@ -804,6 +804,7 @@ with col_chart:
             showhovercast=True
         )
         
+        fig.update_traces(xaxis='x1')
         st.plotly_chart(fig, use_container_width=True)
 
 
