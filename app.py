@@ -662,124 +662,66 @@ if len(d_range) == 2:
 col_chart, col_map = st.columns([2, 1])
 
 with col_chart:
-
     st.subheader("Day-Ahead Prices, Generation Forecasts & Weather Data")
 
-    
-
     # 1. Determine active rows dynamically
-
     active_rows = []
-
     if not plot_df.empty: active_rows.append("Prices")
-
     if selected_gen_types and not forecast_df.empty: active_rows.append("Generation")
-
     if selected_weather_types and not weather_df.empty: active_rows.append("Weather")
 
-    
-
     n_rows = len(active_rows)
-
     
-
     if n_rows > 0:
-
         # Create mapping for row indices
-
         row_map_idx = {name: i + 1 for i, name in enumerate(active_rows)}
 
-        
-
         fig = make_subplots(
-
             rows=n_rows, cols=1, 
-
             shared_xaxes=True, 
-
             vertical_spacing=0.07,
-
             subplot_titles=[f"Market {name}" if name == "Prices" else f"{name} Data" for name in active_rows]
-
         )
 
-        
-
         colors = px.colors.qualitative.Plotly
-
         zone_color_map = {zone: colors[i % len(colors)] for i, zone in enumerate(selected_codes)}
 
-        
-
         if "Prices" in row_map_idx:
-
             curr_row = row_map_idx["Prices"]
-
             for zone in selected_codes:
-
                 zone_df = plot_df[plot_df['Zone'] == zone]
-
                 if not zone_df.empty:
-
                     currency = ZONE_NAMES[zone][1]
-
-                    fig.add_trace(go.Scatter(x=zone_df['Time'], y=zone_df['Price'], name=f"{zone} Price ({currency}/MWh)", line=dict(color=zone_color_map[zone], width=2), hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), row=curr_row, col=1)
-
+                    fig.add_trace(go.Scatter(x=zone_df['Time'], y=zone_df['Price'], name=f"{zone} Price ({currency}/MWh)", xaxis ='x', line=dict(color=zone_color_map[zone], width=2), hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), row=curr_row, col=1)
             if ppa_price > 0:
-
-                fig.add_trace(go.Scatter(x=plot_df['Time'].unique(), y=[ppa_price]*len(plot_df['Time'].unique()), name="PPA Price", line=dict(color='red', dash='dash', width=2), hovertemplate="PPA Price (EUR/MWh): %{y:.2f}<extra></extra>"), row=curr_row, col=1)
-
+                fig.add_trace(go.Scatter(x=plot_df['Time'].unique(), y=[ppa_price]*len(plot_df['Time'].unique()), name="PPA Price", xaxis='x', line=dict(color='red', dash='dash', width=2), hovertemplate="PPA Price (EUR/MWh): %{y:.2f}<extra></extra>"), row=curr_row, col=1)
             fig.update_yaxes(title_text="Price (€/MWh)", row=curr_row, col=1)
 
-
-
         if "Generation" in row_map_idx:
-
             curr_row = row_map_idx["Generation"]
-
             for zone in selected_codes:
-
                 z_gen_df = forecast_df[forecast_df['Zone'] == zone]
-
                 if not z_gen_df.empty:
-
                     for g_type in selected_gen_types:
-
                         if g_type in z_gen_df.columns:
-
-                            fig.add_trace(go.Scatter(x=z_gen_df['Time'], y=z_gen_df[g_type], name=f"{zone} {g_type} Forecast (MW)", line=dict(color=zone_color_map[zone], dash='dot', width=1), hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), row=curr_row, col=1)
-
+                            fig.add_trace(go.Scatter(x=z_gen_df['Time'], y=z_gen_df[g_type], name=f"{zone} {g_type} Forecast (MW)", xaxis='x', line=dict(color=zone_color_map[zone], dash='dot', width=1), hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), row=curr_row, col=1)
             fig.update_yaxes(title_text="Generation (MW)", row=curr_row, col=1)
 
 
 
         if "Weather" in row_map_idx:
-
             curr_row = row_map_idx["Weather"]
-
             for zone in selected_codes:
-
                 z_weather_df = weather_df[weather_df['Zone'] == zone]
-
                 if not z_weather_df.empty:
-
                     for w_type in selected_weather_types:
-
                         if w_type in z_weather_df.columns:
-
                             unit = "W/m²" if w_type == "Solar Radiation" else "m/s"
-
-                            fig.add_trace(go.Scatter(x=z_weather_df['Time'], y=z_weather_df[w_type], name=f"{zone} {w_type} ({unit})", line=dict(color=zone_color_map[zone], dash='dashdot', width=1.5), opacity=0.8, hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), row=curr_row, col=1)
-
+                            fig.add_trace(go.Scatter(x=z_weather_df['Time'], y=z_weather_df[w_type], name=f"{zone} {w_type} ({unit})", xaxis='x', line=dict(color=zone_color_map[zone], dash='dashdot', width=1.5), opacity=0.8, hovertemplate="%{fullData.name}: %{y:.2f}<extra></extra>"), row=curr_row, col=1)
             fig.update_yaxes(title_text="Weather Units", row=curr_row, col=1)
 
-
-
         # Dynamic height: 400px for one chart, 600px for two, 800px for three
-
         dynamic_height = 300 + (n_rows * 170)
-
-        
 
         fig.update_layout(
             height=dynamic_height,
