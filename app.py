@@ -800,8 +800,7 @@ with col_chart:
             spikesnap='cursor',
             spikethickness=1,
             spikecolor="#999999",
-            spikedash="dot",
-            showhovercast=True
+            spikedash="dot"
         )
         
         fig.update_traces(xaxis='x1')
