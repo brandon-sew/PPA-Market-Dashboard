@@ -756,35 +756,6 @@ with col_chart:
 
         st.plotly_chart(fig, use_container_width=True)
 
-        dynamic_height = 300 + (n_rows * 170)
-
-        fig.update_layout(
-            height=dynamic_height,
-            template="plotly_dark", 
-            # Changed from "x unified" to "x"
-            # This triggers all hover labels at once for that X-value
-            hovermode="x", 
-            hoverdistance=-1,
-            spikedistance=-1,
-            legend=dict(orientation="h", y=-0.15 if n_rows > 1 else -0.3), 
-            margin=dict(l=0, r=0, b=0, t=40)
-        )
-
-        fig.update_xaxes(
-            showticklabels=True,
-            showspikes=True,
-            spikemode='across',
-            spikesnap='cursor',
-            spikethickness=1,
-            spikecolor="#999999",
-            spikedash="dot"
-        )
-        
-        for i in range(1, n_rows):
-            fig.update_xaxes(showticklabels=False, row=i, col=1)
-
-        st.plotly_chart(fig, use_container_width=True)
-
 
 
 with col_map:
