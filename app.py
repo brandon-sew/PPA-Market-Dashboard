@@ -114,9 +114,6 @@ with st.sidebar:
             st.error("⚠️ Please specify either a Floor Rate (EUR) OR a Floor Rate (%), not both.")
         elif floor_rate_eur == 0 and floor_rate_pct == 0:
             st.warning("Please enter a floor rate for Market Following.")
-            
-    if (fixed_floating or market_following) and res != "Monthly":
-        st.error("⚠️ Settlement not available on a Daily/60min/15min basis, please select Monthly.")
 
 # --- WEATHER FETCHING ---
 @st.cache_data(ttl=3600)
@@ -539,9 +536,9 @@ with col_tab:
         if not weather_df.empty:
             table_df = table_df.merge(weather_df, on=['Time', 'Zone'], how='outer')
 
-        if fixed_floating and ppa_price > 0 and res == "Monthly" and 'Price' in table_df.columns:
+        if fixed_floating and ppa_price > 0 and 'Price' in table_df.columns:
             table_df['Fixed for Floating settlement'] = table_df['Price'] - ppa_price
-        if market_following and ppa_price > 0 and res == "Monthly" and 'Price' in table_df.columns:
+        if market_following and ppa_price > 0 and 'Price' in table_df.columns:
             eff_floor = floor_rate_eur if floor_rate_eur > 0 else (floor_rate_pct / 100 * ppa_price)
             diff = table_df['Price'] - ppa_price
             table_df['Market following settlement'] = np.where(table_df['Price'] > ppa_price, np.minimum(diff, eff_floor), diff)
