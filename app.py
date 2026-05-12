@@ -782,17 +782,13 @@ with col_chart:
         
 
         fig.update_layout(
-
             height=dynamic_height,
-
             template="plotly_white", 
-
             hovermode="x unified", 
-
+            hoverdistance=-1,
+            spikedistance=-1,
             legend=dict(orientation="h", y=-0.15 if n_rows > 1 else -0.3), 
-
             margin=dict(l=0, r=0, b=0, t=40)
-
         )
 
         fig.update_xaxes(
@@ -805,6 +801,7 @@ with col_chart:
             spikethickness=1,
             spikecolor="#999999",
             spikedash="dot"
+            showhovercast=True
         )
         
         st.plotly_chart(fig, use_container_width=True)
