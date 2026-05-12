@@ -1080,11 +1080,11 @@ with col_tab:
 
 
 
-        if fixed_floating and ppa_price > 0 and res == "Monthly" and 'Price' in table_df.columns:
+        if fixed_floating and ppa_price > 0 and 'Price' in table_df.columns:
 
             table_df['Fixed for Floating settlement'] = table_df['Price'] - ppa_price
 
-        if market_following and ppa_price > 0 and res == "Monthly" and 'Price' in table_df.columns:
+        if market_following and ppa_price > 0 and 'Price' in table_df.columns:
 
             eff_floor = floor_rate_eur if floor_rate_eur > 0 else (floor_rate_pct / 100 * ppa_price)
 
