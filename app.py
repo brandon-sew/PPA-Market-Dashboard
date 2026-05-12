@@ -791,9 +791,14 @@ with col_chart:
             margin=dict(l=0, r=0, b=0, t=40)
         )
         fig.update_traces(xaxis="x")
+        for i in range (1, n_rows + 1):
+            y_axis_key = f"yaxis{i if i > 1 else ''}"
+            if y_axis_key in fig.layout:
+                fig.layout[y_axis_key]["anchor"] = "x"
 
         fig.update_xaxes(
             showticklabels=True,
+            side="bottom", 
             showspikes=True,
             spikemode='across',
             spikesnap='cursor',
