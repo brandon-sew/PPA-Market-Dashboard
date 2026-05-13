@@ -823,50 +823,47 @@ with col_chart:
         # 1. Dynamic height calculation
         dynamic_height = 300 + (n_rows * 170)
 
-        # 1. Determine the ID of the BOTTOM axis (e.g., 'x', 'x2', or 'x3')
-        # This is the axis that will act as the 'Master' for hover and labels
+        # 2. Determine the ID of the BOTTOM axis
         master_xaxis_id = f"x{n_rows if n_rows > 1 else ''}"
         master_xaxis_key = f"xaxis{n_rows if n_rows > 1 else ''}"
 
-        # 2. Move ALL traces to the bottom axis for unified hover
+        # 3. Move ALL traces to the bottom axis for synchronized hover
         fig.update_traces(xaxis=master_xaxis_id)
 
-        # 3. Re-anchor every Y-axis to this bottom master axis
-        # This prevents the charts from stacking on top of each other
+        # 4. Re-anchor every Y-axis to this bottom master axis
         for i in range(1, n_rows + 1):
             y_axis_key = f"yaxis{i if i > 1 else ''}"
             if y_axis_key in fig.layout:
                 fig.layout[y_axis_key]["anchor"] = master_xaxis_id
 
-        # 4. Configure the layout and the Master X-axis
+        # 5. Configure the layout for simultaneous individual hovers
         fig.update_layout(
             height=dynamic_height,
             template="plotly_white", 
-            hovermode="x unified", 
-            hoverdistance=-1,
-            spikedistance=-1,
+            hovermode="x",          # 'x' shows multiple individual boxes simultaneously
+            hoverdistance=-1,       # Triggers hover even when mouse isn't touching a line
+            spikedistance=-1,       # Keeps the vertical spike line visible
             legend=dict(orientation="h", y=-0.15 if n_rows > 1 else -0.3), 
             margin=dict(l=0, r=0, b=0, t=40)
         )
 
-        # 5. Set labels only for the Master (bottom) axis and hide the others
+        # 6. Set labels only for the Master (bottom) axis and hide the others
         for i in range(1, n_rows + 1):
             current_x_key = f"xaxis{i if i > 1 else ''}"
             if current_x_key in fig.layout:
                 if current_x_key == master_xaxis_key:
-                    # This is the bottom row: show labels and spikes
                     fig.layout[current_x_key].update(
                         showticklabels=True,
                         showspikes=True,
-                        spikemode='across',
+                        spikemode='across', # Line goes through all subplots
                         spikesnap='cursor',
                         spikethickness=1,
                         spikecolor="#999999",
                         spikedash="dot",
-                        type='date' # Ensure it treats x-axis as time
+                        type='date'
                     )
                 else:
-                    # These are upper rows: hide labels to keep it clean
+                    # Hide empty X-axis labels for the upper subplots
                     fig.layout[current_x_key].update(showticklabels=False)
 
         st.plotly_chart(fig, use_container_width=True)
