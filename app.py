@@ -820,12 +820,6 @@ with col_chart:
                                 hovertemplate=f"{w_type}: %{{y:.2f}} {unit}<extra></extra>"
                             ), row=curr_row, col=1)
 
-
-
-
-
-
-
         # Dynamic height calculation
         dynamic_height = 300 + (n_rows * 170)
 
@@ -839,34 +833,33 @@ with col_chart:
             margin=dict(l=0, r=0, b=0, t=40)
         )
 
-        # 1. Keep this: It merges the hover labels
+        # 1. Merge all hover data onto the first X-axis
         fig.update_traces(xaxis="x")
 
-        # 2. Keep this: It makes sure the Y-axes don't collapse
+        # 2. Re-link every Y-axis to that single X-axis so the charts stay in their rows
         for i in range(1, n_rows + 1):
             y_axis_key = f"yaxis{i if i > 1 else ''}"
             if y_axis_key in fig.layout:
                 fig.layout[y_axis_key]["anchor"] = "x"
 
-        # 3. FIX: Update the 'xaxis' (the one all data uses) to show at the bottom
-        fig.update_xaxes(
-            patch=dict(
+        # 3. CONFIGURE THE SHARED AXIS ('xaxis')
+        # We target 'xaxis' specifically because that's where all the traces now live
+        fig.update_layout(
+            xaxis=dict(
                 showticklabels=True,
-                side="bottom",      # Forces labels to the very bottom row
+                side="bottom",      # Forces the labels to appear at the bottom of the last chart
                 showspikes=True,
                 spikemode='across',
                 spikesnap='cursor',
                 spikethickness=1,
                 spikecolor="#999999",
-                spikedash="dot"
-            ),
-            # Targeting 'xaxis' specifically as it now holds all data
-            selector=dict(type='linear') 
+                spikedash="dot",
+                type='date'         # Ensures it handles time data correctly
+            )
         )
 
-        # 4. Remove the old loop that was hiding row=1 
-        # (Since all data is on row 1's axis now, we don't need to hide it)
-
+        # 4. Remove any loops that hide 'row=1' labels, as 'row=1' is now our primary axis
+        
         st.plotly_chart(fig, use_container_width=True)
 
 
