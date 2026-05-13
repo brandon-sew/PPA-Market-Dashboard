@@ -234,85 +234,47 @@ with st.sidebar:
 # --- WEATHER FETCHING ---
 
 @st.cache_data(ttl=3600)
-
 def fetch_weather_data(codes, start_date, end_date):
-
     if not codes: return pd.DataFrame()
-
     all_weather = []
 
-    
-
     for code in codes:
-
         if code not in ZONE_COORDS: continue
-
         lat, lon = ZONE_COORDS[code]
-
-        
-
         url = "https://api.open-meteo.com/v1/forecast"
 
         params = {
-
             "latitude": lat,
-
             "longitude": lon,
-
             "hourly": ["shortwave_radiation", "wind_speed_100m"],
-
             "start_date": start_date.strftime('%Y-%m-%d'),
-
             "end_date": end_date.strftime('%Y-%m-%d'),
-
-            "timezone": "UTC"
-
+            "timezone": "Europe/Berlin"
         }
 
-        
-
         try:
-
             responses = open_meteo_client.weather_api(url, params=params)
-
             response = responses[0]
-
             hourly = response.Hourly()
-
             
-
-            num_periods = int((hourly.TimeEnd() - hourly.Time()) / hourly.Interval())
-
-            
+            #Extract values first to get the exact count
+            solar_values = hourly.Variables(0).ValuesAsNumpy()
+            wind_values = hourly.Variables(1).ValuesAsNumpy()
 
             data = {
-
                 "Time": pd.date_range(
-
                     start=pd.to_datetime(hourly.Time(), unit="s", utc=True),
-
-                    periods=num_periods,
-
+                    periods=len(solar_values),
                     freq=pd.Timedelta(seconds=hourly.Interval()),
-
-                    inclusive="left"
-
                 ),
-
-                "Solar Radiation": hourly.Variables(0).ValuesAsNumpy(),
-
-                "Wind Speed (100m)": hourly.Variables(1).ValuesAsNumpy(),
-
+                "Solar Radiation": solar_values,
+                "Wind Speed (100m)": wind_values,
                 "Zone": code
-
             }
 
             df = pd.DataFrame(data)
-
             df['Time'] = df['Time'].dt.tz_convert('Europe/Brussels')
-
-            all_weather.append(df)
-
+        
         except: continue
 
         
