@@ -826,67 +826,46 @@ with col_chart:
 
 
 
-        # Dynamic height: 400px for one chart, 600px for two, 800px for three
-
-
-
+        # Dynamic height calculation
         dynamic_height = 300 + (n_rows * 170)
 
-
-
-        
-
-
-
         fig.update_layout(
-
             height=dynamic_height,
-
             template="plotly_white", 
-
             hovermode="x unified", 
-
             hoverdistance=-1,
-
             spikedistance=-1,
-
             legend=dict(orientation="h", y=-0.15 if n_rows > 1 else -0.3), 
-
             margin=dict(l=0, r=0, b=0, t=40)
-
         )
+
+        # 1. Keep this: It merges the hover labels
         fig.update_traces(xaxis="x")
-        for i in range (1, n_rows +1):
+
+        # 2. Keep this: It makes sure the Y-axes don't collapse
+        for i in range(1, n_rows + 1):
             y_axis_key = f"yaxis{i if i > 1 else ''}"
             if y_axis_key in fig.layout:
                 fig.layout[y_axis_key]["anchor"] = "x"
 
-
-
+        # 3. FIX: Update the 'xaxis' (the one all data uses) to show at the bottom
         fig.update_xaxes(
-
-            showticklabels=True,
-
-            row=n_rows, 
-
-            col=1,
-
-            showspikes=True,
-
-            spikemode='across',
-
-            spikesnap='cursor',
-
-            spikethickness=1,
-
-            spikecolor="#999999",
-
-            spikedash="dot",
-
+            patch=dict(
+                showticklabels=True,
+                side="bottom",      # Forces labels to the very bottom row
+                showspikes=True,
+                spikemode='across',
+                spikesnap='cursor',
+                spikethickness=1,
+                spikecolor="#999999",
+                spikedash="dot"
+            ),
+            # Targeting 'xaxis' specifically as it now holds all data
+            selector=dict(type='linear') 
         )
 
-        for i in range(1, n_rows):
-            fig.update_xaxes(showticklabels=False,row=i, col=1)
+        # 4. Remove the old loop that was hiding row=1 
+        # (Since all data is on row 1's axis now, we don't need to hide it)
 
         st.plotly_chart(fig, use_container_width=True)
 
