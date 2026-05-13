@@ -232,7 +232,6 @@ with st.sidebar:
             
 
 # --- WEATHER FETCHING ---
-
 @st.cache_data(ttl=3600)
 def fetch_weather_data(codes, start_date, end_date):
     if not codes: return pd.DataFrame()
@@ -257,7 +256,7 @@ def fetch_weather_data(codes, start_date, end_date):
             response = responses[0]
             hourly = response.Hourly()
             
-            #Extract values first to get the exact count
+            # Extract values first to get the exact count
             solar_values = hourly.Variables(0).ValuesAsNumpy()
             wind_values = hourly.Variables(1).ValuesAsNumpy()
 
@@ -266,6 +265,7 @@ def fetch_weather_data(codes, start_date, end_date):
                     start=pd.to_datetime(hourly.Time(), unit="s", utc=True),
                     periods=len(solar_values),
                     freq=pd.Timedelta(seconds=hourly.Interval()),
+                    inclusive="left"
                 ),
                 "Solar Radiation": solar_values,
                 "Wind Speed (100m)": wind_values,
@@ -274,10 +274,9 @@ def fetch_weather_data(codes, start_date, end_date):
 
             df = pd.DataFrame(data)
             df['Time'] = df['Time'].dt.tz_convert('Europe/Brussels')
+            all_weather.append(df) # <--- FIXED: Now appending the data to the list
         
         except: continue
-
-        
 
     return pd.concat(all_weather) if all_weather else pd.DataFrame()
 
