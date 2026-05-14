@@ -823,20 +823,41 @@ with col_map:
             fig_map = px.choropleth(map_df, geojson=geojson_data, locations="Zone", featureidkey="properties.zoneName", color="Selected", color_continuous_scale=["#262730", "#007927"], custom_data=["AvgPrice", "Currency"])
             
             # --- ADDED: Weather Coordinate Markers ---
+            # --- UPDATED: Dynamic Weather Coordinate Markers (Red vs Orange) ---
             effective_coords = ZONE_COORDS.copy()
-            if "custom_coords" in st.session_state:
-                effective_coords.update(st.session_state.custom_coords)
-                
-            weather_lats = [coords[0] for code, coords in effective_coords.items() if code in all_found_codes]
-            weather_lons = [coords[1] for code, coords in effective_coords.items() if code in all_found_codes]
+            custom_overrides = st.session_state.get("custom_coords", {})
+            effective_coords.update(custom_overrides)
+
+            lats, lons, colors, hover_texts = [], [], [], []
+
+            for code, coords in effective_coords.items():
+                if code in all_found_codes:
+                    lats.append(coords[0])
+                    lons.append(coords[1])
+                    
+                    # Determine color: Orange if in custom_coords, Red otherwise
+                    if code in custom_overrides:
+                        colors.append('orange')
+                        status = "Custom"
+                    else:
+                        colors.append('red')
+                        status = "Default"
+                    
+                    hover_texts.append(f"{code} ({status})")
+
             fig_map.add_trace(go.Scattergeo(
-                lat=weather_lats,
-                lon=weather_lons,
+                lat=lats,
+                lon=lons,
                 mode='markers',
-                marker=dict(size=5, color='red', line=dict(width=1, color='white')),
+                marker=dict(
+                    size=6, 
+                    color=colors, 
+                    line=dict(width=1, color='white')
+                ),
+                text=hover_texts,
                 name='Weather Point',
                 showlegend=False,
-                hoverinfo='skip'
+                hoverinfo='text'
             ))
             # ------------------------------------------
 
