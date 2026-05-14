@@ -1,180 +1,91 @@
 import streamlit as st
-
 import pandas as pd
-
 import plotly.express as px
-
 import os
-
 import json
-
 import glob
-
 import numpy as np
-
 import requests
-
 from datetime import datetime, timedelta
-
 from entsoe import EntsoePandasClient
-
 import plotly.graph_objects as go
-
 from plotly.subplots import make_subplots
-
 from concurrent.futures import ThreadPoolExecutor, as_completed
-
-# NEW WEATHER INTEGRATION
-
 import openmeteo_requests
-
 import requests_cache
-
 from retry_requests import retry
 
-
-
 # 1. Config & API Setup
-
 API_KEY = os.environ.get('ENTSOE_TOKEN')
-
 client = EntsoePandasClient(api_key=API_KEY)
 
-
-
 # Setup the Open-Meteo API client with cache
-
 cache_session = requests_cache.CachedSession('.cache', expire_after=3600)
-
 retry_session = retry(cache_session, retries=5, backoff_factor=0.2)
-
 open_meteo_client = openmeteo_requests.Client(session=retry_session)
 
-
-
 ZONE_NAMES = {
-
     "AT": ["Austria", "EUR"], "BE": ["Belgium", "EUR"], "BG": ["Bulgaria", "EUR"],
-
     "CH": ["Switzerland", "EUR"], "CZ": ["Czech Republic", "EUR"], 
-
     "DE_LU": ["Germany & Luxembourg", "EUR"], "FR": ["France", "EUR"], 
-
     "GB": ["Great Britain", "GBP"], "IE_SEM": ["Ireland", "EUR"],
-
     "NL": ["Netherlands", "EUR"], "PL": ["Poland", "PLN"], 
-
     "DK_1": ["Denmark West", "EUR"], "DK_2": ["Denmark East", "EUR"],
-
     "EE": ["Estonia", "EUR"], "FI": ["Finland", "EUR"], "LT": ["Lithuania", "EUR"],
-
     "LV": ["Latvia", "EUR"], "NO_1": ["Norway East", "EUR"], "NO_2": ["Norway South", "EUR"],
-
     "NO_3": ["Norway Central", "EUR"], "NO_4": ["Norway Northern", "EUR"], "NO_5": ["Norway West", "EUR"],
-
     "SE_1": ["Sweden Luleå", "EUR"], "SE_2": ["Sweden Sundsvall", "EUR"], "SE_3": ["Sweden Stockholm", "EUR"],
-
     "SE_4": ["Sweden Malmö", "EUR"], "ES": ["Spain", "EUR"], "PT": ["Portugal", "EUR"],
-
     "HR": ["Croatia", "EUR"], "HU": ["Hungary", "EUR"], "GR": ["Greece", "EUR"],
-
     "ME": ["Montenegro", "EUR",], "MK": ["North Macedonia", "EUR"],
-
     "RO": ["Romania", "EUR"], "RS": ["Serbia", "EUR"], 
-
     "SI": ["Slovenia", "EUR"], "SK": ["Slovakia", "EUR"],
-
     "IT_NORD": ["Italy North", "EUR"], "IT_CNOR": ["Italy Central North", "EUR"],
-
     "IT_CSUD": ["Italy Central South", "EUR"], "IT_SUD": ["Italy South", "EUR"],
-
     "IT_SICI": ["Italy Sicily", "EUR"], "IT_SARD": ["Italy Sardinia", "EUR"], "IT_CALA": ["Italy Calabria", "EUR"]
-
 }
-
-
 
 # Coordinate Mapping for Weather Data
-
 ZONE_COORDS = {
-
     "AT": [47.51, 14.55], "BE": [50.85, 4.35], "BG": [42.73, 25.48], "CH": [46.81, 8.22],
-
     "CZ": [49.81, 15.47], "DE_LU": [54.00, 7.50], "FR": [48.00, -1.00], "GB": [53.50, -0.50],
-
     "IE_SEM": [53.14, -7.69], "NL": [52.13, 5.29], "PL": [51.91, 19.14], "DK_1": [56.50, 8.20],
-
     "DK_2": [55.67, 12.00], "EE": [58.59, 25.01], "FI": [61.92, 25.74], "LT": [55.16, 23.88],
-
     "LV": [56.87, 24.60], "NO_1": [59.91, 10.75], "NO_2": [58.50, 6.00], "NO_3": [63.43, 10.39],
-
     "NO_4": [67.28, 14.40], "NO_5": [60.39, 5.32], "SE_1": [65.58, 22.15], "SE_2": [62.39, 17.30],
-
     "SE_3": [59.32, 18.06], "SE_4": [55.60, 13.00], "ES": [37.38, -5.98], "PT": [39.39, -8.22],
-
     "HR": [45.10, 15.20], "HU": [47.16, 19.50], "GR": [38.50, 23.50], "ME": [42.70, 19.37], "MK": [41.60, 21.74],
-
     "RO": [45.94, 24.96], "RS": [44.01, 21.00], "SI": [46.15, 14.99], "SK": [48.66, 19.69],
-
     "IT_NORD": [45.46, 9.19], "IT_CNOR": [43.76, 11.25], "IT_CSUD": [41.87, 12.49],
-
     "IT_SUD": [41.00, 15.50], "IT_SICI": [37.59, 14.01], "IT_SARD": [40.12, 9.01], "IT_CALA": [38.90, 16.58]
-
 }
-
-
 
 st.set_page_config(page_title="Market Explorer", layout="wide", initial_sidebar_state="expanded")
 
-
-
 st.markdown("""
-
     <style>
-
     section[data-testid="stSidebar"] { width: 400px !important; }
-
     .main .block-container { 
-
         padding-top: 2rem !important;
-
         max-width: 98% !important; 
-
     }
-
     </style>
-
     """, unsafe_allow_html=True)
 
-
-
 if 'selected_zones' not in st.session_state:
-
     st.session_state.selected_zones = ["Germany & Luxembourg (DE_LU)"]
 
-
-
 with st.sidebar:
-
     st.title("Configuration")
-
     display_options = {f"{ZONE_NAMES[c][0]} ({c})": c for c in ZONE_NAMES.keys()}
 
-    
-
     st.session_state.selected_zones = st.multiselect("Select bidding zones:", 
-
                    options=sorted(display_options.keys()), 
-
                    default=st.session_state.selected_zones)
-
-    
 
     gen_options = ["Solar", "Wind Onshore", "Wind Offshore"]
 
     selected_gen_types = st.multiselect("Overlay Generation Forecast:", options=gen_options, key="gen_forecast_select")
-
-    
 
     # NEW: Weather Overlays
     weather_options = ["Solar Radiation", "Wind Speed (100m)"]
@@ -182,51 +93,30 @@ with st.sidebar:
     
     res = st.radio("Resolution", ["Monthly", "Daily", "60 min", "15 min"], horizontal=True, key="res_radio")
 
-    
-
     today = datetime.now().date()
-
     default_d_range = st.session_state.get("date_range_input", (today - timedelta(days=2), today))
-
     d_range = st.date_input("Date Range", value=default_d_range, key="date_range_input")
 
-    
-
     exclude_neg = st.checkbox("Hard floor at 0", help="Treats negative prices as 0 for capture price calculation", key="neg_price_check")
-
     no_settle_neg = st.checkbox("No settlement for negative", help="Treats generation as 0 when prices are negative", key="no_settle_check")
 
 
-
     st.divider()
-
     st.subheader("PPA Configuration")
-
     ppa_price = st.number_input("PPA Price (EUR/MWh)", value=0.0, step = 1.0, key="ppa_price_input")
-
     fixed_floating = st.checkbox("Fixed for Floating Price Structure", key="fixed_float_check")
-
-    
-
     market_following = st.checkbox("Market Following with floor", key="mkt_follow_check")
-
     if market_following:
-
         floor_rate_eur = st.number_input("Floor Rate (EUR/MWh)", value=0.0, step=0.1, key="floor_eur_input")
-
         floor_rate_pct = st.number_input("Floor Rate (% of PPA Price)", value=0.0, step=1.0, key="floor_pct_input")
-
-        
-
+ 
         if floor_rate_eur > 0 and floor_rate_pct > 0:
-
             st.error("⚠️ Please specify either a Floor Rate (EUR) OR a Floor Rate (%), not both.")
 
         elif floor_rate_eur == 0 and floor_rate_pct == 0:
-
             st.warning("Please enter a floor rate for Market Following.")
 
-    with st.expander("📍 Weather Configuration (Custom Location)"):
+    with st.expander("📍 Weather Data (Specific Project Location)"):
         config_zone_lbl = st.selectbox("Select zone to customize:", options=sorted(display_options.keys()))
         config_zone_code = display_options[config_zone_lbl]
         
