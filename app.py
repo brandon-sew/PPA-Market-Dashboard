@@ -181,6 +181,28 @@ with st.sidebar:
     weather_options = ["Solar Radiation", "Wind Speed (100m)"]
 
     selected_weather_types = st.multiselect("Overlay Weather Data:", options=weather_options, key="weather_select")
+    # NEW: Weather Configuration (Add this under selected_weather_types)
+    with st.expander("📍 Weather Configuration (Custom Location)"):
+        config_zone_lbl = st.selectbox("Select zone to customize:", options=sorted(display_options.keys()))
+        config_zone_code = display_options[config_zone_lbl]
+        
+        # Initialize custom_coords in session state if not present
+        if "custom_coords" not in st.session_state:
+            st.session_state.custom_coords = {}
+            
+        # Get current lat/lon (either custom or default)
+        current_coords = st.session_state.custom_coords.get(config_zone_code, ZONE_COORDS.get(config_zone_code, [0.0, 0.0]))
+        
+        new_lat = st.number_input("Latitude", value=float(current_coords[0]), format="%.4f")
+        new_lon = st.number_input("Longitude", value=float(current_coords[1]), format="%.4f")
+        
+        c1, c2 = st.columns(2)
+        if c1.button("Apply Coordinates"):
+            st.session_state.custom_coords[config_zone_code] = [new_lat, new_lon]
+            st.rerun()
+        if c2.button("Reset to Default"):
+            st.session_state.custom_coords.pop(config_zone_code, None)
+            st.rerun()
 
     
 
@@ -233,18 +255,22 @@ with st.sidebar:
 
 # --- WEATHER FETCHING ---
 @st.cache_data(ttl=3600)
-def fetch_weather_data(codes, start_date, end_date):
+def fetch_weather_data(codes, start_date, end_date, overrides=None):
     if not codes: return pd.DataFrame()
     all_weather = []
+    
+    # Use overrides if provided, otherwise default ZONE_COORDS
+    effective_coords = ZONE_COORDS.copy()
+    if overrides:
+        effective_coords.update(overrides)
 
     for code in codes:
-        if code not in ZONE_COORDS: continue
-        lat, lon = ZONE_COORDS[code]
+        if code not in effective_coords: continue
+        lat, lon = effective_coords[code]
         url = "https://api.open-meteo.com/v1/forecast"
 
         params = {
-            "latitude": lat,
-            "longitude": lon,
+            "latitude": lat, "longitude": lon,
             "hourly": ["shortwave_radiation", "wind_speed_100m"],
             "start_date": start_date.strftime('%Y-%m-%d'),
             "end_date": end_date.strftime('%Y-%m-%d'),
@@ -255,8 +281,6 @@ def fetch_weather_data(codes, start_date, end_date):
             responses = open_meteo_client.weather_api(url, params=params)
             response = responses[0]
             hourly = response.Hourly()
-            
-            # Extract values first to get the exact count
             solar_values = hourly.Variables(0).ValuesAsNumpy()
             wind_values = hourly.Variables(1).ValuesAsNumpy()
 
@@ -274,8 +298,7 @@ def fetch_weather_data(codes, start_date, end_date):
 
             df = pd.DataFrame(data)
             df['Time'] = df['Time'].dt.tz_convert('Europe/Brussels')
-            all_weather.append(df) # <--- FIXED: Now appending the data to the list
-        
+            all_weather.append(df)
         except: continue
 
     return pd.concat(all_weather) if all_weather else pd.DataFrame()
@@ -570,7 +593,7 @@ if len(d_range) == 2:
 
     if selected_weather_types:
 
-        weather_df_raw = fetch_weather_data(selected_codes, d_range[0], d_range[1])
+        weather_df_raw = fetch_weather_data(selected_codes, d_range[0], d_range[1],st.session_state.get("custom_coords",{}))
 
 
 
@@ -914,14 +937,18 @@ with col_map:
             fig_map = px.choropleth(map_df, geojson=geojson_data, locations="Zone", featureidkey="properties.zoneName", color="Selected", color_continuous_scale=["#262730", "#007927"], custom_data=["AvgPrice", "Currency"])
             
             # --- ADDED: Weather Coordinate Markers ---
-            weather_lats = [coords[0] for coords in ZONE_COORDS.values()]
-            weather_lons = [coords[1] for coords in ZONE_COORDS.values()]
+            effective_coords = ZONE_COORDS.copy()
+            if "custom_coords" in st.session_state:
+                effective_coords.update(st.session_state.custom_coords)
+                
+            weather_lats = [coords[0] for coords in effective_coords.items() if code in all_found_codes]
+            weather_lons = [coords[1] for coords in effective_coords.items() if code in all_found_codes]
             fig_map.add_trace(go.Scattergeo(
                 lat=weather_lats,
                 lon=weather_lons,
                 mode='markers',
-                marker=dict(size=4, color='red', line=dict(width=1, color='white')),
-                name='Weather Station',
+                marker=dict(size=5, color='red', line=dict(width=1, color='white')),
+                name='Weather Point',
                 showlegend=False,
                 hoverinfo='skip'
             ))
