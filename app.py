@@ -843,8 +843,8 @@ with col_map:
                     # Create detailed hover text
                     hover_texts.append(
                         f"<b>Zone: {code}</b><br>"
-                        f"Lat: {lat_val:.4f}<br>"
-                        f"Lon: {lon_val:.4f}"
+                        f"Lat: {lat_val:.2f}<br>"
+                        f"Lon: {lon_val:.2f}"
                     )
 
             fig_map.add_trace(go.Scattergeo(
@@ -880,7 +880,10 @@ with col_map:
             map_event = st.plotly_chart(fig_map, width='stretch', on_select="rerun", selection_mode="points")
             
             # --- ADDED: Map Legend ---
-            st.caption("🔴 **Red dots** indicate the specific coordinates where weather data is currently being taken from.")
+            st.caption("""
+                🔴 **Red dots**: Default energy-weighted coordinates.  
+                🟠 **Orange dots**: Specific coordinates inputted by the user (return to default if needed).
+            """)
             # --------------------------
 
             if map_event and "selection" in map_event and map_event["selection"]["points"]:
