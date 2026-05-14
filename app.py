@@ -177,35 +177,9 @@ with st.sidebar:
     
 
     # NEW: Weather Overlays
-
     weather_options = ["Solar Radiation", "Wind Speed (100m)"]
-
     selected_weather_types = st.multiselect("Overlay Weather Data:", options=weather_options, key="weather_select")
-    # NEW: Weather Configuration (Add this under selected_weather_types)
-    with st.expander("📍 Weather Configuration (Custom Location)"):
-        config_zone_lbl = st.selectbox("Select zone to customize:", options=sorted(display_options.keys()))
-        config_zone_code = display_options[config_zone_lbl]
-        
-        # Initialize custom_coords in session state if not present
-        if "custom_coords" not in st.session_state:
-            st.session_state.custom_coords = {}
-            
-        # Get current lat/lon (either custom or default)
-        current_coords = st.session_state.custom_coords.get(config_zone_code, ZONE_COORDS.get(config_zone_code, [0.0, 0.0]))
-        
-        new_lat = st.number_input("Latitude", value=float(current_coords[0]), format="%.4f")
-        new_lon = st.number_input("Longitude", value=float(current_coords[1]), format="%.4f")
-        
-        c1, c2 = st.columns(2)
-        if c1.button("Apply Coordinates"):
-            st.session_state.custom_coords[config_zone_code] = [new_lat, new_lon]
-            st.rerun()
-        if c2.button("Reset to Default"):
-            st.session_state.custom_coords.pop(config_zone_code, None)
-            st.rerun()
-
     
-
     res = st.radio("Resolution", ["Monthly", "Daily", "60 min", "15 min"], horizontal=True, key="res_radio")
 
     
@@ -251,6 +225,28 @@ with st.sidebar:
         elif floor_rate_eur == 0 and floor_rate_pct == 0:
 
             st.warning("Please enter a floor rate for Market Following.")
+
+    with st.expander("📍 Weather Configuration (Custom Location)"):
+        config_zone_lbl = st.selectbox("Select zone to customize:", options=sorted(display_options.keys()))
+        config_zone_code = display_options[config_zone_lbl]
+        
+        # Initialize custom_coords in session state if not present
+        if "custom_coords" not in st.session_state:
+            st.session_state.custom_coords = {}
+            
+        # Get current lat/lon (either custom or default)
+        current_coords = st.session_state.custom_coords.get(config_zone_code, ZONE_COORDS.get(config_zone_code, [0.0, 0.0]))
+        
+        new_lat = st.number_input("Latitude", value=float(current_coords[0]), format="%.4f")
+        new_lon = st.number_input("Longitude", value=float(current_coords[1]), format="%.4f")
+        
+        c1, c2 = st.columns(2)
+        if c1.button("Apply Coordinates"):
+            st.session_state.custom_coords[config_zone_code] = [new_lat, new_lon]
+            st.rerun()
+        if c2.button("Reset to Default"):
+            st.session_state.custom_coords.pop(config_zone_code, None)
+            st.rerun()
             
 
 # --- WEATHER FETCHING ---
