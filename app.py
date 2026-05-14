@@ -824,6 +824,7 @@ with col_map:
             
             # --- ADDED: Weather Coordinate Markers ---
             # --- UPDATED: Dynamic Weather Coordinate Markers (Red vs Orange) ---
+            # --- UPDATED: Dynamic Weather Coordinate Markers (with Lat/Lon Hover) ---
             effective_coords = ZONE_COORDS.copy()
             custom_overrides = st.session_state.get("custom_coords", {})
             effective_coords.update(custom_overrides)
@@ -832,18 +833,19 @@ with col_map:
 
             for code, coords in effective_coords.items():
                 if code in all_found_codes:
-                    lats.append(coords[0])
-                    lons.append(coords[1])
+                    lat_val, lon_val = coords[0], coords[1]
+                    lats.append(lat_val)
+                    lons.append(lon_val)
                     
                     # Determine color: Orange if in custom_coords, Red otherwise
-                    if code in custom_overrides:
-                        colors.append('orange')
-                        status = "Custom"
-                    else:
-                        colors.append('red')
-                        status = "Default"
+                    colors.append('orange' if code in custom_overrides else 'red')
                     
-                    hover_texts.append(f"{code} ({status})")
+                    # Create detailed hover text
+                    hover_texts.append(
+                        f"<b>Zone: {code}</b><br>"
+                        f"Lat: {lat_val:.4f}<br>"
+                        f"Lon: {lon_val:.4f}"
+                    )
 
             fig_map.add_trace(go.Scattergeo(
                 lat=lats,
@@ -855,9 +857,8 @@ with col_map:
                     line=dict(width=1, color='white')
                 ),
                 text=hover_texts,
-                name='Weather Point',
-                showlegend=False,
-                hoverinfo='text'
+                hoverinfo='text', # Ensures only our custom text shows
+                showlegend=False
             ))
             # ------------------------------------------
 
