@@ -885,111 +885,77 @@ with col_chart:
 with col_map:
 
     def load_and_get_centers(folder_path):
-
         combined, centers, found_zones = {"type": "FeatureCollection", "features": []}, [], []
-
         files = glob.glob(os.path.join(folder_path, "*.geojson")) + glob.glob(os.path.join(folder_path, "*.txt"))
-
         for file in files:
-
             try:
-
                 with open(file, "r") as f:
-
                     data = json.load(f)
-
                     features = data["features"] if "features" in data else [data]
-
                     for feature in features:
-
                         combined["features"].append(feature)
-
                         z_name = feature["properties"]["zoneName"]
-
                         found_zones.append(z_name)
-
                         geom = feature["geometry"]
-
                         coords = np.array(geom["coordinates"][0]) if geom["type"] == "Polygon" else np.array(max(geom["coordinates"], key=lambda x: len(x[0]))[0])
-
                         min_lon, min_lat = np.min(coords, axis=0)
-
                         max_lon, max_lat = np.max(coords, axis=0)
-
                         centers.append({"Zone": z_name, "lat": (min_lat + max_lat) / 2, "lon": (min_lon + max_lon) / 2})
-
             except: continue
-
         return combined, pd.DataFrame(centers), found_zones
 
-
-
     geojson_folder = "geojson_files"
-
     if os.path.exists(geojson_folder):
-
         geojson_data, centers_df, all_found_codes = load_and_get_centers(geojson_folder)
-
         if geojson_data["features"]:
-
             avg_prices = plot_df.groupby('Zone')['Price'].mean().to_dict() if not plot_df.empty else {}
-
             map_df = pd.DataFrame([{"Zone": k, "Selected": 1 if k in selected_codes else 0, "AvgPrice": f"{avg_prices.get(k, 0):.2f}", "Currency": ZONE_NAMES.get(k, ["", "EUR"])[1]} for k in all_found_codes])
-
             
-
             fig_map = px.choropleth(map_df, geojson=geojson_data, locations="Zone", featureidkey="properties.zoneName", color="Selected", color_continuous_scale=["#262730", "#007927"], custom_data=["AvgPrice", "Currency"])
-
             
+            # --- ADDED: Weather Coordinate Markers ---
+            weather_lats = [coords[0] for coords in ZONE_COORDS.values()]
+            weather_lons = [coords[1] for coords in ZONE_COORDS.values()]
+            fig_map.add_trace(go.Scattergeo(
+                lat=weather_lats,
+                lon=weather_lons,
+                mode='markers',
+                marker=dict(size=4, color='red', line=dict(width=1, color='white')),
+                name='Weather Station',
+                showlegend=False,
+                hoverinfo='skip'
+            ))
+            # ------------------------------------------
 
             if not centers_df.empty:
-
                 label_df = centers_df[centers_df['Zone'].isin(all_found_codes)]
-
                 fig_map.add_trace(go.Scattergeo(
-
                     lon=label_df['lon'],
-
                     lat=label_df['lat'],
-
                     text=label_df['Zone'],
-
                     mode='text',
-
                     textfont=dict(size=10, color="white"),
-
                     showlegend=False,
-
                     hoverinfo='skip'
-
                 ))
 
-
-
             fig_map.update_geos(center=dict(lon=12, lat=52), projection_scale=7, projection_type="mercator", bgcolor="rgba(0,0,0,0)")
-
             fig_map.update_layout(margin={"r":0,"t":0,"l":0,"b":0}, height=500, coloraxis_showscale=False, paper_bgcolor="rgba(0,0,0,0)")
-
             
-
             map_event = st.plotly_chart(fig_map, width='stretch', on_select="rerun", selection_mode="points")
+            
+            # --- ADDED: Map Legend ---
+            st.caption("🔴 **Red dots** indicate the specific coordinates where weather data is currently being taken from.")
+            # --------------------------
 
             if map_event and "selection" in map_event and map_event["selection"]["points"]:
-
                 clicked_code = map_event["selection"]["points"][0].get("location")
-
                 if clicked_code:
-
                     clicked_label = f"{ZONE_NAMES[clicked_code][0]} ({clicked_code})"
-
                     curr = list(st.session_state.selected_zones)
-
                     if clicked_label in curr: curr.remove(clicked_label)
-
                     else: curr.append(clicked_label)
-
                     st.session_state.selected_zones = curr
-
                     st.rerun()
 
 
