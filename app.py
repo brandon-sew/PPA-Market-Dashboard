@@ -941,8 +941,8 @@ with col_map:
             if "custom_coords" in st.session_state:
                 effective_coords.update(st.session_state.custom_coords)
                 
-            weather_lats = [coords[0] for coords in effective_coords.items() if code in all_found_codes]
-            weather_lons = [coords[1] for coords in effective_coords.items() if code in all_found_codes]
+            weather_lats = [coords[0] for code, coords in effective_coords.items() if code in all_found_codes]
+            weather_lons = [coords[1] for code, coords in effective_coords.items() if code in all_found_codes]
             fig_map.add_trace(go.Scattergeo(
                 lat=weather_lats,
                 lon=weather_lons,
