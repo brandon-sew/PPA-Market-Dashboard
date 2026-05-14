@@ -127,8 +127,8 @@ with st.sidebar:
         # Get current lat/lon (either custom or default)
         current_coords = st.session_state.custom_coords.get(config_zone_code, ZONE_COORDS.get(config_zone_code, [0.0, 0.0]))
         
-        new_lat = st.number_input("Latitude", value=float(current_coords[0]), format="%.4f")
-        new_lon = st.number_input("Longitude", value=float(current_coords[1]), format="%.4f")
+        new_lat = st.number_input("Latitude", value=float(current_coords[0]), format="%.2f")
+        new_lon = st.number_input("Longitude", value=float(current_coords[1]), format="%.2f")
         
         c1, c2 = st.columns(2)
         if c1.button("Apply Coordinates"):
