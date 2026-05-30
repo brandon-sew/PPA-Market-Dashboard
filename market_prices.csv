@@ -478525,7 +478525,6 @@ Date,Metric,Price,Country
 2026-05-19,Solar Capture,142.11,SI
 2026-05-19,Wind Onshore Generation,1.68,SI
 2026-05-19,Wind Onshore Capture,146.25,SI
-2026-05-27,Wind Onshore Capture,37.16,SI
 2026-05-19,Solar Forecast,669.83,SI
 2026-05-19,Baseload,157.38,SK
 2026-05-19,Solar Generation,746.0,SK
@@ -478586,7 +478585,318 @@ Date,Metric,Price,Country
 2026-05-19,Solar Forecast,845.0,IT_CALA
 2026-05-19,Wind Onshore Forecast,10715.0,IT_CALA
 2026-05-20,Baseload,138.48,CH
-2026-05-21,Baseload,109.59,CH
+2026-05-20,Solar Generation,4269.19,CH
+2026-05-20,Solar Capture,121.12,CH
+2026-05-20,Wind Onshore Generation,111.24,CH
+2026-05-20,Wind Onshore Capture,134.08,CH
+2026-05-20,Solar Forecast,4336.15,CH
+2026-05-20,Wind Onshore Forecast,66.68,CH
+2026-05-20,Baseload,126.68,BE
+2026-05-20,Solar Generation,4391.23,BE
+2026-05-20,Solar Capture,73.28,BE
+2026-05-20,Wind Onshore Generation,8269.26,BE
+2026-05-20,Wind Onshore Capture,110.7,BE
+2026-05-20,Wind Offshore Generation,12032.62,BE
+2026-05-20,Wind Offshore Capture,117.89,BE
+2026-05-20,Solar Forecast,7108.43,BE
+2026-05-20,Wind Onshore Forecast,7485.8,BE
+2026-05-20,Wind Offshore Forecast,13244.18,BE
+2026-05-20,Baseload,147.4,AT
+2026-05-20,Solar Generation,7924.0,AT
+2026-05-20,Solar Capture,119.11,AT
+2026-05-20,Wind Onshore Generation,66344.0,AT
+2026-05-20,Wind Onshore Capture,147.24,AT
+2026-05-20,Solar Forecast,8916.0,AT
+2026-05-20,Wind Onshore Forecast,32388.0,AT
+2026-05-20,Baseload,144.56,CZ
+2026-05-20,Solar Generation,7497.45,CZ
+2026-05-20,Solar Capture,122.03,CZ
+2026-05-20,Wind Onshore Generation,1745.12,CZ
+2026-05-20,Wind Onshore Capture,145.68,CZ
+2026-05-20,Solar Forecast,7340.0,CZ
+2026-05-20,Baseload,157.81,IE_SEM
+2026-05-20,Solar Generation,0.0,IE_SEM
+2026-05-20,Wind Onshore Generation,12975.73,IE_SEM
+2026-05-20,Wind Onshore Capture,155.73,IE_SEM
+2026-05-20,Wind Onshore Forecast,18318.76,IE_SEM
+2026-05-20,Baseload,141.44,DE_LU
+2026-05-20,Solar Generation,132933.64,DE_LU
+2026-05-20,Solar Capture,115.91,DE_LU
+2026-05-20,Wind Onshore Generation,258385.32,DE_LU
+2026-05-20,Wind Onshore Capture,138.52,DE_LU
+2026-05-20,Wind Offshore Generation,71000.35,DE_LU
+2026-05-20,Wind Offshore Capture,140.8,DE_LU
+2026-05-20,Solar Forecast,152134.74,DE_LU
+2026-05-20,Wind Onshore Forecast,240014.61,DE_LU
+2026-05-20,Wind Offshore Forecast,67946.15,DE_LU
+2026-05-20,Baseload,80.81,FR
+2026-05-20,Solar Generation,99354.76,FR
+2026-05-20,Solar Capture,29.11,FR
+2026-05-20,Wind Onshore Generation,75031.25,FR
+2026-05-20,Wind Onshore Capture,65.02,FR
+2026-05-20,Wind Offshore Generation,5057.02,FR
+2026-05-20,Wind Offshore Capture,68.07,FR
+2026-05-20,Solar Forecast,103868.71,FR
+2026-05-20,Wind Onshore Forecast,100937.43,FR
+2026-05-20,Wind Offshore Forecast,6234.57,FR
+2026-05-20,Baseload,133.01,NL
+2026-05-20,Solar Generation,490.23,NL
+2026-05-20,Solar Capture,102.16,NL
+2026-05-20,Wind Onshore Generation,12948.98,NL
+2026-05-20,Wind Onshore Capture,127.05,NL
+2026-05-20,Wind Offshore Generation,88542.69,NL
+2026-05-20,Wind Offshore Capture,133.22,NL
+2026-05-20,Solar Forecast,30159.0,NL
+2026-05-20,Wind Onshore Forecast,36944.0,NL
+2026-05-20,Wind Offshore Forecast,23213.0,NL
+2026-05-20,Baseload,141.44,DK_1
+2026-05-20,Solar Generation,5929.17,DK_1
+2026-05-20,Solar Capture,119.47,DK_1
+2026-05-20,Wind Onshore Generation,11944.69,DK_1
+2026-05-20,Wind Onshore Capture,140.41,DK_1
+2026-05-20,Wind Offshore Generation,22508.59,DK_1
+2026-05-20,Wind Offshore Capture,143.25,DK_1
+2026-05-20,Solar Forecast,8090.05,DK_1
+2026-05-20,Wind Onshore Forecast,13022.17,DK_1
+2026-05-20,Wind Offshore Forecast,13961.17,DK_1
+2026-05-20,Baseload,144.54,PL
+2026-05-20,Solar Generation,35768.05,PL
+2026-05-20,Solar Capture,120.3,PL
+2026-05-20,Wind Onshore Generation,18381.24,PL
+2026-05-20,Wind Onshore Capture,145.43,PL
+2026-05-20,Solar Forecast,52983.11,PL
+2026-05-20,Wind Onshore Forecast,16085.6,PL
+2026-05-20,Baseload,68.97,EE
+2026-05-20,Solar Generation,1407.6,EE
+2026-05-20,Solar Capture,80.5,EE
+2026-05-20,Wind Onshore Generation,260.0,EE
+2026-05-20,Wind Onshore Capture,65.56,EE
+2026-05-20,Solar Forecast,454.5,EE
+2026-05-21,Solar Forecast,0.0,EE
+2026-05-20,Wind Onshore Forecast,278.23,EE
+2026-05-21,Wind Onshore Forecast,0.0,EE
+2026-05-20,Baseload,55.87,FI
+2026-05-20,Solar Generation,3379.96,FI
+2026-05-20,Solar Capture,60.27,FI
+2026-05-20,Wind Onshore Generation,55086.9,FI
+2026-05-20,Wind Onshore Capture,53.94,FI
+2026-05-20,Solar Forecast,3291.9,FI
+2026-05-20,Wind Onshore Forecast,55226.0,FI
+2026-05-20,Baseload,141.56,DK_2
+2026-05-20,Solar Generation,2445.86,DK_2
+2026-05-20,Solar Capture,120.11,DK_2
+2026-05-20,Wind Onshore Generation,1326.22,DK_2
+2026-05-20,Wind Onshore Capture,148.46,DK_2
+2026-05-20,Wind Offshore Generation,2032.24,DK_2
+2026-05-20,Wind Offshore Capture,138.16,DK_2
+2026-05-20,Solar Forecast,2187.74,DK_2
+2026-05-20,Wind Onshore Forecast,1556.17,DK_2
+2026-05-20,Wind Offshore Forecast,3481.5,DK_2
+2026-05-20,Baseload,142.36,LV
+2026-05-20,Solar Generation,449.0,LV
+2026-05-20,Solar Capture,81.72,LV
+2026-05-20,Wind Onshore Generation,53.0,LV
+2026-05-20,Wind Onshore Capture,151.97,LV
+2026-05-20,Solar Forecast,3392.2,LV
+2026-05-20,Wind Onshore Forecast,630.1,LV
+2026-05-20,Baseload,142.36,LT
+2026-05-20,Solar Generation,2292.23,LT
+2026-05-20,Solar Capture,109.33,LT
+2026-05-20,Wind Onshore Generation,1683.14,LT
+2026-05-20,Wind Onshore Capture,151.53,LT
+2026-05-20,Solar Forecast,2959.09,LT
+2026-05-20,Wind Onshore Forecast,4432.76,LT
+2026-05-20,Baseload,130.51,NO_1
+2026-05-20,Solar Generation,11.86,NO_1
+2026-05-20,Solar Capture,105.58,NO_1
+2026-05-20,Wind Onshore Generation,1119.68,NO_1
+2026-05-20,Wind Onshore Capture,126.59,NO_1
+2026-05-20,Solar Forecast,0.0,NO_1
+2026-05-20,Wind Onshore Forecast,1938.23,NO_1
+2026-05-20,Baseload,133.19,NO_2
+2026-05-20,Wind Onshore Generation,8249.05,NO_2
+2026-05-20,Wind Onshore Capture,128.45,NO_2
+2026-05-20,Wind Offshore Generation,83.17,NO_2
+2026-05-20,Wind Offshore Capture,133.85,NO_2
+2026-05-20,Solar Forecast,0.0,NO_2
+2026-05-20,Wind Onshore Forecast,9704.65,NO_2
+2026-05-20,Wind Offshore Forecast,102.8,NO_2
+2026-05-20,Baseload,80.77,NO_3
+2026-05-20,Solar Generation,0.0,NO_3
+2026-05-20,Wind Onshore Generation,5881.2,NO_3
+2026-05-20,Wind Onshore Capture,80.14,NO_3
+2026-05-20,Solar Forecast,0.0,NO_3
+2026-05-20,Wind Onshore Forecast,3330.98,NO_3
+2026-05-20,Baseload,26.47,NO_4
+2026-05-20,Wind Onshore Generation,1855.91,NO_4
+2026-05-20,Wind Onshore Capture,26.28,NO_4
+2026-05-20,Solar Forecast,0.0,NO_4
+2026-05-20,Wind Onshore Forecast,1985.25,NO_4
+2026-05-20,Baseload,119.36,NO_5
+2026-05-20,Solar Forecast,0.0,NO_5
+2026-05-20,Wind Onshore Forecast,0.0,NO_5
+2026-05-20,Baseload,50.67,SE_1
+2026-05-20,Solar Generation,24.69,SE_1
+2026-05-20,Solar Capture,55.51,SE_1
+2026-05-20,Wind Onshore Generation,10121.55,SE_1
+2026-05-20,Wind Onshore Capture,48.46,SE_1
+2026-05-20,Solar Forecast,21.06,SE_1
+2026-05-20,Wind Onshore Forecast,10274.03,SE_1
+2026-05-20,Baseload,51.53,SE_2
+2026-05-20,Solar Generation,244.27,SE_2
+2026-05-20,Solar Capture,56.34,SE_2
+2026-05-20,Wind Onshore Generation,38091.53,SE_2
+2026-05-20,Wind Onshore Capture,47.67,SE_2
+2026-05-20,Solar Forecast,239.95,SE_2
+2026-05-20,Wind Onshore Forecast,42936.12,SE_2
+2026-05-20,Baseload,97.42,SE_3
+2026-05-20,Solar Generation,4125.24,SE_3
+2026-05-20,Solar Capture,88.33,SE_3
+2026-05-20,Wind Onshore Generation,15322.84,SE_3
+2026-05-20,Wind Onshore Capture,96.76,SE_3
+2026-05-20,Solar Forecast,4222.63,SE_3
+2026-05-20,Wind Onshore Forecast,15392.79,SE_3
+2026-05-20,Baseload,146.95,BG
+2026-05-20,Solar Generation,4749.38,BG
+2026-05-20,Solar Capture,139.12,BG
+2026-05-20,Wind Onshore Generation,2252.8,BG
+2026-05-20,Wind Onshore Capture,143.78,BG
+2026-05-20,Solar Forecast,1535.0,BG
+2026-05-20,Wind Onshore Forecast,972.0,BG
+2026-05-20,Baseload,141.44,SE_4
+2026-05-20,Solar Generation,905.68,SE_4
+2026-05-20,Solar Capture,113.91,SE_4
+2026-05-20,Wind Onshore Generation,6996.22,SE_4
+2026-05-20,Wind Onshore Capture,140.9,SE_4
+2026-05-20,Solar Forecast,1212.88,SE_4
+2026-05-20,Wind Onshore Forecast,7158.62,SE_4
+2026-05-20,Baseload,146.87,GR
+2026-05-20,Solar Generation,15455.0,GR
+2026-05-20,Solar Capture,114.0,GR
+2026-05-20,Wind Onshore Generation,23569.0,GR
+2026-05-20,Wind Onshore Capture,146.33,GR
+2026-05-20,Solar Forecast,13180.0,GR
+2026-05-20,Wind Onshore Forecast,23860.0,GR
+2026-05-20,Baseload,72.87,ES
+2026-05-20,Solar Generation,259412.0,ES
+2026-05-20,Solar Capture,25.09,ES
+2026-05-20,Wind Onshore Generation,109072.0,ES
+2026-05-20,Wind Onshore Capture,83.79,ES
+2026-05-20,Wind Offshore Generation,0.0,ES
+2026-05-20,Solar Forecast,233099.0,ES
+2026-05-20,Wind Onshore Forecast,119180.0,ES
+2026-05-20,Baseload,145.54,HR
+2026-05-20,Solar Generation,1182.4,HR
+2026-05-20,Solar Capture,113.17,HR
+2026-05-20,Wind Onshore Generation,8820.4,HR
+2026-05-20,Wind Onshore Capture,148.68,HR
+2026-05-20,Solar Forecast,1369.4,HR
+2026-05-20,Wind Onshore Forecast,10511.63,HR
+2026-05-20,Baseload,62.9,ME
+2026-05-20,Wind Onshore Generation,485.33,ME
+2026-05-20,Wind Onshore Capture,64.72,ME
+2026-05-20,Solar Forecast,13.18,ME
+2026-05-20,Wind Onshore Forecast,637.17,ME
+2026-05-20,Baseload,107.42,MK
+2026-05-20,Wind Onshore Generation,246.2,MK
+2026-05-20,Wind Onshore Capture,107.42,MK
+2026-05-20,Solar Forecast,108.6,MK
+2026-05-20,Wind Onshore Forecast,422.27,MK
+2026-05-20,Wind Offshore Forecast,0.0,MK
+2026-05-20,Baseload,77.64,PT
+2026-05-20,Solar Generation,6930.2,PT
+2026-05-20,Solar Capture,6.99,PT
+2026-05-20,Wind Onshore Generation,1758.9,PT
+2026-05-20,Wind Onshore Capture,85.11,PT
+2026-05-20,Wind Offshore Generation,37.7,PT
+2026-05-20,Wind Offshore Capture,87.93,PT
+2026-05-21,Wind Offshore Capture,93.4,PT
+2026-05-20,Solar Forecast,6634.1,PT
+2026-05-20,Wind Onshore Forecast,1987.7,PT
+2026-05-20,Wind Offshore Forecast,41.5,PT
+2026-05-20,Baseload,152.35,HU
+2026-05-20,Solar Generation,12535.48,HU
+2026-05-20,Solar Capture,117.9,HU
+2026-05-20,Wind Onshore Generation,3714.92,HU
+2026-05-20,Wind Onshore Capture,155.91,HU
+2026-05-20,Solar Forecast,10853.17,HU
+2026-05-20,Wind Onshore Forecast,3246.01,HU
+2026-05-20,Baseload,105.02,RS
+2026-05-20,Wind Onshore Generation,1793.66,RS
+2026-05-20,Wind Onshore Capture,105.97,RS
+2026-05-20,Wind Onshore Forecast,1973.34,RS
+2026-05-20,Baseload,146.95,RO
+2026-05-20,Solar Generation,3568.0,RO
+2026-05-20,Solar Capture,114.23,RO
+2026-05-20,Wind Onshore Generation,51841.0,RO
+2026-05-20,Wind Onshore Capture,147.91,RO
+2026-05-20,Solar Forecast,5094.77,RO
+2026-05-20,Wind Onshore Forecast,34502.13,RO
+2026-05-20,Baseload,149.22,SI
+2026-05-20,Solar Generation,2091.3,SI
+2026-05-20,Solar Capture,129.54,SI
+2026-05-20,Wind Onshore Generation,10.77,SI
+2026-05-20,Wind Onshore Capture,147.31,SI
+2026-05-20,Solar Forecast,2070.72,SI
+2026-05-20,Baseload,144.98,SK
+2026-05-20,Solar Generation,701.2,SK
+2026-05-20,Solar Capture,114.71,SK
+2026-05-20,Wind Onshore Generation,10.3,SK
+2026-05-20,Wind Onshore Capture,152.59,SK
+2026-05-20,Solar Forecast,425.0,SK
+2026-05-20,Wind Onshore Forecast,28.0,SK
+2026-05-20,Baseload,157.71,IT_NORD
+2026-05-20,Solar Generation,22927.0,IT_NORD
+2026-05-20,Solar Capture,134.76,IT_NORD
+2026-05-20,Wind Onshore Generation,81.0,IT_NORD
+2026-05-20,Wind Onshore Capture,151.71,IT_NORD
+2026-05-20,Solar Forecast,24097.0,IT_NORD
+2026-05-20,Wind Onshore Forecast,254.0,IT_NORD
+2026-05-20,Baseload,157.71,IT_CNOR
+2026-05-20,Solar Generation,4831.0,IT_CNOR
+2026-05-20,Solar Capture,133.99,IT_CNOR
+2026-05-20,Wind Onshore Generation,517.0,IT_CNOR
+2026-05-20,Wind Onshore Capture,155.72,IT_CNOR
+2026-05-20,Solar Forecast,4459.0,IT_CNOR
+2026-05-20,Wind Onshore Forecast,348.0,IT_CNOR
+2026-05-20,Baseload,157.71,IT_CSUD
+2026-05-20,Solar Generation,13275.0,IT_CSUD
+2026-05-20,Solar Capture,134.82,IT_CSUD
+2026-05-20,Wind Onshore Generation,11679.0,IT_CSUD
+2026-05-20,Wind Onshore Capture,156.7,IT_CSUD
+2026-05-20,Solar Forecast,14384.0,IT_CSUD
+2026-05-20,Wind Onshore Forecast,6652.0,IT_CSUD
+2026-05-20,Baseload,153.88,IT_SUD
+2026-05-20,Solar Generation,8369.0,IT_SUD
+2026-05-20,Solar Capture,130.99,IT_SUD
+2026-05-20,Wind Onshore Generation,56100.0,IT_SUD
+2026-05-20,Wind Onshore Capture,157.92,IT_SUD
+2026-05-20,Wind Offshore Generation,703.0,IT_SUD
+2026-05-20,Wind Offshore Capture,159.48,IT_SUD
+2026-05-20,Solar Forecast,8061.0,IT_SUD
+2026-05-20,Wind Onshore Forecast,40056.0,IT_SUD
+2026-05-20,Baseload,153.88,IT_SICI
+2026-05-20,Solar Generation,8438.0,IT_SICI
+2026-05-20,Solar Capture,132.32,IT_SICI
+2026-05-20,Wind Onshore Generation,19392.0,IT_SICI
+2026-05-20,Wind Onshore Capture,156.91,IT_SICI
+2026-05-20,Solar Forecast,6808.0,IT_SICI
+2026-05-20,Wind Onshore Forecast,13238.0,IT_SICI
+2026-05-20,Baseload,153.88,IT_CALA
+2026-05-20,Solar Generation,1022.0,IT_CALA
+2026-05-20,Solar Capture,129.49,IT_CALA
+2026-05-20,Wind Onshore Generation,11673.0,IT_CALA
+2026-05-20,Wind Onshore Capture,158.31,IT_CALA
+2026-05-20,Solar Forecast,922.0,IT_CALA
+2026-05-20,Wind Onshore Forecast,11125.0,IT_CALA
+2026-05-20,Baseload,154.14,IT_SARD
+2026-05-20,Solar Generation,5102.0,IT_SARD
+2026-05-20,Solar Capture,136.26,IT_SARD
+2026-05-20,Wind Onshore Generation,6349.0,IT_SARD
+2026-05-20,Wind Onshore Capture,156.02,IT_SARD
+2026-05-20,Solar Forecast,4521.0,IT_SARD
+2026-05-20,Wind Onshore Forecast,6105.0,IT_SARD
+2026-05-21,Baseload,132.59,CH
 2026-05-22,Baseload,104.74,CH
 2026-05-23,Baseload,69.05,CH
 2026-05-24,Baseload,58.23,CH
@@ -478595,9 +478905,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,112.65,CH
 2026-05-28,Baseload,111.11,CH
 2026-05-29,Baseload,102.47,CH
-2026-05-30,Baseload,60.66,CH
-2026-05-20,Solar Generation,4269.19,CH
-2026-05-21,Solar Generation,36013.21,CH
+2026-05-30,Baseload,80.3,CH
+2026-05-31,Baseload,76.41,CH
+2026-05-21,Solar Generation,11178.56,CH
 2026-05-22,Solar Generation,35752.5,CH
 2026-05-23,Solar Generation,34985.42,CH
 2026-05-24,Solar Generation,35037.69,CH
@@ -478605,9 +478915,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Generation,33391.05,CH
 2026-05-27,Solar Generation,32357.64,CH
 2026-05-28,Solar Generation,34205.26,CH
-2026-05-29,Solar Generation,33543.02,CH
-2026-05-20,Solar Capture,121.12,CH
-2026-05-21,Solar Capture,61.66,CH
+2026-05-29,Solar Generation,36133.37,CH
+2026-05-30,Solar Generation,24709.44,CH
+2026-05-21,Solar Capture,86.57,CH
 2026-05-22,Solar Capture,51.28,CH
 2026-05-23,Solar Capture,-6.85,CH
 2026-05-24,Solar Capture,-28.52,CH
@@ -478615,9 +478925,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Capture,68.71,CH
 2026-05-27,Solar Capture,87.12,CH
 2026-05-28,Solar Capture,53.59,CH
-2026-05-29,Solar Capture,37.09,CH
-2026-05-20,Wind Onshore Generation,111.24,CH
-2026-05-21,Wind Onshore Generation,195.42,CH
+2026-05-29,Solar Capture,45.17,CH
+2026-05-30,Solar Capture,7.37,CH
+2026-05-21,Wind Onshore Generation,96.76,CH
 2026-05-22,Wind Onshore Generation,156.94,CH
 2026-05-23,Wind Onshore Generation,259.58,CH
 2026-05-24,Wind Onshore Generation,482.81,CH
@@ -478625,9 +478935,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,140.11,CH
 2026-05-27,Wind Onshore Generation,242.89,CH
 2026-05-28,Wind Onshore Generation,518.22,CH
-2026-05-29,Wind Onshore Generation,287.01,CH
-2026-05-20,Wind Onshore Capture,134.08,CH
-2026-05-21,Wind Onshore Capture,111.53,CH
+2026-05-29,Wind Onshore Generation,488.07,CH
+2026-05-30,Wind Onshore Generation,91.92,CH
+2026-05-21,Wind Onshore Capture,132.98,CH
 2026-05-22,Wind Onshore Capture,115.02,CH
 2026-05-23,Wind Onshore Capture,88.06,CH
 2026-05-24,Wind Onshore Capture,62.94,CH
@@ -478635,9 +478945,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,120.71,CH
 2026-05-27,Wind Onshore Capture,114.62,CH
 2026-05-28,Wind Onshore Capture,114.06,CH
-2026-05-29,Wind Onshore Capture,81.8,CH
-2026-05-20,Solar Forecast,4336.15,CH
-2026-05-21,Solar Forecast,33491.1,CH
+2026-05-29,Wind Onshore Capture,106.3,CH
+2026-05-30,Wind Onshore Capture,73.88,CH
+2026-05-21,Solar Forecast,10108.31,CH
 2026-05-22,Solar Forecast,34617.08,CH
 2026-05-23,Solar Forecast,33830.84,CH
 2026-05-24,Solar Forecast,34099.95,CH
@@ -478646,9 +478956,8 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,32262.28,CH
 2026-05-28,Solar Forecast,34528.39,CH
 2026-05-29,Solar Forecast,35218.62,CH
-2026-05-30,Solar Forecast,23886.91,CH
-2026-05-20,Wind Onshore Forecast,66.68,CH
-2026-05-21,Wind Onshore Forecast,247.71,CH
+2026-05-30,Solar Forecast,27490.81,CH
+2026-05-21,Wind Onshore Forecast,145.55,CH
 2026-05-22,Wind Onshore Forecast,137.18,CH
 2026-05-23,Wind Onshore Forecast,212.47,CH
 2026-05-24,Wind Onshore Forecast,446.02,CH
@@ -478657,9 +478966,8 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,229.92,CH
 2026-05-28,Wind Onshore Forecast,432.98,CH
 2026-05-29,Wind Onshore Forecast,417.06,CH
-2026-05-30,Wind Onshore Forecast,87.71,CH
-2026-05-20,Baseload,126.68,BE
-2026-05-21,Baseload,106.59,BE
+2026-05-30,Wind Onshore Forecast,123.54,CH
+2026-05-21,Baseload,123.54,BE
 2026-05-22,Baseload,96.61,BE
 2026-05-23,Baseload,74.35,BE
 2026-05-24,Baseload,67.41,BE
@@ -478668,9 +478976,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,83.21,BE
 2026-05-28,Baseload,117.14,BE
 2026-05-29,Baseload,104.32,BE
-2026-05-30,Baseload,65.59,BE
-2026-05-20,Solar Generation,4391.23,BE
-2026-05-21,Solar Generation,56840.14,BE
+2026-05-30,Baseload,82.62,BE
+2026-05-31,Baseload,73.8,BE
+2026-05-21,Solar Generation,19474.32,BE
 2026-05-22,Solar Generation,70457.59,BE
 2026-05-23,Solar Generation,65861.71,BE
 2026-05-24,Solar Generation,66411.8,BE
@@ -478678,9 +478986,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Generation,69769.15,BE
 2026-05-27,Solar Generation,68024.05,BE
 2026-05-28,Solar Generation,68823.73,BE
-2026-05-29,Solar Generation,50826.54,BE
-2026-05-20,Solar Capture,73.28,BE
-2026-05-21,Solar Capture,63.23,BE
+2026-05-29,Solar Generation,53860.94,BE
+2026-05-30,Solar Generation,32941.85,BE
+2026-05-21,Solar Capture,56.66,BE
 2026-05-22,Solar Capture,37.06,BE
 2026-05-23,Solar Capture,5.26,BE
 2026-05-24,Solar Capture,-12.02,BE
@@ -478688,49 +478996,49 @@ Date,Metric,Price,Country
 2026-05-26,Solar Capture,28.47,BE
 2026-05-27,Solar Capture,21.41,BE
 2026-05-28,Solar Capture,35.0,BE
-2026-05-29,Solar Capture,32.8,BE
-2026-05-20,Wind Onshore Generation,8269.26,BE
-2026-05-21,Wind Onshore Generation,6250.27,BE
+2026-05-29,Solar Capture,38.12,BE
+2026-05-30,Solar Capture,11.87,BE
+2026-05-21,Wind Onshore Generation,351.44,BE
 2026-05-22,Wind Onshore Generation,3531.18,BE
 2026-05-23,Wind Onshore Generation,1873.04,BE
 2026-05-24,Wind Onshore Generation,4180.53,BE
 2026-05-25,Wind Onshore Generation,5157.36,BE
 2026-05-26,Wind Onshore Generation,4716.37,BE
 2026-05-27,Wind Onshore Generation,12725.12,BE
-2026-05-28,Wind Onshore Generation,7781.51,BE
-2026-05-29,Wind Onshore Generation,10913.84,BE
-2026-05-20,Wind Onshore Capture,110.7,BE
-2026-05-21,Wind Onshore Capture,114.84,BE
+2026-05-28,Wind Onshore Generation,7650.41,BE
+2026-05-29,Wind Onshore Generation,12628.23,BE
+2026-05-30,Wind Onshore Generation,3497.77,BE
+2026-05-21,Wind Onshore Capture,113.21,BE
 2026-05-22,Wind Onshore Capture,120.83,BE
 2026-05-23,Wind Onshore Capture,99.43,BE
 2026-05-24,Wind Onshore Capture,111.08,BE
 2026-05-25,Wind Onshore Capture,114.25,BE
 2026-05-26,Wind Onshore Capture,127.24,BE
 2026-05-27,Wind Onshore Capture,96.75,BE
-2026-05-28,Wind Onshore Capture,140.77,BE
-2026-05-29,Wind Onshore Capture,96.15,BE
-2026-05-20,Wind Offshore Generation,12032.62,BE
-2026-05-21,Wind Offshore Generation,8772.76,BE
+2026-05-28,Wind Onshore Capture,141.21,BE
+2026-05-29,Wind Onshore Capture,102.72,BE
+2026-05-30,Wind Onshore Capture,79.99,BE
+2026-05-21,Wind Offshore Generation,592.9,BE
 2026-05-22,Wind Offshore Generation,1865.6,BE
 2026-05-23,Wind Offshore Generation,5177.63,BE
 2026-05-24,Wind Offshore Generation,2267.39,BE
 2026-05-25,Wind Offshore Generation,1036.14,BE
 2026-05-26,Wind Offshore Generation,1356.1,BE
-2026-05-27,Wind Offshore Generation,15585.81,BE
+2026-05-27,Wind Offshore Generation,15664.08,BE
 2026-05-28,Wind Offshore Generation,11687.21,BE
-2026-05-29,Wind Offshore Generation,4341.26,BE
-2026-05-20,Wind Offshore Capture,117.89,BE
-2026-05-21,Wind Offshore Capture,110.52,BE
+2026-05-29,Wind Offshore Generation,4406.39,BE
+2026-05-30,Wind Offshore Generation,943.86,BE
+2026-05-21,Wind Offshore Capture,53.5,BE
 2026-05-22,Wind Offshore Capture,122.77,BE
 2026-05-23,Wind Offshore Capture,71.38,BE
 2026-05-24,Wind Offshore Capture,81.0,BE
 2026-05-25,Wind Offshore Capture,100.38,BE
 2026-05-26,Wind Offshore Capture,113.19,BE
-2026-05-27,Wind Offshore Capture,70.81,BE
+2026-05-27,Wind Offshore Capture,70.82,BE
 2026-05-28,Wind Offshore Capture,110.98,BE
-2026-05-29,Wind Offshore Capture,115.08,BE
-2026-05-20,Solar Forecast,7108.43,BE
-2026-05-21,Solar Forecast,58313.15,BE
+2026-05-29,Wind Offshore Capture,115.82,BE
+2026-05-30,Wind Offshore Capture,63.23,BE
+2026-05-21,Solar Forecast,18663.2,BE
 2026-05-22,Solar Forecast,66765.56,BE
 2026-05-23,Solar Forecast,64064.89,BE
 2026-05-24,Solar Forecast,65369.27,BE
@@ -478739,9 +479047,9 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,63754.82,BE
 2026-05-28,Solar Forecast,66493.5,BE
 2026-05-29,Solar Forecast,53068.03,BE
-2026-05-30,Solar Forecast,50496.5,BE
-2026-05-20,Wind Onshore Forecast,7485.8,BE
-2026-05-21,Wind Onshore Forecast,6502.35,BE
+2026-05-30,Solar Forecast,59057.8,BE
+2026-05-31,Solar Forecast,25770.22,BE
+2026-05-21,Wind Onshore Forecast,541.45,BE
 2026-05-22,Wind Onshore Forecast,3590.75,BE
 2026-05-23,Wind Onshore Forecast,3042.42,BE
 2026-05-24,Wind Onshore Forecast,4883.8,BE
@@ -478750,9 +479058,9 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,12006.92,BE
 2026-05-28,Wind Onshore Forecast,6904.5,BE
 2026-05-29,Wind Onshore Forecast,7855.8,BE
-2026-05-30,Wind Onshore Forecast,1661.25,BE
-2026-05-20,Wind Offshore Forecast,13244.18,BE
-2026-05-21,Wind Offshore Forecast,10455.72,BE
+2026-05-30,Wind Onshore Forecast,2488.78,BE
+2026-05-31,Wind Onshore Forecast,6176.58,BE
+2026-05-21,Wind Offshore Forecast,893.38,BE
 2026-05-22,Wind Offshore Forecast,4526.18,BE
 2026-05-23,Wind Offshore Forecast,10124.2,BE
 2026-05-24,Wind Offshore Forecast,4869.0,BE
@@ -478761,9 +479069,9 @@ Date,Metric,Price,Country
 2026-05-27,Wind Offshore Forecast,30615.88,BE
 2026-05-28,Wind Offshore Forecast,17479.0,BE
 2026-05-29,Wind Offshore Forecast,4324.45,BE
-2026-05-30,Wind Offshore Forecast,931.18,BE
-2026-05-20,Baseload,147.4,AT
-2026-05-21,Baseload,108.25,AT
+2026-05-30,Wind Offshore Forecast,4293.1,BE
+2026-05-31,Wind Offshore Forecast,3790.6,BE
+2026-05-21,Baseload,132.42,AT
 2026-05-22,Baseload,108.45,AT
 2026-05-23,Baseload,82.9,AT
 2026-05-24,Baseload,68.05,AT
@@ -478772,9 +479080,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,91.16,AT
 2026-05-28,Baseload,116.61,AT
 2026-05-29,Baseload,100.74,AT
-2026-05-30,Baseload,68.55,AT
-2026-05-20,Solar Generation,7924.0,AT
-2026-05-21,Solar Generation,120756.0,AT
+2026-05-30,Baseload,88.52,AT
+2026-05-31,Baseload,77.68,AT
+2026-05-21,Solar Generation,41728.0,AT
 2026-05-22,Solar Generation,164396.0,AT
 2026-05-23,Solar Generation,171460.0,AT
 2026-05-24,Solar Generation,163000.0,AT
@@ -478782,9 +479090,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Generation,173540.0,AT
 2026-05-27,Solar Generation,127188.0,AT
 2026-05-28,Solar Generation,163540.0,AT
-2026-05-29,Solar Generation,181912.0,AT
-2026-05-20,Solar Capture,119.11,AT
-2026-05-21,Solar Capture,52.83,AT
+2026-05-29,Solar Generation,187384.0,AT
+2026-05-30,Solar Generation,101916.0,AT
+2026-05-21,Solar Capture,65.89,AT
 2026-05-22,Solar Capture,44.19,AT
 2026-05-23,Solar Capture,5.06,AT
 2026-05-24,Solar Capture,-16.22,AT
@@ -478792,9 +479100,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Capture,29.1,AT
 2026-05-27,Solar Capture,27.63,AT
 2026-05-28,Solar Capture,32.32,AT
-2026-05-29,Solar Capture,24.48,AT
-2026-05-20,Wind Onshore Generation,66344.0,AT
-2026-05-21,Wind Onshore Generation,193148.0,AT
+2026-05-29,Solar Capture,29.18,AT
+2026-05-30,Solar Capture,16.39,AT
+2026-05-21,Wind Onshore Generation,55728.0,AT
 2026-05-22,Wind Onshore Generation,90120.0,AT
 2026-05-23,Wind Onshore Generation,59772.0,AT
 2026-05-24,Wind Onshore Generation,25236.0,AT
@@ -478802,9 +479110,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,30448.0,AT
 2026-05-27,Wind Onshore Generation,82116.0,AT
 2026-05-28,Wind Onshore Generation,105792.0,AT
-2026-05-29,Wind Onshore Generation,7456.0,AT
-2026-05-20,Wind Onshore Capture,147.24,AT
-2026-05-21,Wind Onshore Capture,101.92,AT
+2026-05-29,Wind Onshore Generation,12208.0,AT
+2026-05-30,Wind Onshore Generation,31948.0,AT
+2026-05-21,Wind Onshore Capture,117.21,AT
 2026-05-22,Wind Onshore Capture,108.81,AT
 2026-05-23,Wind Onshore Capture,89.36,AT
 2026-05-24,Wind Onshore Capture,82.08,AT
@@ -478812,9 +479120,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,100.94,AT
 2026-05-27,Wind Onshore Capture,98.99,AT
 2026-05-28,Wind Onshore Capture,108.2,AT
-2026-05-29,Wind Onshore Capture,45.64,AT
-2026-05-20,Solar Forecast,8916.0,AT
-2026-05-21,Solar Forecast,143172.0,AT
+2026-05-29,Wind Onshore Capture,93.16,AT
+2026-05-30,Wind Onshore Capture,76.0,AT
+2026-05-21,Solar Forecast,43800.0,AT
 2026-05-22,Solar Forecast,158440.0,AT
 2026-05-23,Solar Forecast,160360.0,AT
 2026-05-24,Solar Forecast,172968.0,AT
@@ -478823,9 +479131,9 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,152608.0,AT
 2026-05-28,Solar Forecast,168592.0,AT
 2026-05-29,Solar Forecast,178460.0,AT
-2026-05-30,Solar Forecast,149528.0,AT
-2026-05-20,Wind Onshore Forecast,32388.0,AT
-2026-05-21,Wind Onshore Forecast,185412.0,AT
+2026-05-30,Solar Forecast,165336.0,AT
+2026-05-31,Solar Forecast,84000.0,AT
+2026-05-21,Wind Onshore Forecast,60428.0,AT
 2026-05-22,Wind Onshore Forecast,106548.0,AT
 2026-05-23,Wind Onshore Forecast,67324.0,AT
 2026-05-24,Wind Onshore Forecast,36744.0,AT
@@ -478834,9 +479142,9 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,95736.0,AT
 2026-05-28,Wind Onshore Forecast,91420.0,AT
 2026-05-29,Wind Onshore Forecast,9784.0,AT
-2026-05-30,Wind Onshore Forecast,42172.0,AT
-2026-05-20,Baseload,144.56,CZ
-2026-05-21,Baseload,107.92,CZ
+2026-05-30,Wind Onshore Forecast,73524.0,AT
+2026-05-31,Wind Onshore Forecast,32564.0,AT
+2026-05-21,Baseload,130.37,CZ
 2026-05-22,Baseload,106.86,CZ
 2026-05-23,Baseload,81.51,CZ
 2026-05-24,Baseload,66.9,CZ
@@ -478845,9 +479153,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,91.42,CZ
 2026-05-28,Baseload,118.8,CZ
 2026-05-29,Baseload,101.45,CZ
-2026-05-30,Baseload,66.5,CZ
-2026-05-20,Solar Generation,7497.45,CZ
-2026-05-21,Solar Generation,84885.47,CZ
+2026-05-30,Baseload,85.8,CZ
+2026-05-31,Baseload,77.96,CZ
+2026-05-21,Solar Generation,29173.97,CZ
 2026-05-22,Solar Generation,98521.24,CZ
 2026-05-23,Solar Generation,105228.07,CZ
 2026-05-24,Solar Generation,98738.13,CZ
@@ -478855,9 +479163,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Generation,115614.35,CZ
 2026-05-27,Solar Generation,107448.87,CZ
 2026-05-28,Solar Generation,118122.62,CZ
-2026-05-29,Solar Generation,113482.37,CZ
-2026-05-20,Solar Capture,122.03,CZ
-2026-05-21,Solar Capture,58.38,CZ
+2026-05-29,Solar Generation,118524.08,CZ
+2026-05-30,Solar Generation,67812.48,CZ
+2026-05-21,Solar Capture,69.88,CZ
 2026-05-22,Solar Capture,50.21,CZ
 2026-05-23,Solar Capture,8.54,CZ
 2026-05-24,Solar Capture,-13.15,CZ
@@ -478865,9 +479173,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Capture,32.37,CZ
 2026-05-27,Solar Capture,33.92,CZ
 2026-05-28,Solar Capture,38.87,CZ
-2026-05-29,Solar Capture,30.71,CZ
-2026-05-20,Wind Onshore Generation,1745.12,CZ
-2026-05-21,Wind Onshore Generation,6232.03,CZ
+2026-05-29,Solar Capture,35.95,CZ
+2026-05-30,Solar Capture,14.65,CZ
+2026-05-21,Wind Onshore Generation,2040.76,CZ
 2026-05-22,Wind Onshore Generation,3200.29,CZ
 2026-05-23,Wind Onshore Generation,2127.69,CZ
 2026-05-24,Wind Onshore Generation,3182.38,CZ
@@ -478875,9 +479183,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,2835.48,CZ
 2026-05-27,Wind Onshore Generation,11538.01,CZ
 2026-05-28,Wind Onshore Generation,5617.46,CZ
-2026-05-29,Wind Onshore Generation,1227.27,CZ
-2026-05-20,Wind Onshore Capture,145.68,CZ
-2026-05-21,Wind Onshore Capture,112.28,CZ
+2026-05-29,Wind Onshore Generation,2202.91,CZ
+2026-05-30,Wind Onshore Generation,7646.89,CZ
+2026-05-21,Wind Onshore Capture,129.73,CZ
 2026-05-22,Wind Onshore Capture,113.82,CZ
 2026-05-23,Wind Onshore Capture,92.36,CZ
 2026-05-24,Wind Onshore Capture,78.31,CZ
@@ -478885,9 +479193,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,104.32,CZ
 2026-05-27,Wind Onshore Capture,79.57,CZ
 2026-05-28,Wind Onshore Capture,115.99,CZ
-2026-05-29,Wind Onshore Capture,66.96,CZ
-2026-05-20,Solar Forecast,7340.0,CZ
-2026-05-21,Solar Forecast,86263.0,CZ
+2026-05-29,Wind Onshore Capture,111.13,CZ
+2026-05-30,Wind Onshore Capture,67.09,CZ
+2026-05-21,Solar Forecast,26600.0,CZ
 2026-05-22,Solar Forecast,94921.0,CZ
 2026-05-23,Solar Forecast,104975.0,CZ
 2026-05-24,Solar Forecast,102234.0,CZ
@@ -478896,9 +479204,9 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,106526.0,CZ
 2026-05-28,Solar Forecast,115119.0,CZ
 2026-05-29,Solar Forecast,115280.0,CZ
-2026-05-30,Solar Forecast,75923.0,CZ
-2026-05-20,Baseload,157.81,IE_SEM
-2026-05-21,Baseload,136.74,IE_SEM
+2026-05-30,Solar Forecast,87645.0,CZ
+2026-05-31,Solar Forecast,65558.0,CZ
+2026-05-21,Baseload,143.59,IE_SEM
 2026-05-22,Baseload,134.75,IE_SEM
 2026-05-23,Baseload,123.31,IE_SEM
 2026-05-24,Baseload,144.1,IE_SEM
@@ -478907,8 +479215,8 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,138.95,IE_SEM
 2026-05-28,Baseload,128.04,IE_SEM
 2026-05-29,Baseload,130.21,IE_SEM
-2026-05-30,Baseload,122.2,IE_SEM
-2026-05-20,Solar Generation,0.0,IE_SEM
+2026-05-30,Baseload,128.09,IE_SEM
+2026-05-31,Baseload,124.45,IE_SEM
 2026-05-21,Solar Generation,0.0,IE_SEM
 2026-05-22,Solar Generation,0.0,IE_SEM
 2026-05-23,Solar Generation,0.0,IE_SEM
@@ -478918,8 +479226,8 @@ Date,Metric,Price,Country
 2026-05-27,Solar Generation,0.0,IE_SEM
 2026-05-28,Solar Generation,0.0,IE_SEM
 2026-05-29,Solar Generation,0.0,IE_SEM
-2026-05-20,Wind Onshore Generation,12975.73,IE_SEM
-2026-05-21,Wind Onshore Generation,54037.43,IE_SEM
+2026-05-30,Solar Generation,0.0,IE_SEM
+2026-05-21,Wind Onshore Generation,22098.82,IE_SEM
 2026-05-22,Wind Onshore Generation,42917.59,IE_SEM
 2026-05-23,Wind Onshore Generation,32061.37,IE_SEM
 2026-05-24,Wind Onshore Generation,16447.29,IE_SEM
@@ -478927,9 +479235,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,8619.36,IE_SEM
 2026-05-27,Wind Onshore Generation,33458.98,IE_SEM
 2026-05-28,Wind Onshore Generation,44364.8,IE_SEM
-2026-05-29,Wind Onshore Generation,33688.88,IE_SEM
-2026-05-20,Wind Onshore Capture,155.73,IE_SEM
-2026-05-21,Wind Onshore Capture,137.21,IE_SEM
+2026-05-29,Wind Onshore Generation,43948.24,IE_SEM
+2026-05-30,Wind Onshore Generation,17380.68,IE_SEM
+2026-05-21,Wind Onshore Capture,145.21,IE_SEM
 2026-05-22,Wind Onshore Capture,134.69,IE_SEM
 2026-05-23,Wind Onshore Capture,122.27,IE_SEM
 2026-05-24,Wind Onshore Capture,134.65,IE_SEM
@@ -478937,9 +479245,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,151.38,IE_SEM
 2026-05-27,Wind Onshore Capture,139.13,IE_SEM
 2026-05-28,Wind Onshore Capture,129.55,IE_SEM
-2026-05-29,Wind Onshore Capture,115.61,IE_SEM
-2026-05-20,Wind Onshore Forecast,18318.76,IE_SEM
-2026-05-21,Wind Onshore Forecast,63961.52,IE_SEM
+2026-05-29,Wind Onshore Capture,122.61,IE_SEM
+2026-05-30,Wind Onshore Capture,123.24,IE_SEM
+2026-05-21,Wind Onshore Forecast,23773.72,IE_SEM
 2026-05-22,Wind Onshore Forecast,43673.15,IE_SEM
 2026-05-23,Wind Onshore Forecast,21626.14,IE_SEM
 2026-05-24,Wind Onshore Forecast,18035.44,IE_SEM
@@ -478948,9 +479256,9 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,45031.06,IE_SEM
 2026-05-28,Wind Onshore Forecast,37685.31,IE_SEM
 2026-05-29,Wind Onshore Forecast,0.0,IE_SEM
-2026-05-30,Wind Onshore Forecast,21281.5,IE_SEM
-2026-05-20,Baseload,141.44,DE_LU
-2026-05-21,Baseload,109.15,DE_LU
+2026-05-30,Wind Onshore Forecast,34913.45,IE_SEM
+2026-05-31,Wind Onshore Forecast,17016.39,IE_SEM
+2026-05-21,Baseload,128.63,DE_LU
 2026-05-22,Baseload,106.35,DE_LU
 2026-05-23,Baseload,79.78,DE_LU
 2026-05-24,Baseload,66.72,DE_LU
@@ -478959,29 +479267,29 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,84.05,DE_LU
 2026-05-28,Baseload,122.32,DE_LU
 2026-05-29,Baseload,102.88,DE_LU
-2026-05-30,Baseload,66.49,DE_LU
-2026-05-20,Solar Generation,132933.64,DE_LU
-2026-05-21,Solar Generation,1424848.06,DE_LU
+2026-05-30,Baseload,85.87,DE_LU
+2026-05-31,Baseload,78.4,DE_LU
+2026-05-21,Solar Generation,499631.96,DE_LU
 2026-05-22,Solar Generation,1832321.82,DE_LU
 2026-05-23,Solar Generation,1862037.37,DE_LU
 2026-05-24,Solar Generation,1669886.07,DE_LU
 2026-05-25,Solar Generation,1934136.24,DE_LU
 2026-05-26,Solar Generation,1935115.49,DE_LU
 2026-05-27,Solar Generation,1863260.38,DE_LU
-2026-05-28,Solar Generation,2024917.58,DE_LU
-2026-05-29,Solar Generation,1792951.84,DE_LU
-2026-05-20,Solar Capture,115.91,DE_LU
-2026-05-21,Solar Capture,61.31,DE_LU
+2026-05-28,Solar Generation,2024699.18,DE_LU
+2026-05-29,Solar Generation,1864086.1,DE_LU
+2026-05-30,Solar Generation,1203506.62,DE_LU
+2026-05-21,Solar Capture,71.7,DE_LU
 2026-05-22,Solar Capture,44.42,DE_LU
 2026-05-23,Solar Capture,8.11,DE_LU
 2026-05-24,Solar Capture,-11.06,DE_LU
 2026-05-25,Solar Capture,8.26,DE_LU
 2026-05-26,Solar Capture,31.68,DE_LU
 2026-05-27,Solar Capture,21.81,DE_LU
-2026-05-28,Solar Capture,38.93,DE_LU
-2026-05-29,Solar Capture,31.34,DE_LU
-2026-05-20,Wind Onshore Generation,258385.32,DE_LU
-2026-05-21,Wind Onshore Generation,564167.66,DE_LU
+2026-05-28,Solar Capture,38.83,DE_LU
+2026-05-29,Solar Capture,36.15,DE_LU
+2026-05-30,Solar Capture,13.72,DE_LU
+2026-05-21,Wind Onshore Generation,149386.34,DE_LU
 2026-05-22,Wind Onshore Generation,144285.3,DE_LU
 2026-05-23,Wind Onshore Generation,227572.75,DE_LU
 2026-05-24,Wind Onshore Generation,401606.4,DE_LU
@@ -478989,9 +479297,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,557692.45,DE_LU
 2026-05-27,Wind Onshore Generation,994737.87,DE_LU
 2026-05-28,Wind Onshore Generation,303539.11,DE_LU
-2026-05-29,Wind Onshore Generation,266031.65,DE_LU
-2026-05-20,Wind Onshore Capture,138.52,DE_LU
-2026-05-21,Wind Onshore Capture,102.66,DE_LU
+2026-05-29,Wind Onshore Generation,501121.12,DE_LU
+2026-05-30,Wind Onshore Generation,679870.68,DE_LU
+2026-05-21,Wind Onshore Capture,106.98,DE_LU
 2026-05-22,Wind Onshore Capture,119.0,DE_LU
 2026-05-23,Wind Onshore Capture,102.88,DE_LU
 2026-05-24,Wind Onshore Capture,94.41,DE_LU
@@ -478999,9 +479307,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,105.72,DE_LU
 2026-05-27,Wind Onshore Capture,94.48,DE_LU
 2026-05-28,Wind Onshore Capture,130.2,DE_LU
-2026-05-29,Wind Onshore Capture,80.46,DE_LU
-2026-05-20,Wind Offshore Generation,71000.35,DE_LU
-2026-05-21,Wind Offshore Generation,207683.42,DE_LU
+2026-05-29,Wind Onshore Capture,124.49,DE_LU
+2026-05-30,Wind Onshore Capture,78.73,DE_LU
+2026-05-21,Wind Offshore Generation,90261.82,DE_LU
 2026-05-22,Wind Offshore Generation,87348.96,DE_LU
 2026-05-23,Wind Offshore Generation,168810.99,DE_LU
 2026-05-24,Wind Offshore Generation,60800.59,DE_LU
@@ -479009,9 +479317,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Offshore Generation,270635.91,DE_LU
 2026-05-27,Wind Offshore Generation,303164.93,DE_LU
 2026-05-28,Wind Offshore Generation,74400.16,DE_LU
-2026-05-29,Wind Offshore Generation,193232.95,DE_LU
-2026-05-20,Wind Offshore Capture,140.8,DE_LU
-2026-05-21,Wind Offshore Capture,117.79,DE_LU
+2026-05-29,Wind Offshore Generation,246980.52,DE_LU
+2026-05-30,Wind Offshore Generation,125698.45,DE_LU
+2026-05-21,Wind Offshore Capture,137.34,DE_LU
 2026-05-22,Wind Offshore Capture,107.48,DE_LU
 2026-05-23,Wind Offshore Capture,98.82,DE_LU
 2026-05-24,Wind Offshore Capture,97.98,DE_LU
@@ -479019,9 +479327,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Offshore Capture,87.52,DE_LU
 2026-05-27,Wind Offshore Capture,95.05,DE_LU
 2026-05-28,Wind Offshore Capture,142.19,DE_LU
-2026-05-29,Wind Offshore Capture,89.45,DE_LU
-2026-05-20,Solar Forecast,152134.74,DE_LU
-2026-05-21,Solar Forecast,1489809.86,DE_LU
+2026-05-29,Wind Offshore Capture,101.15,DE_LU
+2026-05-30,Wind Offshore Capture,86.23,DE_LU
+2026-05-21,Solar Forecast,517597.48,DE_LU
 2026-05-22,Solar Forecast,1749131.69,DE_LU
 2026-05-23,Solar Forecast,1816262.31,DE_LU
 2026-05-24,Solar Forecast,1726214.37,DE_LU
@@ -479030,9 +479338,8 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,1897567.13,DE_LU
 2026-05-28,Solar Forecast,1998456.49,DE_LU
 2026-05-29,Solar Forecast,1880745.04,DE_LU
-2026-05-30,Solar Forecast,1390506.12,DE_LU
-2026-05-20,Wind Onshore Forecast,240014.61,DE_LU
-2026-05-21,Wind Onshore Forecast,592625.32,DE_LU
+2026-05-30,Solar Forecast,1628199.9,DE_LU
+2026-05-21,Wind Onshore Forecast,154782.86,DE_LU
 2026-05-22,Wind Onshore Forecast,158432.5,DE_LU
 2026-05-23,Wind Onshore Forecast,266785.53,DE_LU
 2026-05-24,Wind Onshore Forecast,429902.01,DE_LU
@@ -479041,9 +479348,8 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,1072545.13,DE_LU
 2026-05-28,Wind Onshore Forecast,283322.19,DE_LU
 2026-05-29,Wind Onshore Forecast,412037.5,DE_LU
-2026-05-30,Wind Onshore Forecast,561171.42,DE_LU
-2026-05-20,Wind Offshore Forecast,67946.15,DE_LU
-2026-05-21,Wind Offshore Forecast,166260.3,DE_LU
+2026-05-30,Wind Onshore Forecast,768985.77,DE_LU
+2026-05-21,Wind Offshore Forecast,65018.35,DE_LU
 2026-05-22,Wind Offshore Forecast,86960.11,DE_LU
 2026-05-23,Wind Offshore Forecast,162083.97,DE_LU
 2026-05-24,Wind Offshore Forecast,45208.05,DE_LU
@@ -479052,9 +479358,8 @@ Date,Metric,Price,Country
 2026-05-27,Wind Offshore Forecast,245343.42,DE_LU
 2026-05-28,Wind Offshore Forecast,61129.34,DE_LU
 2026-05-29,Wind Offshore Forecast,221474.93,DE_LU
-2026-05-30,Wind Offshore Forecast,133710.77,DE_LU
-2026-05-20,Baseload,80.81,FR
-2026-05-21,Baseload,60.53,FR
+2026-05-30,Wind Offshore Forecast,157046.67,DE_LU
+2026-05-21,Baseload,61.61,FR
 2026-05-22,Baseload,59.77,FR
 2026-05-23,Baseload,34.32,FR
 2026-05-24,Baseload,17.52,FR
@@ -479063,9 +479368,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,76.41,FR
 2026-05-28,Baseload,81.81,FR
 2026-05-29,Baseload,84.82,FR
-2026-05-30,Baseload,51.6,FR
-2026-05-20,Solar Generation,99354.76,FR
-2026-05-21,Solar Generation,638576.38,FR
+2026-05-30,Baseload,59.77,FR
+2026-05-31,Baseload,29.54,FR
+2026-05-21,Solar Generation,272448.37,FR
 2026-05-22,Solar Generation,674239.63,FR
 2026-05-23,Solar Generation,538627.24,FR
 2026-05-24,Solar Generation,504028.24,FR
@@ -479073,9 +479378,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Generation,639561.6,FR
 2026-05-27,Solar Generation,701040.6,FR
 2026-05-28,Solar Generation,717424.95,FR
-2026-05-29,Solar Generation,639230.48,FR
-2026-05-20,Solar Capture,29.11,FR
-2026-05-21,Solar Capture,12.05,FR
+2026-05-29,Solar Generation,702233.32,FR
+2026-05-30,Solar Generation,356563.92,FR
+2026-05-21,Solar Capture,16.09,FR
 2026-05-22,Solar Capture,11.73,FR
 2026-05-23,Solar Capture,-2.33,FR
 2026-05-24,Solar Capture,-17.22,FR
@@ -479083,19 +479388,19 @@ Date,Metric,Price,Country
 2026-05-26,Solar Capture,18.6,FR
 2026-05-27,Solar Capture,19.89,FR
 2026-05-28,Solar Capture,27.33,FR
-2026-05-29,Solar Capture,17.68,FR
-2026-05-20,Wind Onshore Generation,75031.25,FR
-2026-05-21,Wind Onshore Generation,111833.07,FR
+2026-05-29,Solar Capture,26.26,FR
+2026-05-30,Solar Capture,8.07,FR
+2026-05-21,Wind Onshore Generation,45127.4,FR
 2026-05-22,Wind Onshore Generation,138456.57,FR
 2026-05-23,Wind Onshore Generation,152275.88,FR
 2026-05-24,Wind Onshore Generation,246914.68,FR
 2026-05-25,Wind Onshore Generation,278431.97,FR
 2026-05-26,Wind Onshore Generation,164825.82,FR
 2026-05-27,Wind Onshore Generation,162774.24,FR
-2026-05-28,Wind Onshore Generation,223544.19,FR
-2026-05-29,Wind Onshore Generation,159669.97,FR
-2026-05-20,Wind Onshore Capture,65.02,FR
-2026-05-21,Wind Onshore Capture,76.62,FR
+2026-05-28,Wind Onshore Generation,223544.34,FR
+2026-05-29,Wind Onshore Generation,197464.65,FR
+2026-05-30,Wind Onshore Generation,83085.26,FR
+2026-05-21,Wind Onshore Capture,81.48,FR
 2026-05-22,Wind Onshore Capture,79.65,FR
 2026-05-23,Wind Onshore Capture,54.47,FR
 2026-05-24,Wind Onshore Capture,37.77,FR
@@ -479103,19 +479408,19 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,80.65,FR
 2026-05-27,Wind Onshore Capture,96.83,FR
 2026-05-28,Wind Onshore Capture,96.45,FR
-2026-05-29,Wind Onshore Capture,92.09,FR
-2026-05-20,Wind Offshore Generation,5057.02,FR
-2026-05-21,Wind Offshore Generation,10607.22,FR
+2026-05-29,Wind Onshore Capture,100.23,FR
+2026-05-30,Wind Onshore Capture,77.28,FR
+2026-05-21,Wind Offshore Generation,6600.56,FR
 2026-05-22,Wind Offshore Generation,29972.5,FR
 2026-05-23,Wind Offshore Generation,14844.35,FR
 2026-05-24,Wind Offshore Generation,52182.81,FR
 2026-05-25,Wind Offshore Generation,46026.81,FR
 2026-05-26,Wind Offshore Generation,22296.26,FR
 2026-05-27,Wind Offshore Generation,25233.47,FR
-2026-05-28,Wind Offshore Generation,12405.17,FR
-2026-05-29,Wind Offshore Generation,10250.6,FR
-2026-05-20,Wind Offshore Capture,68.07,FR
-2026-05-21,Wind Offshore Capture,58.42,FR
+2026-05-28,Wind Offshore Generation,12405.16,FR
+2026-05-29,Wind Offshore Generation,13458.48,FR
+2026-05-30,Wind Offshore Generation,4104.08,FR
+2026-05-21,Wind Offshore Capture,69.02,FR
 2026-05-22,Wind Offshore Capture,54.27,FR
 2026-05-23,Wind Offshore Capture,59.54,FR
 2026-05-24,Wind Offshore Capture,39.05,FR
@@ -479123,9 +479428,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Offshore Capture,82.36,FR
 2026-05-27,Wind Offshore Capture,67.77,FR
 2026-05-28,Wind Offshore Capture,105.09,FR
-2026-05-29,Wind Offshore Capture,90.31,FR
-2026-05-20,Solar Forecast,103868.71,FR
-2026-05-21,Solar Forecast,605494.12,FR
+2026-05-29,Wind Offshore Capture,99.35,FR
+2026-05-30,Wind Offshore Capture,64.19,FR
+2026-05-21,Solar Forecast,263933.82,FR
 2026-05-22,Solar Forecast,652350.03,FR
 2026-05-23,Solar Forecast,545966.16,FR
 2026-05-24,Solar Forecast,543686.0,FR
@@ -479134,9 +479439,8 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,700255.42,FR
 2026-05-28,Solar Forecast,713388.1,FR
 2026-05-29,Solar Forecast,707297.65,FR
-2026-05-30,Solar Forecast,433709.47,FR
-2026-05-20,Wind Onshore Forecast,100937.43,FR
-2026-05-21,Wind Onshore Forecast,105909.86,FR
+2026-05-30,Solar Forecast,564318.68,FR
+2026-05-21,Wind Onshore Forecast,45571.34,FR
 2026-05-22,Wind Onshore Forecast,148111.33,FR
 2026-05-23,Wind Onshore Forecast,158493.94,FR
 2026-05-24,Wind Onshore Forecast,235573.53,FR
@@ -479145,9 +479449,8 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,162931.77,FR
 2026-05-28,Wind Onshore Forecast,229807.33,FR
 2026-05-29,Wind Onshore Forecast,165552.05,FR
-2026-05-30,Wind Onshore Forecast,91279.47,FR
-2026-05-20,Wind Offshore Forecast,6234.57,FR
-2026-05-21,Wind Offshore Forecast,17413.35,FR
+2026-05-30,Wind Onshore Forecast,146509.34,FR
+2026-05-21,Wind Offshore Forecast,6905.97,FR
 2026-05-22,Wind Offshore Forecast,33618.28,FR
 2026-05-23,Wind Offshore Forecast,23589.91,FR
 2026-05-24,Wind Offshore Forecast,59122.86,FR
@@ -479156,9 +479459,8 @@ Date,Metric,Price,Country
 2026-05-27,Wind Offshore Forecast,28748.27,FR
 2026-05-28,Wind Offshore Forecast,23921.57,FR
 2026-05-29,Wind Offshore Forecast,17777.66,FR
-2026-05-30,Wind Offshore Forecast,14359.43,FR
-2026-05-20,Baseload,133.01,NL
-2026-05-21,Baseload,106.27,NL
+2026-05-30,Wind Offshore Forecast,39793.24,FR
+2026-05-21,Baseload,123.73,NL
 2026-05-22,Baseload,101.69,NL
 2026-05-23,Baseload,76.06,NL
 2026-05-24,Baseload,66.4,NL
@@ -479167,9 +479469,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,83.5,NL
 2026-05-28,Baseload,119.26,NL
 2026-05-29,Baseload,102.78,NL
-2026-05-30,Baseload,65.26,NL
-2026-05-20,Solar Generation,490.23,NL
-2026-05-21,Solar Generation,6609.05,NL
+2026-05-30,Baseload,83.56,NL
+2026-05-31,Baseload,75.07,NL
+2026-05-21,Solar Generation,2843.12,NL
 2026-05-22,Solar Generation,8071.23,NL
 2026-05-23,Solar Generation,3189.96,NL
 2026-05-24,Solar Generation,2297.32,NL
@@ -479177,9 +479479,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Generation,9017.96,NL
 2026-05-27,Solar Generation,9699.78,NL
 2026-05-28,Solar Generation,9757.33,NL
-2026-05-29,Solar Generation,5689.8,NL
-2026-05-20,Solar Capture,102.16,NL
-2026-05-21,Solar Capture,65.02,NL
+2026-05-29,Solar Generation,5934.96,NL
+2026-05-30,Solar Generation,5529.54,NL
+2026-05-21,Solar Capture,73.62,NL
 2026-05-22,Solar Capture,46.61,NL
 2026-05-23,Solar Capture,42.36,NL
 2026-05-24,Solar Capture,47.49,NL
@@ -479187,9 +479489,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Capture,32.28,NL
 2026-05-27,Solar Capture,22.73,NL
 2026-05-28,Solar Capture,41.94,NL
-2026-05-29,Solar Capture,18.51,NL
-2026-05-20,Wind Onshore Generation,12948.98,NL
-2026-05-21,Wind Onshore Generation,15839.86,NL
+2026-05-29,Solar Capture,24.59,NL
+2026-05-30,Solar Capture,16.97,NL
+2026-05-21,Wind Onshore Generation,3010.51,NL
 2026-05-22,Wind Onshore Generation,4447.19,NL
 2026-05-23,Wind Onshore Generation,11858.48,NL
 2026-05-24,Wind Onshore Generation,3380.19,NL
@@ -479197,9 +479499,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,9240.78,NL
 2026-05-27,Wind Onshore Generation,21028.62,NL
 2026-05-28,Wind Onshore Generation,9322.32,NL
-2026-05-29,Wind Onshore Generation,21707.53,NL
-2026-05-20,Wind Onshore Capture,127.05,NL
-2026-05-21,Wind Onshore Capture,110.5,NL
+2026-05-29,Wind Onshore Generation,23438.14,NL
+2026-05-30,Wind Onshore Generation,1283.25,NL
+2026-05-21,Wind Onshore Capture,121.98,NL
 2026-05-22,Wind Onshore Capture,129.03,NL
 2026-05-23,Wind Onshore Capture,97.59,NL
 2026-05-24,Wind Onshore Capture,106.22,NL
@@ -479207,9 +479509,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,107.94,NL
 2026-05-27,Wind Onshore Capture,93.64,NL
 2026-05-28,Wind Onshore Capture,147.81,NL
-2026-05-29,Wind Onshore Capture,101.09,NL
-2026-05-20,Wind Offshore Generation,88542.69,NL
-2026-05-21,Wind Offshore Generation,105290.69,NL
+2026-05-29,Wind Onshore Capture,106.0,NL
+2026-05-30,Wind Onshore Capture,83.39,NL
+2026-05-21,Wind Offshore Generation,25651.46,NL
 2026-05-22,Wind Offshore Generation,33957.89,NL
 2026-05-23,Wind Offshore Generation,72791.81,NL
 2026-05-24,Wind Offshore Generation,28671.55,NL
@@ -479217,9 +479519,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Offshore Generation,57389.92,NL
 2026-05-27,Wind Offshore Generation,187434.4,NL
 2026-05-28,Wind Offshore Generation,101523.55,NL
-2026-05-29,Wind Offshore Generation,90351.65,NL
-2026-05-20,Wind Offshore Capture,133.22,NL
-2026-05-21,Wind Offshore Capture,106.42,NL
+2026-05-29,Wind Offshore Generation,98641.75,NL
+2026-05-30,Wind Offshore Generation,16451.43,NL
+2026-05-21,Wind Offshore Capture,106.37,NL
 2026-05-22,Wind Offshore Capture,110.72,NL
 2026-05-23,Wind Offshore Capture,86.14,NL
 2026-05-24,Wind Offshore Capture,99.7,NL
@@ -479227,9 +479529,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Offshore Capture,103.26,NL
 2026-05-27,Wind Offshore Capture,92.05,NL
 2026-05-28,Wind Offshore Capture,150.84,NL
-2026-05-29,Wind Offshore Capture,103.61,NL
-2026-05-20,Solar Forecast,30159.0,NL
-2026-05-21,Solar Forecast,140459.0,NL
+2026-05-29,Wind Offshore Capture,110.15,NL
+2026-05-30,Wind Offshore Capture,83.92,NL
+2026-05-21,Solar Forecast,68413.0,NL
 2026-05-22,Solar Forecast,157588.0,NL
 2026-05-23,Solar Forecast,157883.0,NL
 2026-05-24,Solar Forecast,166301.0,NL
@@ -479238,9 +479540,9 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,153716.0,NL
 2026-05-28,Solar Forecast,169563.0,NL
 2026-05-29,Solar Forecast,138839.0,NL
-2026-05-30,Solar Forecast,126610.0,NL
-2026-05-20,Wind Onshore Forecast,36944.0,NL
-2026-05-21,Wind Onshore Forecast,62180.0,NL
+2026-05-30,Solar Forecast,163691.0,NL
+2026-05-31,Solar Forecast,57976.0,NL
+2026-05-21,Wind Onshore Forecast,12933.0,NL
 2026-05-22,Wind Onshore Forecast,20200.0,NL
 2026-05-23,Wind Onshore Forecast,43206.0,NL
 2026-05-24,Wind Onshore Forecast,18581.0,NL
@@ -479249,9 +479551,9 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,77796.0,NL
 2026-05-28,Wind Onshore Forecast,38028.0,NL
 2026-05-29,Wind Onshore Forecast,73838.0,NL
-2026-05-30,Wind Onshore Forecast,8773.0,NL
-2026-05-20,Wind Offshore Forecast,23213.0,NL
-2026-05-21,Wind Offshore Forecast,30063.0,NL
+2026-05-30,Wind Onshore Forecast,19817.0,NL
+2026-05-31,Wind Onshore Forecast,10565.0,NL
+2026-05-21,Wind Offshore Forecast,7226.0,NL
 2026-05-22,Wind Offshore Forecast,9226.0,NL
 2026-05-23,Wind Offshore Forecast,18068.0,NL
 2026-05-24,Wind Offshore Forecast,11369.0,NL
@@ -479260,113 +479562,9 @@ Date,Metric,Price,Country
 2026-05-27,Wind Offshore Forecast,37237.0,NL
 2026-05-28,Wind Offshore Forecast,20212.0,NL
 2026-05-29,Wind Offshore Forecast,32643.0,NL
-2026-05-30,Wind Offshore Forecast,4846.0,NL
-2026-05-20,Baseload,141.44,DK_1
-2026-05-21,Baseload,108.93,DK_1
-2026-05-22,Baseload,107.48,DK_1
-2026-05-23,Baseload,78.84,DK_1
-2026-05-24,Baseload,70.41,DK_1
-2026-05-25,Baseload,79.2,DK_1
-2026-05-26,Baseload,88.11,DK_1
-2026-05-27,Baseload,72.61,DK_1
-2026-05-28,Baseload,121.52,DK_1
-2026-05-29,Baseload,101.42,DK_1
-2026-05-30,Baseload,65.36,DK_1
-2026-05-20,Solar Generation,5929.17,DK_1
-2026-05-21,Solar Generation,51638.42,DK_1
-2026-05-22,Solar Generation,52417.3,DK_1
-2026-05-23,Solar Generation,37994.62,DK_1
-2026-05-24,Solar Generation,42184.8,DK_1
-2026-05-25,Solar Generation,48457.98,DK_1
-2026-05-26,Solar Generation,66539.93,DK_1
-2026-05-27,Solar Generation,79052.2,DK_1
-2026-05-28,Solar Generation,99832.51,DK_1
-2026-05-29,Solar Generation,74253.25,DK_1
-2026-05-20,Solar Capture,119.47,DK_1
-2026-05-21,Solar Capture,66.05,DK_1
-2026-05-22,Solar Capture,49.48,DK_1
-2026-05-23,Solar Capture,30.35,DK_1
-2026-05-24,Solar Capture,12.67,DK_1
-2026-05-25,Solar Capture,24.44,DK_1
-2026-05-26,Solar Capture,42.64,DK_1
-2026-05-27,Solar Capture,32.28,DK_1
-2026-05-28,Solar Capture,56.99,DK_1
-2026-05-29,Solar Capture,37.56,DK_1
-2026-05-20,Wind Onshore Generation,11944.69,DK_1
-2026-05-21,Wind Onshore Generation,60410.76,DK_1
-2026-05-22,Wind Onshore Generation,22973.01,DK_1
-2026-05-23,Wind Onshore Generation,44066.65,DK_1
-2026-05-24,Wind Onshore Generation,40440.48,DK_1
-2026-05-25,Wind Onshore Generation,56951.23,DK_1
-2026-05-26,Wind Onshore Generation,91125.01,DK_1
-2026-05-27,Wind Onshore Generation,134891.04,DK_1
-2026-05-28,Wind Onshore Generation,29693.85,DK_1
-2026-05-29,Wind Onshore Generation,47792.97,DK_1
-2026-05-20,Wind Onshore Capture,140.41,DK_1
-2026-05-21,Wind Onshore Capture,97.91,DK_1
-2026-05-22,Wind Onshore Capture,101.79,DK_1
-2026-05-23,Wind Onshore Capture,66.07,DK_1
-2026-05-24,Wind Onshore Capture,69.76,DK_1
-2026-05-25,Wind Onshore Capture,65.17,DK_1
-2026-05-26,Wind Onshore Capture,100.98,DK_1
-2026-05-27,Wind Onshore Capture,81.87,DK_1
-2026-05-28,Wind Onshore Capture,125.65,DK_1
-2026-05-29,Wind Onshore Capture,42.66,DK_1
-2026-05-20,Wind Offshore Generation,22508.59,DK_1
-2026-05-21,Wind Offshore Generation,56566.16,DK_1
-2026-05-22,Wind Offshore Generation,25243.68,DK_1
-2026-05-23,Wind Offshore Generation,50067.59,DK_1
-2026-05-24,Wind Offshore Generation,26480.29,DK_1
-2026-05-25,Wind Offshore Generation,43724.14,DK_1
-2026-05-26,Wind Offshore Generation,61264.56,DK_1
-2026-05-27,Wind Offshore Generation,126586.17,DK_1
-2026-05-28,Wind Offshore Generation,37455.23,DK_1
-2026-05-29,Wind Offshore Generation,47908.73,DK_1
-2026-05-20,Wind Offshore Capture,143.25,DK_1
-2026-05-21,Wind Offshore Capture,117.64,DK_1
-2026-05-22,Wind Offshore Capture,114.94,DK_1
-2026-05-23,Wind Offshore Capture,94.53,DK_1
-2026-05-24,Wind Offshore Capture,114.51,DK_1
-2026-05-25,Wind Offshore Capture,111.81,DK_1
-2026-05-26,Wind Offshore Capture,114.58,DK_1
-2026-05-27,Wind Offshore Capture,95.43,DK_1
-2026-05-28,Wind Offshore Capture,126.51,DK_1
-2026-05-29,Wind Offshore Capture,41.85,DK_1
-2026-05-20,Solar Forecast,8090.05,DK_1
-2026-05-21,Solar Forecast,81671.53,DK_1
-2026-05-22,Solar Forecast,68420.79,DK_1
-2026-05-23,Solar Forecast,56898.09,DK_1
-2026-05-24,Solar Forecast,59283.51,DK_1
-2026-05-25,Solar Forecast,62351.27,DK_1
-2026-05-26,Solar Forecast,54521.79,DK_1
-2026-05-27,Solar Forecast,71883.65,DK_1
-2026-05-28,Solar Forecast,81688.58,DK_1
-2026-05-29,Solar Forecast,70295.83,DK_1
-2026-05-30,Solar Forecast,43900.31,DK_1
-2026-05-20,Wind Onshore Forecast,13022.17,DK_1
-2026-05-21,Wind Onshore Forecast,62133.0,DK_1
-2026-05-22,Wind Onshore Forecast,30115.33,DK_1
-2026-05-23,Wind Onshore Forecast,58560.33,DK_1
-2026-05-24,Wind Onshore Forecast,44628.0,DK_1
-2026-05-25,Wind Onshore Forecast,54669.33,DK_1
-2026-05-26,Wind Onshore Forecast,72462.0,DK_1
-2026-05-27,Wind Onshore Forecast,107923.0,DK_1
-2026-05-28,Wind Onshore Forecast,26514.33,DK_1
-2026-05-29,Wind Onshore Forecast,47508.67,DK_1
-2026-05-30,Wind Onshore Forecast,68439.5,DK_1
-2026-05-20,Wind Offshore Forecast,13961.17,DK_1
-2026-05-21,Wind Offshore Forecast,41104.33,DK_1
-2026-05-22,Wind Offshore Forecast,20290.0,DK_1
-2026-05-23,Wind Offshore Forecast,45348.17,DK_1
-2026-05-24,Wind Offshore Forecast,32590.33,DK_1
-2026-05-25,Wind Offshore Forecast,38573.5,DK_1
-2026-05-26,Wind Offshore Forecast,43597.5,DK_1
-2026-05-27,Wind Offshore Forecast,73872.33,DK_1
-2026-05-28,Wind Offshore Forecast,30738.17,DK_1
-2026-05-29,Wind Offshore Forecast,43503.0,DK_1
-2026-05-30,Wind Offshore Forecast,40541.83,DK_1
-2026-05-20,Baseload,144.54,PL
-2026-05-21,Baseload,106.68,PL
+2026-05-30,Wind Offshore Forecast,11363.0,NL
+2026-05-31,Wind Offshore Forecast,5659.0,NL
+2026-05-21,Baseload,128.16,PL
 2026-05-22,Baseload,106.47,PL
 2026-05-23,Baseload,95.63,PL
 2026-05-24,Baseload,67.83,PL
@@ -479375,9 +479573,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,80.33,PL
 2026-05-28,Baseload,119.38,PL
 2026-05-29,Baseload,101.66,PL
-2026-05-30,Baseload,82.18,PL
-2026-05-20,Solar Generation,35768.05,PL
-2026-05-21,Solar Generation,418928.6,PL
+2026-05-30,Baseload,98.18,PL
+2026-05-31,Baseload,77.88,PL
+2026-05-21,Solar Generation,125910.88,PL
 2026-05-22,Solar Generation,482790.78,PL
 2026-05-23,Solar Generation,458542.29,PL
 2026-05-24,Solar Generation,380035.7,PL
@@ -479385,9 +479583,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Generation,506014.24,PL
 2026-05-27,Solar Generation,496468.08,PL
 2026-05-28,Solar Generation,514423.87,PL
-2026-05-29,Solar Generation,490216.48,PL
-2026-05-20,Solar Capture,120.3,PL
-2026-05-21,Solar Capture,58.72,PL
+2026-05-29,Solar Generation,513127.35,PL
+2026-05-30,Solar Generation,287670.28,PL
+2026-05-21,Solar Capture,69.85,PL
 2026-05-22,Solar Capture,53.56,PL
 2026-05-23,Solar Capture,39.55,PL
 2026-05-24,Solar Capture,-2.28,PL
@@ -479395,9 +479593,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Capture,34.36,PL
 2026-05-27,Solar Capture,26.26,PL
 2026-05-28,Solar Capture,46.86,PL
-2026-05-29,Solar Capture,37.77,PL
-2026-05-20,Wind Onshore Generation,18381.24,PL
-2026-05-21,Wind Onshore Generation,151570.07,PL
+2026-05-29,Solar Capture,42.72,PL
+2026-05-30,Solar Capture,49.47,PL
+2026-05-21,Wind Onshore Generation,64786.78,PL
 2026-05-22,Wind Onshore Generation,116218.29,PL
 2026-05-23,Wind Onshore Generation,28083.73,PL
 2026-05-24,Wind Onshore Generation,145738.03,PL
@@ -479405,9 +479603,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,353074.25,PL
 2026-05-27,Wind Onshore Generation,422437.33,PL
 2026-05-28,Wind Onshore Generation,230703.65,PL
-2026-05-29,Wind Onshore Generation,122158.04,PL
-2026-05-20,Wind Onshore Capture,145.43,PL
-2026-05-21,Wind Onshore Capture,101.6,PL
+2026-05-29,Wind Onshore Generation,159680.82,PL
+2026-05-30,Wind Onshore Generation,165724.31,PL
+2026-05-21,Wind Onshore Capture,121.27,PL
 2026-05-22,Wind Onshore Capture,101.63,PL
 2026-05-23,Wind Onshore Capture,105.5,PL
 2026-05-24,Wind Onshore Capture,84.27,PL
@@ -479415,9 +479613,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,103.43,PL
 2026-05-27,Wind Onshore Capture,85.97,PL
 2026-05-28,Wind Onshore Capture,113.69,PL
-2026-05-29,Wind Onshore Capture,66.84,PL
-2026-05-20,Solar Forecast,52983.11,PL
-2026-05-21,Solar Forecast,489412.26,PL
+2026-05-29,Wind Onshore Capture,90.45,PL
+2026-05-30,Wind Onshore Capture,84.61,PL
+2026-05-21,Solar Forecast,163005.78,PL
 2026-05-22,Solar Forecast,510345.79,PL
 2026-05-23,Solar Forecast,499238.38,PL
 2026-05-24,Solar Forecast,416957.48,PL
@@ -479426,9 +479624,8 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,547413.82,PL
 2026-05-28,Solar Forecast,551891.85,PL
 2026-05-29,Solar Forecast,577160.1,PL
-2026-05-30,Solar Forecast,371214.04,PL
-2026-05-20,Wind Onshore Forecast,16085.6,PL
-2026-05-21,Wind Onshore Forecast,139268.72,PL
+2026-05-30,Solar Forecast,435363.39,PL
+2026-05-21,Wind Onshore Forecast,62981.84,PL
 2026-05-22,Wind Onshore Forecast,126521.98,PL
 2026-05-23,Wind Onshore Forecast,32396.26,PL
 2026-05-24,Wind Onshore Forecast,193925.35,PL
@@ -479437,9 +479634,109 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,473040.55,PL
 2026-05-28,Wind Onshore Forecast,256057.67,PL
 2026-05-29,Wind Onshore Forecast,140090.92,PL
-2026-05-30,Wind Onshore Forecast,171628.92,PL
-2026-05-20,Baseload,68.97,EE
-2026-05-21,Baseload,90.55,EE
+2026-05-30,Wind Onshore Forecast,261684.77,PL
+2026-05-21,Baseload,128.08,DK_1
+2026-05-22,Baseload,107.48,DK_1
+2026-05-23,Baseload,78.84,DK_1
+2026-05-24,Baseload,70.41,DK_1
+2026-05-25,Baseload,79.2,DK_1
+2026-05-26,Baseload,88.11,DK_1
+2026-05-27,Baseload,72.61,DK_1
+2026-05-28,Baseload,121.52,DK_1
+2026-05-29,Baseload,101.42,DK_1
+2026-05-30,Baseload,83.75,DK_1
+2026-05-31,Baseload,83.38,DK_1
+2026-05-21,Solar Generation,26989.49,DK_1
+2026-05-22,Solar Generation,52417.3,DK_1
+2026-05-23,Solar Generation,37994.62,DK_1
+2026-05-24,Solar Generation,42184.8,DK_1
+2026-05-25,Solar Generation,48457.98,DK_1
+2026-05-26,Solar Generation,66539.93,DK_1
+2026-05-27,Solar Generation,79052.2,DK_1
+2026-05-28,Solar Generation,99832.51,DK_1
+2026-05-29,Solar Generation,86188.24,DK_1
+2026-05-30,Solar Generation,36014.72,DK_1
+2026-05-21,Solar Capture,69.98,DK_1
+2026-05-22,Solar Capture,49.48,DK_1
+2026-05-23,Solar Capture,30.35,DK_1
+2026-05-24,Solar Capture,12.67,DK_1
+2026-05-25,Solar Capture,24.44,DK_1
+2026-05-26,Solar Capture,42.64,DK_1
+2026-05-27,Solar Capture,32.28,DK_1
+2026-05-28,Solar Capture,56.99,DK_1
+2026-05-29,Solar Capture,52.33,DK_1
+2026-05-30,Solar Capture,26.46,DK_1
+2026-05-21,Wind Onshore Generation,32557.89,DK_1
+2026-05-22,Wind Onshore Generation,22973.01,DK_1
+2026-05-23,Wind Onshore Generation,44066.65,DK_1
+2026-05-24,Wind Onshore Generation,40440.48,DK_1
+2026-05-25,Wind Onshore Generation,56951.23,DK_1
+2026-05-26,Wind Onshore Generation,91125.01,DK_1
+2026-05-27,Wind Onshore Generation,134891.04,DK_1
+2026-05-28,Wind Onshore Generation,29693.85,DK_1
+2026-05-29,Wind Onshore Generation,67389.73,DK_1
+2026-05-30,Wind Onshore Generation,82585.22,DK_1
+2026-05-21,Wind Onshore Capture,109.46,DK_1
+2026-05-22,Wind Onshore Capture,101.79,DK_1
+2026-05-23,Wind Onshore Capture,66.07,DK_1
+2026-05-24,Wind Onshore Capture,69.76,DK_1
+2026-05-25,Wind Onshore Capture,65.17,DK_1
+2026-05-26,Wind Onshore Capture,100.98,DK_1
+2026-05-27,Wind Onshore Capture,81.87,DK_1
+2026-05-28,Wind Onshore Capture,125.65,DK_1
+2026-05-29,Wind Onshore Capture,76.75,DK_1
+2026-05-30,Wind Onshore Capture,59.23,DK_1
+2026-05-21,Wind Offshore Generation,24378.72,DK_1
+2026-05-22,Wind Offshore Generation,25243.68,DK_1
+2026-05-23,Wind Offshore Generation,50067.59,DK_1
+2026-05-24,Wind Offshore Generation,26480.29,DK_1
+2026-05-25,Wind Offshore Generation,43724.14,DK_1
+2026-05-26,Wind Offshore Generation,61264.56,DK_1
+2026-05-27,Wind Offshore Generation,126586.17,DK_1
+2026-05-28,Wind Offshore Generation,37455.23,DK_1
+2026-05-29,Wind Offshore Generation,67051.85,DK_1
+2026-05-30,Wind Offshore Generation,62487.47,DK_1
+2026-05-21,Wind Offshore Capture,127.44,DK_1
+2026-05-22,Wind Offshore Capture,114.94,DK_1
+2026-05-23,Wind Offshore Capture,94.53,DK_1
+2026-05-24,Wind Offshore Capture,114.51,DK_1
+2026-05-25,Wind Offshore Capture,111.81,DK_1
+2026-05-26,Wind Offshore Capture,114.58,DK_1
+2026-05-27,Wind Offshore Capture,95.43,DK_1
+2026-05-28,Wind Offshore Capture,126.51,DK_1
+2026-05-29,Wind Offshore Capture,76.35,DK_1
+2026-05-30,Wind Offshore Capture,92.47,DK_1
+2026-05-21,Solar Forecast,32024.34,DK_1
+2026-05-22,Solar Forecast,68420.79,DK_1
+2026-05-23,Solar Forecast,56898.09,DK_1
+2026-05-24,Solar Forecast,59283.51,DK_1
+2026-05-25,Solar Forecast,62351.27,DK_1
+2026-05-26,Solar Forecast,54521.79,DK_1
+2026-05-27,Solar Forecast,71883.65,DK_1
+2026-05-28,Solar Forecast,81688.58,DK_1
+2026-05-29,Solar Forecast,70295.83,DK_1
+2026-05-30,Solar Forecast,56643.7,DK_1
+2026-05-21,Wind Onshore Forecast,28464.83,DK_1
+2026-05-22,Wind Onshore Forecast,30115.33,DK_1
+2026-05-23,Wind Onshore Forecast,58560.33,DK_1
+2026-05-24,Wind Onshore Forecast,44628.0,DK_1
+2026-05-25,Wind Onshore Forecast,54669.33,DK_1
+2026-05-26,Wind Onshore Forecast,72462.0,DK_1
+2026-05-27,Wind Onshore Forecast,107923.0,DK_1
+2026-05-28,Wind Onshore Forecast,26514.33,DK_1
+2026-05-29,Wind Onshore Forecast,47508.67,DK_1
+2026-05-30,Wind Onshore Forecast,105298.33,DK_1
+2026-05-21,Wind Offshore Forecast,16184.67,DK_1
+2026-05-22,Wind Offshore Forecast,20290.0,DK_1
+2026-05-23,Wind Offshore Forecast,45348.17,DK_1
+2026-05-24,Wind Offshore Forecast,32590.33,DK_1
+2026-05-25,Wind Offshore Forecast,38573.5,DK_1
+2026-05-26,Wind Offshore Forecast,43597.5,DK_1
+2026-05-27,Wind Offshore Forecast,73872.33,DK_1
+2026-05-28,Wind Offshore Forecast,30738.17,DK_1
+2026-05-29,Wind Offshore Forecast,43503.0,DK_1
+2026-05-30,Wind Offshore Forecast,56682.83,DK_1
+2026-05-21,Baseload,117.97,EE
 2026-05-22,Baseload,76.47,EE
 2026-05-23,Baseload,26.58,EE
 2026-05-24,Baseload,1.75,EE
@@ -479448,9 +479745,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,13.37,EE
 2026-05-28,Baseload,17.27,EE
 2026-05-29,Baseload,50.32,EE
-2026-05-30,Baseload,47.54,EE
-2026-05-20,Solar Generation,1407.6,EE
-2026-05-21,Solar Generation,16566.4,EE
+2026-05-30,Baseload,66.73,EE
+2026-05-31,Baseload,65.46,EE
+2026-05-21,Solar Generation,3748.0,EE
 2026-05-22,Solar Generation,12849.0,EE
 2026-05-23,Solar Generation,24832.7,EE
 2026-05-24,Solar Generation,21308.2,EE
@@ -479458,9 +479755,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Generation,21652.1,EE
 2026-05-27,Solar Generation,19328.0,EE
 2026-05-28,Solar Generation,22180.0,EE
-2026-05-29,Solar Generation,21874.6,EE
-2026-05-20,Solar Capture,80.5,EE
-2026-05-21,Solar Capture,69.83,EE
+2026-05-29,Solar Generation,22622.7,EE
+2026-05-30,Solar Generation,20776.7,EE
+2026-05-21,Solar Capture,64.85,EE
 2026-05-22,Solar Capture,61.57,EE
 2026-05-23,Solar Capture,12.34,EE
 2026-05-24,Solar Capture,-2.71,EE
@@ -479468,9 +479765,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Capture,20.23,EE
 2026-05-27,Solar Capture,7.63,EE
 2026-05-28,Solar Capture,6.09,EE
-2026-05-29,Solar Capture,24.34,EE
-2026-05-20,Wind Onshore Generation,260.0,EE
-2026-05-21,Wind Onshore Generation,1263.2,EE
+2026-05-29,Solar Capture,27.21,EE
+2026-05-30,Solar Capture,33.39,EE
+2026-05-21,Wind Onshore Generation,357.3,EE
 2026-05-22,Wind Onshore Generation,5478.8,EE
 2026-05-23,Wind Onshore Generation,16889.1,EE
 2026-05-24,Wind Onshore Generation,13122.3,EE
@@ -479478,9 +479775,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,23039.6,EE
 2026-05-27,Wind Onshore Generation,26651.4,EE
 2026-05-28,Wind Onshore Generation,23901.4,EE
-2026-05-29,Wind Onshore Generation,23522.2,EE
-2026-05-20,Wind Onshore Capture,65.56,EE
-2026-05-21,Wind Onshore Capture,89.17,EE
+2026-05-29,Wind Onshore Generation,24807.3,EE
+2026-05-30,Wind Onshore Generation,5284.8,EE
+2026-05-21,Wind Onshore Capture,125.25,EE
 2026-05-22,Wind Onshore Capture,76.07,EE
 2026-05-23,Wind Onshore Capture,29.65,EE
 2026-05-24,Wind Onshore Capture,4.66,EE
@@ -479488,9 +479785,8 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,26.92,EE
 2026-05-27,Wind Onshore Capture,15.19,EE
 2026-05-28,Wind Onshore Capture,19.47,EE
-2026-05-29,Wind Onshore Capture,22.29,EE
-2026-05-20,Solar Forecast,454.5,EE
-2026-05-21,Solar Forecast,0.0,EE
+2026-05-29,Wind Onshore Capture,27.25,EE
+2026-05-30,Wind Onshore Capture,38.21,EE
 2026-05-22,Solar Forecast,2702.1,EE
 2026-05-23,Solar Forecast,5548.22,EE
 2026-05-24,Solar Forecast,4749.4,EE
@@ -479499,9 +479795,7 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,3745.38,EE
 2026-05-28,Solar Forecast,4269.38,EE
 2026-05-29,Solar Forecast,5234.92,EE
-2026-05-30,Solar Forecast,4607.1,EE
-2026-05-20,Wind Onshore Forecast,278.23,EE
-2026-05-21,Wind Onshore Forecast,0.0,EE
+2026-05-30,Solar Forecast,5095.82,EE
 2026-05-22,Wind Onshore Forecast,1942.15,EE
 2026-05-23,Wind Onshore Forecast,5224.55,EE
 2026-05-24,Wind Onshore Forecast,3699.68,EE
@@ -479510,82 +479804,8 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,7760.92,EE
 2026-05-28,Wind Onshore Forecast,7218.4,EE
 2026-05-29,Wind Onshore Forecast,8297.55,EE
-2026-05-30,Wind Onshore Forecast,2858.15,EE
-2026-05-20,Baseload,55.87,FI
-2026-05-21,Baseload,70.87,FI
-2026-05-22,Baseload,71.88,FI
-2026-05-23,Baseload,22.22,FI
-2026-05-24,Baseload,0.83,FI
-2026-05-25,Baseload,3.8,FI
-2026-05-26,Baseload,26.13,FI
-2026-05-27,Baseload,13.24,FI
-2026-05-28,Baseload,17.24,FI
-2026-05-29,Baseload,39.49,FI
-2026-05-30,Baseload,41.14,FI
-2026-05-20,Solar Generation,3379.96,FI
-2026-05-21,Solar Generation,38695.12,FI
-2026-05-22,Solar Generation,24926.26,FI
-2026-05-23,Solar Generation,46675.59,FI
-2026-05-24,Solar Generation,28486.6,FI
-2026-05-25,Solar Generation,35445.07,FI
-2026-05-26,Solar Generation,38277.41,FI
-2026-05-27,Solar Generation,30471.31,FI
-2026-05-28,Solar Generation,33657.69,FI
-2026-05-29,Solar Generation,41267.11,FI
-2026-05-20,Solar Capture,60.27,FI
-2026-05-21,Solar Capture,67.86,FI
-2026-05-22,Solar Capture,57.48,FI
-2026-05-23,Solar Capture,10.55,FI
-2026-05-24,Solar Capture,-2.68,FI
-2026-05-25,Solar Capture,1.75,FI
-2026-05-26,Solar Capture,19.5,FI
-2026-05-27,Solar Capture,7.21,FI
-2026-05-28,Solar Capture,7.32,FI
-2026-05-29,Solar Capture,24.97,FI
-2026-05-20,Wind Onshore Generation,55086.9,FI
-2026-05-21,Wind Onshore Generation,136595.81,FI
-2026-05-22,Wind Onshore Generation,42786.03,FI
-2026-05-23,Wind Onshore Generation,119386.06,FI
-2026-05-24,Wind Onshore Generation,285430.7,FI
-2026-05-25,Wind Onshore Generation,402785.2,FI
-2026-05-26,Wind Onshore Generation,198836.72,FI
-2026-05-27,Wind Onshore Generation,319019.3,FI
-2026-05-28,Wind Onshore Generation,412655.8,FI
-2026-05-29,Wind Onshore Generation,262281.0,FI
-2026-05-20,Wind Onshore Capture,53.94,FI
-2026-05-21,Wind Onshore Capture,48.44,FI
-2026-05-22,Wind Onshore Capture,72.23,FI
-2026-05-23,Wind Onshore Capture,21.63,FI
-2026-05-24,Wind Onshore Capture,1.33,FI
-2026-05-25,Wind Onshore Capture,3.84,FI
-2026-05-26,Wind Onshore Capture,23.95,FI
-2026-05-27,Wind Onshore Capture,11.11,FI
-2026-05-28,Wind Onshore Capture,15.08,FI
-2026-05-29,Wind Onshore Capture,22.32,FI
-2026-05-20,Solar Forecast,3291.9,FI
-2026-05-21,Solar Forecast,36093.9,FI
-2026-05-22,Solar Forecast,29372.8,FI
-2026-05-23,Solar Forecast,45888.7,FI
-2026-05-24,Solar Forecast,29465.6,FI
-2026-05-25,Solar Forecast,36719.2,FI
-2026-05-26,Solar Forecast,40370.3,FI
-2026-05-27,Solar Forecast,34938.2,FI
-2026-05-28,Solar Forecast,36016.7,FI
-2026-05-29,Solar Forecast,44414.0,FI
-2026-05-30,Solar Forecast,43404.8,FI
-2026-05-20,Wind Onshore Forecast,55226.0,FI
-2026-05-21,Wind Onshore Forecast,147287.4,FI
-2026-05-22,Wind Onshore Forecast,47969.1,FI
-2026-05-23,Wind Onshore Forecast,123385.7,FI
-2026-05-24,Wind Onshore Forecast,304774.0,FI
-2026-05-25,Wind Onshore Forecast,445010.8,FI
-2026-05-26,Wind Onshore Forecast,177007.0,FI
-2026-05-27,Wind Onshore Forecast,354052.1,FI
-2026-05-28,Wind Onshore Forecast,419145.2,FI
-2026-05-29,Wind Onshore Forecast,244609.3,FI
-2026-05-30,Wind Onshore Forecast,40454.1,FI
-2026-05-20,Baseload,141.56,DK_2
-2026-05-21,Baseload,111.32,DK_2
+2026-05-30,Wind Onshore Forecast,3357.55,EE
+2026-05-21,Baseload,126.52,DK_2
 2026-05-22,Baseload,109.22,DK_2
 2026-05-23,Baseload,78.6,DK_2
 2026-05-24,Baseload,71.61,DK_2
@@ -479594,9 +479814,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,63.07,DK_2
 2026-05-28,Baseload,119.57,DK_2
 2026-05-29,Baseload,98.48,DK_2
-2026-05-30,Baseload,69.61,DK_2
-2026-05-20,Solar Generation,2445.86,DK_2
-2026-05-21,Solar Generation,21346.52,DK_2
+2026-05-30,Baseload,86.18,DK_2
+2026-05-31,Baseload,88.23,DK_2
+2026-05-21,Solar Generation,10420.75,DK_2
 2026-05-22,Solar Generation,17078.21,DK_2
 2026-05-23,Solar Generation,27659.45,DK_2
 2026-05-24,Solar Generation,27883.67,DK_2
@@ -479604,9 +479824,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Generation,33455.96,DK_2
 2026-05-27,Solar Generation,37508.16,DK_2
 2026-05-28,Solar Generation,39977.37,DK_2
-2026-05-29,Solar Generation,27106.79,DK_2
-2026-05-20,Solar Capture,120.11,DK_2
-2026-05-21,Solar Capture,78.59,DK_2
+2026-05-29,Solar Generation,30223.43,DK_2
+2026-05-30,Solar Generation,18438.6,DK_2
+2026-05-21,Solar Capture,78.1,DK_2
 2026-05-22,Solar Capture,70.66,DK_2
 2026-05-23,Solar Capture,19.2,DK_2
 2026-05-24,Solar Capture,10.49,DK_2
@@ -479614,9 +479834,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Capture,38.15,DK_2
 2026-05-27,Solar Capture,22.53,DK_2
 2026-05-28,Solar Capture,47.07,DK_2
-2026-05-29,Solar Capture,40.01,DK_2
-2026-05-20,Wind Onshore Generation,1326.22,DK_2
-2026-05-21,Wind Onshore Generation,10175.22,DK_2
+2026-05-29,Solar Capture,49.97,DK_2
+2026-05-30,Solar Capture,36.38,DK_2
+2026-05-21,Wind Onshore Generation,6019.67,DK_2
 2026-05-22,Wind Onshore Generation,3829.19,DK_2
 2026-05-23,Wind Onshore Generation,3981.5,DK_2
 2026-05-24,Wind Onshore Generation,4965.47,DK_2
@@ -479624,9 +479844,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,12026.24,DK_2
 2026-05-27,Wind Onshore Generation,17556.06,DK_2
 2026-05-28,Wind Onshore Generation,3521.32,DK_2
-2026-05-29,Wind Onshore Generation,3252.09,DK_2
-2026-05-20,Wind Onshore Capture,148.46,DK_2
-2026-05-21,Wind Onshore Capture,104.3,DK_2
+2026-05-29,Wind Onshore Generation,6718.95,DK_2
+2026-05-30,Wind Onshore Generation,12810.59,DK_2
+2026-05-21,Wind Onshore Capture,106.27,DK_2
 2026-05-22,Wind Onshore Capture,108.74,DK_2
 2026-05-23,Wind Onshore Capture,67.09,DK_2
 2026-05-24,Wind Onshore Capture,63.11,DK_2
@@ -479634,9 +479854,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,91.17,DK_2
 2026-05-27,Wind Onshore Capture,70.37,DK_2
 2026-05-28,Wind Onshore Capture,117.54,DK_2
-2026-05-29,Wind Onshore Capture,50.5,DK_2
-2026-05-20,Wind Offshore Generation,2032.24,DK_2
-2026-05-21,Wind Offshore Generation,32070.03,DK_2
+2026-05-29,Wind Onshore Capture,101.2,DK_2
+2026-05-30,Wind Onshore Capture,60.52,DK_2
+2026-05-21,Wind Offshore Generation,20284.63,DK_2
 2026-05-22,Wind Offshore Generation,12515.69,DK_2
 2026-05-23,Wind Offshore Generation,6969.48,DK_2
 2026-05-24,Wind Offshore Generation,11099.72,DK_2
@@ -479644,9 +479864,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Offshore Generation,38518.39,DK_2
 2026-05-27,Wind Offshore Generation,35947.78,DK_2
 2026-05-28,Wind Offshore Generation,9205.02,DK_2
-2026-05-29,Wind Offshore Generation,6515.05,DK_2
-2026-05-20,Wind Offshore Capture,138.16,DK_2
-2026-05-21,Wind Offshore Capture,118.74,DK_2
+2026-05-29,Wind Offshore Generation,21076.68,DK_2
+2026-05-30,Wind Offshore Generation,32951.5,DK_2
+2026-05-21,Wind Offshore Capture,126.78,DK_2
 2026-05-22,Wind Offshore Capture,113.1,DK_2
 2026-05-23,Wind Offshore Capture,115.17,DK_2
 2026-05-24,Wind Offshore Capture,117.06,DK_2
@@ -479654,9 +479874,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Offshore Capture,101.53,DK_2
 2026-05-27,Wind Offshore Capture,82.18,DK_2
 2026-05-28,Wind Offshore Capture,123.04,DK_2
-2026-05-29,Wind Offshore Capture,37.09,DK_2
-2026-05-20,Solar Forecast,2187.74,DK_2
-2026-05-21,Solar Forecast,29161.85,DK_2
+2026-05-29,Wind Offshore Capture,120.67,DK_2
+2026-05-30,Wind Offshore Capture,69.79,DK_2
+2026-05-21,Solar Forecast,11095.67,DK_2
 2026-05-22,Solar Forecast,23343.0,DK_2
 2026-05-23,Solar Forecast,31038.79,DK_2
 2026-05-24,Solar Forecast,30963.23,DK_2
@@ -479665,9 +479885,8 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,32949.94,DK_2
 2026-05-28,Solar Forecast,0.0,DK_2
 2026-05-29,Solar Forecast,31140.43,DK_2
-2026-05-30,Solar Forecast,24372.47,DK_2
-2026-05-20,Wind Onshore Forecast,1556.17,DK_2
-2026-05-21,Wind Onshore Forecast,9696.83,DK_2
+2026-05-30,Solar Forecast,28496.36,DK_2
+2026-05-21,Wind Onshore Forecast,4670.17,DK_2
 2026-05-22,Wind Onshore Forecast,4525.67,DK_2
 2026-05-23,Wind Onshore Forecast,6594.17,DK_2
 2026-05-24,Wind Onshore Forecast,5763.0,DK_2
@@ -479676,9 +479895,8 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,14173.83,DK_2
 2026-05-28,Wind Onshore Forecast,3621.5,DK_2
 2026-05-29,Wind Onshore Forecast,6237.33,DK_2
-2026-05-30,Wind Onshore Forecast,11856.17,DK_2
-2026-05-20,Wind Offshore Forecast,3481.5,DK_2
-2026-05-21,Wind Offshore Forecast,29701.17,DK_2
+2026-05-30,Wind Onshore Forecast,17911.17,DK_2
+2026-05-21,Wind Offshore Forecast,13686.17,DK_2
 2026-05-22,Wind Offshore Forecast,18420.83,DK_2
 2026-05-23,Wind Offshore Forecast,20634.5,DK_2
 2026-05-24,Wind Offshore Forecast,21721.67,DK_2
@@ -479687,9 +479905,81 @@ Date,Metric,Price,Country
 2026-05-27,Wind Offshore Forecast,48943.17,DK_2
 2026-05-28,Wind Offshore Forecast,17660.17,DK_2
 2026-05-29,Wind Offshore Forecast,18700.83,DK_2
-2026-05-30,Wind Offshore Forecast,32788.5,DK_2
-2026-05-20,Baseload,142.36,LV
-2026-05-21,Baseload,109.39,LV
+2026-05-30,Wind Offshore Forecast,48195.33,DK_2
+2026-05-21,Baseload,98.98,FI
+2026-05-22,Baseload,71.88,FI
+2026-05-23,Baseload,22.22,FI
+2026-05-24,Baseload,0.83,FI
+2026-05-25,Baseload,3.8,FI
+2026-05-26,Baseload,26.13,FI
+2026-05-27,Baseload,13.24,FI
+2026-05-28,Baseload,17.24,FI
+2026-05-29,Baseload,39.49,FI
+2026-05-30,Baseload,49.25,FI
+2026-05-31,Baseload,55.53,FI
+2026-05-21,Solar Generation,8933.21,FI
+2026-05-22,Solar Generation,24926.26,FI
+2026-05-23,Solar Generation,46675.59,FI
+2026-05-24,Solar Generation,28486.6,FI
+2026-05-25,Solar Generation,35445.07,FI
+2026-05-26,Solar Generation,38277.41,FI
+2026-05-27,Solar Generation,30471.31,FI
+2026-05-28,Solar Generation,33657.69,FI
+2026-05-29,Solar Generation,43201.46,FI
+2026-05-30,Solar Generation,43949.58,FI
+2026-05-21,Solar Capture,65.51,FI
+2026-05-22,Solar Capture,57.48,FI
+2026-05-23,Solar Capture,10.55,FI
+2026-05-24,Solar Capture,-2.68,FI
+2026-05-25,Solar Capture,1.75,FI
+2026-05-26,Solar Capture,19.5,FI
+2026-05-27,Solar Capture,7.21,FI
+2026-05-28,Solar Capture,7.32,FI
+2026-05-29,Solar Capture,27.87,FI
+2026-05-30,Solar Capture,32.11,FI
+2026-05-21,Wind Onshore Generation,25153.73,FI
+2026-05-22,Wind Onshore Generation,42786.03,FI
+2026-05-23,Wind Onshore Generation,119386.06,FI
+2026-05-24,Wind Onshore Generation,285430.7,FI
+2026-05-25,Wind Onshore Generation,402785.2,FI
+2026-05-26,Wind Onshore Generation,198836.72,FI
+2026-05-27,Wind Onshore Generation,319019.3,FI
+2026-05-28,Wind Onshore Generation,412655.8,FI
+2026-05-29,Wind Onshore Generation,281301.65,FI
+2026-05-30,Wind Onshore Generation,28974.68,FI
+2026-05-21,Wind Onshore Capture,83.99,FI
+2026-05-22,Wind Onshore Capture,72.23,FI
+2026-05-23,Wind Onshore Capture,21.63,FI
+2026-05-24,Wind Onshore Capture,1.33,FI
+2026-05-25,Wind Onshore Capture,3.84,FI
+2026-05-26,Wind Onshore Capture,23.95,FI
+2026-05-27,Wind Onshore Capture,11.11,FI
+2026-05-28,Wind Onshore Capture,15.08,FI
+2026-05-29,Wind Onshore Capture,27.21,FI
+2026-05-30,Wind Onshore Capture,45.7,FI
+2026-05-21,Solar Forecast,8147.6,FI
+2026-05-22,Solar Forecast,29372.8,FI
+2026-05-23,Solar Forecast,45888.7,FI
+2026-05-24,Solar Forecast,29465.6,FI
+2026-05-25,Solar Forecast,36719.2,FI
+2026-05-26,Solar Forecast,40370.3,FI
+2026-05-27,Solar Forecast,34938.2,FI
+2026-05-28,Solar Forecast,36016.7,FI
+2026-05-29,Solar Forecast,44414.0,FI
+2026-05-30,Solar Forecast,48291.6,FI
+2026-05-31,Solar Forecast,0.0,FI
+2026-05-21,Wind Onshore Forecast,27470.6,FI
+2026-05-22,Wind Onshore Forecast,47969.1,FI
+2026-05-23,Wind Onshore Forecast,123385.7,FI
+2026-05-24,Wind Onshore Forecast,304774.0,FI
+2026-05-25,Wind Onshore Forecast,445010.8,FI
+2026-05-26,Wind Onshore Forecast,177007.0,FI
+2026-05-27,Wind Onshore Forecast,354052.1,FI
+2026-05-28,Wind Onshore Forecast,419145.2,FI
+2026-05-29,Wind Onshore Forecast,244609.3,FI
+2026-05-30,Wind Onshore Forecast,76023.4,FI
+2026-05-31,Wind Onshore Forecast,9300.2,FI
+2026-05-21,Baseload,120.09,LV
 2026-05-22,Baseload,90.9,LV
 2026-05-23,Baseload,42.94,LV
 2026-05-24,Baseload,22.7,LV
@@ -479698,9 +479988,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,40.32,LV
 2026-05-28,Baseload,81.13,LV
 2026-05-29,Baseload,60.57,LV
-2026-05-30,Baseload,69.06,LV
-2026-05-20,Solar Generation,449.0,LV
-2026-05-21,Solar Generation,6679.0,LV
+2026-05-30,Baseload,82.99,LV
+2026-05-31,Baseload,90.49,LV
+2026-05-21,Solar Generation,1019.0,LV
 2026-05-22,Solar Generation,7508.0,LV
 2026-05-23,Solar Generation,6957.0,LV
 2026-05-24,Solar Generation,2650.0,LV
@@ -479708,9 +479998,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Generation,7692.0,LV
 2026-05-27,Solar Generation,5403.0,LV
 2026-05-28,Solar Generation,6914.0,LV
-2026-05-29,Solar Generation,7582.0,LV
-2026-05-20,Solar Capture,81.72,LV
-2026-05-21,Solar Capture,82.68,LV
+2026-05-29,Solar Generation,7813.0,LV
+2026-05-30,Solar Generation,8831.0,LV
+2026-05-21,Solar Capture,42.87,LV
 2026-05-22,Solar Capture,60.14,LV
 2026-05-23,Solar Capture,28.19,LV
 2026-05-24,Solar Capture,2.08,LV
@@ -479718,9 +480008,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Capture,37.2,LV
 2026-05-27,Solar Capture,26.38,LV
 2026-05-28,Solar Capture,20.76,LV
-2026-05-29,Solar Capture,23.65,LV
-2026-05-20,Wind Onshore Generation,53.0,LV
-2026-05-21,Wind Onshore Generation,174.0,LV
+2026-05-29,Solar Capture,25.68,LV
+2026-05-30,Solar Capture,47.33,LV
+2026-05-21,Wind Onshore Generation,98.0,LV
 2026-05-22,Wind Onshore Generation,895.0,LV
 2026-05-23,Wind Onshore Generation,1167.0,LV
 2026-05-24,Wind Onshore Generation,1132.0,LV
@@ -479728,9 +480018,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,1134.0,LV
 2026-05-27,Wind Onshore Generation,2846.0,LV
 2026-05-28,Wind Onshore Generation,3117.0,LV
-2026-05-29,Wind Onshore Generation,1728.0,LV
-2026-05-20,Wind Onshore Capture,151.97,LV
-2026-05-21,Wind Onshore Capture,126.38,LV
+2026-05-29,Wind Onshore Generation,1928.0,LV
+2026-05-30,Wind Onshore Generation,229.0,LV
+2026-05-21,Wind Onshore Capture,145.47,LV
 2026-05-22,Wind Onshore Capture,87.87,LV
 2026-05-23,Wind Onshore Capture,51.7,LV
 2026-05-24,Wind Onshore Capture,16.89,LV
@@ -479738,9 +480028,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,46.28,LV
 2026-05-27,Wind Onshore Capture,45.88,LV
 2026-05-28,Wind Onshore Capture,87.83,LV
-2026-05-29,Wind Onshore Capture,33.95,LV
-2026-05-20,Solar Forecast,3392.2,LV
-2026-05-21,Solar Forecast,28092.5,LV
+2026-05-29,Wind Onshore Capture,45.01,LV
+2026-05-30,Wind Onshore Capture,67.3,LV
+2026-05-21,Solar Forecast,7793.8,LV
 2026-05-22,Solar Forecast,31576.8,LV
 2026-05-23,Solar Forecast,30846.5,LV
 2026-05-24,Solar Forecast,13086.2,LV
@@ -479749,9 +480039,9 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,24339.6,LV
 2026-05-28,Solar Forecast,30624.5,LV
 2026-05-29,Solar Forecast,33496.9,LV
-2026-05-30,Solar Forecast,35851.8,LV
-2026-05-20,Wind Onshore Forecast,630.1,LV
-2026-05-21,Wind Onshore Forecast,943.9,LV
+2026-05-30,Solar Forecast,40387.7,LV
+2026-05-31,Solar Forecast,0.0,LV
+2026-05-21,Wind Onshore Forecast,314.2,LV
 2026-05-22,Wind Onshore Forecast,4623.1,LV
 2026-05-23,Wind Onshore Forecast,5609.7,LV
 2026-05-24,Wind Onshore Forecast,7393.2,LV
@@ -479760,9 +480050,9 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,13349.4,LV
 2026-05-28,Wind Onshore Forecast,14408.7,LV
 2026-05-29,Wind Onshore Forecast,9930.3,LV
-2026-05-30,Wind Onshore Forecast,1810.4,LV
-2026-05-20,Baseload,142.36,LT
-2026-05-21,Baseload,109.39,LT
+2026-05-30,Wind Onshore Forecast,2020.3,LV
+2026-05-31,Wind Onshore Forecast,23.0,LV
+2026-05-21,Baseload,120.09,LT
 2026-05-22,Baseload,90.9,LT
 2026-05-23,Baseload,43.66,LT
 2026-05-24,Baseload,22.7,LT
@@ -479771,9 +480061,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,40.32,LT
 2026-05-28,Baseload,81.13,LT
 2026-05-29,Baseload,60.57,LT
-2026-05-30,Baseload,69.24,LT
-2026-05-20,Solar Generation,2292.23,LT
-2026-05-21,Solar Generation,36949.04,LT
+2026-05-30,Baseload,83.12,LT
+2026-05-31,Baseload,90.49,LT
+2026-05-21,Solar Generation,8599.91,LT
 2026-05-22,Solar Generation,53089.67,LT
 2026-05-23,Solar Generation,60764.43,LT
 2026-05-24,Solar Generation,52827.94,LT
@@ -479781,9 +480071,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Generation,47868.0,LT
 2026-05-27,Solar Generation,58677.71,LT
 2026-05-28,Solar Generation,59266.36,LT
-2026-05-29,Solar Generation,48025.28,LT
-2026-05-20,Solar Capture,109.33,LT
-2026-05-21,Solar Capture,73.55,LT
+2026-05-29,Solar Generation,49338.0,LT
+2026-05-30,Solar Generation,57181.96,LT
+2026-05-21,Solar Capture,65.78,LT
 2026-05-22,Solar Capture,56.59,LT
 2026-05-23,Solar Capture,12.75,LT
 2026-05-24,Solar Capture,-1.29,LT
@@ -479791,9 +480081,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Capture,21.17,LT
 2026-05-27,Solar Capture,8.93,LT
 2026-05-28,Solar Capture,15.55,LT
-2026-05-29,Solar Capture,23.46,LT
-2026-05-20,Wind Onshore Generation,1683.14,LT
-2026-05-21,Wind Onshore Generation,16187.33,LT
+2026-05-29,Solar Capture,26.4,LT
+2026-05-30,Solar Capture,37.98,LT
+2026-05-21,Wind Onshore Generation,12550.57,LT
 2026-05-22,Wind Onshore Generation,55975.16,LT
 2026-05-23,Wind Onshore Generation,30028.63,LT
 2026-05-24,Wind Onshore Generation,62438.03,LT
@@ -479801,9 +480091,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,69439.7,LT
 2026-05-27,Wind Onshore Generation,95312.15,LT
 2026-05-28,Wind Onshore Generation,115231.5,LT
-2026-05-29,Wind Onshore Generation,71842.76,LT
-2026-05-20,Wind Onshore Capture,151.53,LT
-2026-05-21,Wind Onshore Capture,134.23,LT
+2026-05-29,Wind Onshore Generation,88138.79,LT
+2026-05-30,Wind Onshore Generation,15216.85,LT
+2026-05-21,Wind Onshore Capture,138.34,LT
 2026-05-22,Wind Onshore Capture,78.07,LT
 2026-05-23,Wind Onshore Capture,53.56,LT
 2026-05-24,Wind Onshore Capture,28.73,LT
@@ -479811,9 +480101,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,48.6,LT
 2026-05-27,Wind Onshore Capture,42.11,LT
 2026-05-28,Wind Onshore Capture,87.07,LT
-2026-05-29,Wind Onshore Capture,37.92,LT
-2026-05-20,Solar Forecast,2959.09,LT
-2026-05-21,Solar Forecast,35397.3,LT
+2026-05-29,Wind Onshore Capture,60.51,LT
+2026-05-30,Wind Onshore Capture,112.79,LT
+2026-05-21,Solar Forecast,10256.57,LT
 2026-05-22,Solar Forecast,48361.56,LT
 2026-05-23,Solar Forecast,63529.03,LT
 2026-05-24,Solar Forecast,57638.69,LT
@@ -479822,9 +480112,9 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,64713.75,LT
 2026-05-28,Solar Forecast,61287.53,LT
 2026-05-29,Solar Forecast,53928.41,LT
-2026-05-30,Solar Forecast,60122.58,LT
-2026-05-20,Wind Onshore Forecast,4432.76,LT
-2026-05-21,Wind Onshore Forecast,17215.42,LT
+2026-05-30,Solar Forecast,66606.59,LT
+2026-05-31,Solar Forecast,28709.13,LT
+2026-05-21,Wind Onshore Forecast,10194.48,LT
 2026-05-22,Wind Onshore Forecast,50984.57,LT
 2026-05-23,Wind Onshore Forecast,39901.34,LT
 2026-05-24,Wind Onshore Forecast,75819.62,LT
@@ -479833,9 +480123,9 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,124196.79,LT
 2026-05-28,Wind Onshore Forecast,130594.01,LT
 2026-05-29,Wind Onshore Forecast,97534.33,LT
-2026-05-30,Wind Onshore Forecast,11114.86,LT
-2026-05-20,Baseload,130.51,NO_1
-2026-05-21,Baseload,110.12,NO_1
+2026-05-30,Wind Onshore Forecast,17675.11,LT
+2026-05-31,Wind Onshore Forecast,7537.38,LT
+2026-05-21,Baseload,121.71,NO_1
 2026-05-22,Baseload,97.18,NO_1
 2026-05-23,Baseload,66.44,NO_1
 2026-05-24,Baseload,46.24,NO_1
@@ -479844,9 +480134,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,75.69,NO_1
 2026-05-28,Baseload,87.9,NO_1
 2026-05-29,Baseload,79.67,NO_1
-2026-05-30,Baseload,65.62,NO_1
-2026-05-20,Solar Generation,11.86,NO_1
-2026-05-21,Solar Generation,64.9,NO_1
+2026-05-30,Baseload,76.02,NO_1
+2026-05-31,Baseload,78.08,NO_1
+2026-05-21,Solar Generation,24.79,NO_1
 2026-05-22,Solar Generation,136.33,NO_1
 2026-05-23,Solar Generation,159.15,NO_1
 2026-05-24,Solar Generation,60.88,NO_1
@@ -479854,9 +480144,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Generation,129.29,NO_1
 2026-05-27,Solar Generation,120.29,NO_1
 2026-05-28,Solar Generation,163.24,NO_1
-2026-05-29,Solar Generation,147.71,NO_1
-2026-05-20,Solar Capture,105.58,NO_1
-2026-05-21,Solar Capture,75.81,NO_1
+2026-05-29,Solar Generation,152.18,NO_1
+2026-05-30,Solar Generation,117.33,NO_1
+2026-05-21,Solar Capture,72.26,NO_1
 2026-05-22,Solar Capture,60.55,NO_1
 2026-05-23,Solar Capture,20.82,NO_1
 2026-05-24,Solar Capture,27.33,NO_1
@@ -479864,9 +480154,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Capture,57.34,NO_1
 2026-05-27,Solar Capture,34.37,NO_1
 2026-05-28,Solar Capture,51.76,NO_1
-2026-05-29,Solar Capture,31.2,NO_1
-2026-05-20,Wind Onshore Generation,1119.68,NO_1
-2026-05-21,Wind Onshore Generation,2177.6,NO_1
+2026-05-29,Solar Capture,33.52,NO_1
+2026-05-30,Solar Capture,33.58,NO_1
+2026-05-21,Wind Onshore Generation,547.86,NO_1
 2026-05-22,Wind Onshore Generation,5697.56,NO_1
 2026-05-23,Wind Onshore Generation,23116.38,NO_1
 2026-05-24,Wind Onshore Generation,18478.56,NO_1
@@ -479874,9 +480164,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,24709.29,NO_1
 2026-05-27,Wind Onshore Generation,18922.4,NO_1
 2026-05-28,Wind Onshore Generation,10874.0,NO_1
-2026-05-29,Wind Onshore Generation,4981.52,NO_1
-2026-05-20,Wind Onshore Capture,126.59,NO_1
-2026-05-21,Wind Onshore Capture,109.63,NO_1
+2026-05-29,Wind Onshore Generation,10582.31,NO_1
+2026-05-30,Wind Onshore Generation,2738.48,NO_1
+2026-05-21,Wind Onshore Capture,124.91,NO_1
 2026-05-22,Wind Onshore Capture,104.64,NO_1
 2026-05-23,Wind Onshore Capture,55.92,NO_1
 2026-05-24,Wind Onshore Capture,64.12,NO_1
@@ -479884,8 +480174,8 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,78.3,NO_1
 2026-05-27,Wind Onshore Capture,75.98,NO_1
 2026-05-28,Wind Onshore Capture,101.32,NO_1
-2026-05-29,Wind Onshore Capture,57.86,NO_1
-2026-05-20,Solar Forecast,0.0,NO_1
+2026-05-29,Wind Onshore Capture,85.32,NO_1
+2026-05-30,Wind Onshore Capture,90.9,NO_1
 2026-05-21,Solar Forecast,0.0,NO_1
 2026-05-22,Solar Forecast,0.0,NO_1
 2026-05-23,Solar Forecast,0.0,NO_1
@@ -479896,8 +480186,8 @@ Date,Metric,Price,Country
 2026-05-28,Solar Forecast,0.0,NO_1
 2026-05-29,Solar Forecast,0.0,NO_1
 2026-05-30,Solar Forecast,0.0,NO_1
-2026-05-20,Wind Onshore Forecast,1938.23,NO_1
-2026-05-21,Wind Onshore Forecast,2821.5,NO_1
+2026-05-31,Solar Forecast,0.0,NO_1
+2026-05-21,Wind Onshore Forecast,896.17,NO_1
 2026-05-22,Wind Onshore Forecast,5800.87,NO_1
 2026-05-23,Wind Onshore Forecast,23493.42,NO_1
 2026-05-24,Wind Onshore Forecast,18045.85,NO_1
@@ -479906,9 +480196,9 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,22324.0,NO_1
 2026-05-28,Wind Onshore Forecast,10766.41,NO_1
 2026-05-29,Wind Onshore Forecast,9712.73,NO_1
-2026-05-30,Wind Onshore Forecast,0.0,NO_1
-2026-05-20,Baseload,133.19,NO_2
-2026-05-21,Baseload,109.38,NO_2
+2026-05-30,Wind Onshore Forecast,6169.53,NO_1
+2026-05-31,Wind Onshore Forecast,0.0,NO_1
+2026-05-21,Baseload,124.85,NO_2
 2026-05-22,Baseload,98.15,NO_2
 2026-05-23,Baseload,69.45,NO_2
 2026-05-24,Baseload,64.89,NO_2
@@ -479917,9 +480207,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,76.43,NO_2
 2026-05-28,Baseload,89.44,NO_2
 2026-05-29,Baseload,85.05,NO_2
-2026-05-30,Baseload,71.95,NO_2
-2026-05-20,Wind Onshore Generation,8249.05,NO_2
-2026-05-21,Wind Onshore Generation,8108.58,NO_2
+2026-05-30,Baseload,82.74,NO_2
+2026-05-31,Baseload,84.26,NO_2
+2026-05-21,Wind Onshore Generation,2448.11,NO_2
 2026-05-22,Wind Onshore Generation,11789.58,NO_2
 2026-05-23,Wind Onshore Generation,34717.81,NO_2
 2026-05-24,Wind Onshore Generation,12102.7,NO_2
@@ -479927,9 +480217,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,50008.5,NO_2
 2026-05-27,Wind Onshore Generation,61705.95,NO_2
 2026-05-28,Wind Onshore Generation,9941.12,NO_2
-2026-05-29,Wind Onshore Generation,23680.46,NO_2
-2026-05-20,Wind Onshore Capture,128.45,NO_2
-2026-05-21,Wind Onshore Capture,110.26,NO_2
+2026-05-29,Wind Onshore Generation,25704.91,NO_2
+2026-05-30,Wind Onshore Generation,17039.82,NO_2
+2026-05-21,Wind Onshore Capture,114.68,NO_2
 2026-05-22,Wind Onshore Capture,97.22,NO_2
 2026-05-23,Wind Onshore Capture,80.9,NO_2
 2026-05-24,Wind Onshore Capture,65.6,NO_2
@@ -479937,9 +480227,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,75.16,NO_2
 2026-05-27,Wind Onshore Capture,75.82,NO_2
 2026-05-28,Wind Onshore Capture,99.03,NO_2
-2026-05-29,Wind Onshore Capture,53.86,NO_2
-2026-05-20,Wind Offshore Generation,83.17,NO_2
-2026-05-21,Wind Offshore Generation,111.22,NO_2
+2026-05-29,Wind Onshore Capture,58.91,NO_2
+2026-05-30,Wind Onshore Capture,70.48,NO_2
+2026-05-21,Wind Offshore Generation,9.99,NO_2
 2026-05-22,Wind Offshore Generation,301.18,NO_2
 2026-05-23,Wind Offshore Generation,260.43,NO_2
 2026-05-24,Wind Offshore Generation,98.0,NO_2
@@ -479947,9 +480237,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Offshore Generation,262.38,NO_2
 2026-05-27,Wind Offshore Generation,412.4,NO_2
 2026-05-28,Wind Offshore Generation,137.62,NO_2
-2026-05-29,Wind Offshore Generation,255.87,NO_2
-2026-05-20,Wind Offshore Capture,133.85,NO_2
-2026-05-21,Wind Offshore Capture,120.83,NO_2
+2026-05-29,Wind Offshore Generation,299.42,NO_2
+2026-05-30,Wind Offshore Generation,108.81,NO_2
+2026-05-21,Wind Offshore Capture,152.03,NO_2
 2026-05-22,Wind Offshore Capture,94.0,NO_2
 2026-05-23,Wind Offshore Capture,71.97,NO_2
 2026-05-24,Wind Offshore Capture,44.19,NO_2
@@ -479957,8 +480247,8 @@ Date,Metric,Price,Country
 2026-05-26,Wind Offshore Capture,74.69,NO_2
 2026-05-27,Wind Offshore Capture,77.11,NO_2
 2026-05-28,Wind Offshore Capture,99.91,NO_2
-2026-05-29,Wind Offshore Capture,59.2,NO_2
-2026-05-20,Solar Forecast,0.0,NO_2
+2026-05-29,Wind Offshore Capture,67.81,NO_2
+2026-05-30,Wind Offshore Capture,94.76,NO_2
 2026-05-21,Solar Forecast,0.0,NO_2
 2026-05-22,Solar Forecast,0.0,NO_2
 2026-05-23,Solar Forecast,0.0,NO_2
@@ -479969,8 +480259,8 @@ Date,Metric,Price,Country
 2026-05-28,Solar Forecast,0.0,NO_2
 2026-05-29,Solar Forecast,0.0,NO_2
 2026-05-30,Solar Forecast,0.0,NO_2
-2026-05-20,Wind Onshore Forecast,9704.65,NO_2
-2026-05-21,Wind Onshore Forecast,10767.88,NO_2
+2026-05-31,Solar Forecast,0.0,NO_2
+2026-05-21,Wind Onshore Forecast,3238.13,NO_2
 2026-05-22,Wind Onshore Forecast,14792.07,NO_2
 2026-05-23,Wind Onshore Forecast,38962.92,NO_2
 2026-05-24,Wind Onshore Forecast,11141.64,NO_2
@@ -479979,9 +480269,9 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,58177.26,NO_2
 2026-05-28,Wind Onshore Forecast,10024.41,NO_2
 2026-05-29,Wind Onshore Forecast,25717.2,NO_2
-2026-05-30,Wind Onshore Forecast,0.0,NO_2
-2026-05-20,Wind Offshore Forecast,102.8,NO_2
-2026-05-21,Wind Offshore Forecast,113.6,NO_2
+2026-05-30,Wind Onshore Forecast,26019.38,NO_2
+2026-05-31,Wind Onshore Forecast,0.0,NO_2
+2026-05-21,Wind Offshore Forecast,15.8,NO_2
 2026-05-22,Wind Offshore Forecast,311.6,NO_2
 2026-05-23,Wind Offshore Forecast,260.0,NO_2
 2026-05-24,Wind Offshore Forecast,68.8,NO_2
@@ -479990,72 +480280,9 @@ Date,Metric,Price,Country
 2026-05-27,Wind Offshore Forecast,394.4,NO_2
 2026-05-28,Wind Offshore Forecast,136.0,NO_2
 2026-05-29,Wind Offshore Forecast,282.0,NO_2
-2026-05-30,Wind Offshore Forecast,0.0,NO_2
-2026-05-20,Baseload,80.77,NO_3
-2026-05-21,Baseload,71.49,NO_3
-2026-05-22,Baseload,63.32,NO_3
-2026-05-23,Baseload,28.26,NO_3
-2026-05-24,Baseload,17.08,NO_3
-2026-05-25,Baseload,25.09,NO_3
-2026-05-26,Baseload,24.45,NO_3
-2026-05-27,Baseload,31.03,NO_3
-2026-05-28,Baseload,36.65,NO_3
-2026-05-29,Baseload,52.43,NO_3
-2026-05-30,Baseload,42.72,NO_3
-2026-05-20,Solar Generation,0.0,NO_3
-2026-05-21,Solar Generation,0.0,NO_3
-2026-05-22,Solar Generation,0.0,NO_3
-2026-05-23,Solar Generation,0.0,NO_3
-2026-05-24,Solar Generation,0.0,NO_3
-2026-05-25,Solar Generation,0.0,NO_3
-2026-05-26,Solar Generation,0.0,NO_3
-2026-05-27,Solar Generation,0.0,NO_3
-2026-05-28,Solar Generation,0.0,NO_3
-2026-05-29,Solar Generation,0.0,NO_3
-2026-05-20,Wind Onshore Generation,5881.2,NO_3
-2026-05-21,Wind Onshore Generation,28669.01,NO_3
-2026-05-22,Wind Onshore Generation,29951.3,NO_3
-2026-05-23,Wind Onshore Generation,77515.62,NO_3
-2026-05-24,Wind Onshore Generation,118730.89,NO_3
-2026-05-25,Wind Onshore Generation,99965.88,NO_3
-2026-05-26,Wind Onshore Generation,130079.39,NO_3
-2026-05-27,Wind Onshore Generation,92209.21,NO_3
-2026-05-28,Wind Onshore Generation,63336.57,NO_3
-2026-05-29,Wind Onshore Generation,26189.15,NO_3
-2026-05-20,Wind Onshore Capture,80.14,NO_3
-2026-05-21,Wind Onshore Capture,71.35,NO_3
-2026-05-22,Wind Onshore Capture,62.89,NO_3
-2026-05-23,Wind Onshore Capture,31.39,NO_3
-2026-05-24,Wind Onshore Capture,19.12,NO_3
-2026-05-25,Wind Onshore Capture,26.52,NO_3
-2026-05-26,Wind Onshore Capture,24.94,NO_3
-2026-05-27,Wind Onshore Capture,30.25,NO_3
-2026-05-28,Wind Onshore Capture,35.79,NO_3
-2026-05-29,Wind Onshore Capture,48.58,NO_3
-2026-05-20,Solar Forecast,0.0,NO_3
-2026-05-21,Solar Forecast,0.0,NO_3
-2026-05-22,Solar Forecast,0.0,NO_3
-2026-05-23,Solar Forecast,0.0,NO_3
-2026-05-24,Solar Forecast,0.0,NO_3
-2026-05-25,Solar Forecast,0.0,NO_3
-2026-05-26,Solar Forecast,0.0,NO_3
-2026-05-27,Solar Forecast,0.0,NO_3
-2026-05-28,Solar Forecast,0.0,NO_3
-2026-05-29,Solar Forecast,0.0,NO_3
-2026-05-30,Solar Forecast,0.0,NO_3
-2026-05-20,Wind Onshore Forecast,3330.98,NO_3
-2026-05-21,Wind Onshore Forecast,25442.92,NO_3
-2026-05-22,Wind Onshore Forecast,30631.68,NO_3
-2026-05-23,Wind Onshore Forecast,71067.28,NO_3
-2026-05-24,Wind Onshore Forecast,125618.89,NO_3
-2026-05-25,Wind Onshore Forecast,102675.83,NO_3
-2026-05-26,Wind Onshore Forecast,131945.72,NO_3
-2026-05-27,Wind Onshore Forecast,91455.49,NO_3
-2026-05-28,Wind Onshore Forecast,62671.86,NO_3
-2026-05-29,Wind Onshore Forecast,30412.43,NO_3
-2026-05-30,Wind Onshore Forecast,0.0,NO_3
-2026-05-20,Baseload,26.47,NO_4
-2026-05-21,Baseload,21.83,NO_4
+2026-05-30,Wind Offshore Forecast,156.4,NO_2
+2026-05-31,Wind Offshore Forecast,0.0,NO_2
+2026-05-21,Baseload,21.72,NO_4
 2026-05-22,Baseload,25.54,NO_4
 2026-05-23,Baseload,11.6,NO_4
 2026-05-24,Baseload,2.17,NO_4
@@ -480064,9 +480291,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,7.46,NO_4
 2026-05-28,Baseload,11.2,NO_4
 2026-05-29,Baseload,31.29,NO_4
-2026-05-30,Baseload,26.68,NO_4
-2026-05-20,Wind Onshore Generation,1855.91,NO_4
-2026-05-21,Wind Onshore Generation,11923.38,NO_4
+2026-05-30,Baseload,27.36,NO_4
+2026-05-31,Baseload,26.89,NO_4
+2026-05-21,Wind Onshore Generation,6599.64,NO_4
 2026-05-22,Wind Onshore Generation,9986.97,NO_4
 2026-05-23,Wind Onshore Generation,19522.25,NO_4
 2026-05-24,Wind Onshore Generation,41160.55,NO_4
@@ -480074,9 +480301,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,32989.71,NO_4
 2026-05-27,Wind Onshore Generation,24809.84,NO_4
 2026-05-28,Wind Onshore Generation,37623.2,NO_4
-2026-05-29,Wind Onshore Generation,13238.19,NO_4
-2026-05-20,Wind Onshore Capture,26.28,NO_4
-2026-05-21,Wind Onshore Capture,21.97,NO_4
+2026-05-29,Wind Onshore Generation,14902.49,NO_4
+2026-05-30,Wind Onshore Generation,5576.51,NO_4
+2026-05-21,Wind Onshore Capture,21.78,NO_4
 2026-05-22,Wind Onshore Capture,22.93,NO_4
 2026-05-23,Wind Onshore Capture,12.15,NO_4
 2026-05-24,Wind Onshore Capture,2.56,NO_4
@@ -480084,8 +480311,8 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,8.19,NO_4
 2026-05-27,Wind Onshore Capture,7.99,NO_4
 2026-05-28,Wind Onshore Capture,10.83,NO_4
-2026-05-29,Wind Onshore Capture,28.71,NO_4
-2026-05-20,Solar Forecast,0.0,NO_4
+2026-05-29,Wind Onshore Capture,30.05,NO_4
+2026-05-30,Wind Onshore Capture,26.74,NO_4
 2026-05-21,Solar Forecast,0.0,NO_4
 2026-05-22,Solar Forecast,0.0,NO_4
 2026-05-23,Solar Forecast,0.0,NO_4
@@ -480096,8 +480323,8 @@ Date,Metric,Price,Country
 2026-05-28,Solar Forecast,0.0,NO_4
 2026-05-29,Solar Forecast,0.0,NO_4
 2026-05-30,Solar Forecast,0.0,NO_4
-2026-05-20,Wind Onshore Forecast,1985.25,NO_4
-2026-05-21,Wind Onshore Forecast,10018.87,NO_4
+2026-05-31,Solar Forecast,0.0,NO_4
+2026-05-21,Wind Onshore Forecast,5531.62,NO_4
 2026-05-22,Wind Onshore Forecast,13877.43,NO_4
 2026-05-23,Wind Onshore Forecast,17719.43,NO_4
 2026-05-24,Wind Onshore Forecast,39995.42,NO_4
@@ -480106,9 +480333,72 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,23988.04,NO_4
 2026-05-28,Wind Onshore Forecast,37056.57,NO_4
 2026-05-29,Wind Onshore Forecast,19264.02,NO_4
-2026-05-30,Wind Onshore Forecast,0.0,NO_4
-2026-05-20,Baseload,119.36,NO_5
-2026-05-21,Baseload,106.84,NO_5
+2026-05-30,Wind Onshore Forecast,8800.22,NO_4
+2026-05-31,Wind Onshore Forecast,0.0,NO_4
+2026-05-21,Baseload,71.35,NO_3
+2026-05-22,Baseload,63.32,NO_3
+2026-05-23,Baseload,28.26,NO_3
+2026-05-24,Baseload,17.08,NO_3
+2026-05-25,Baseload,25.09,NO_3
+2026-05-26,Baseload,24.45,NO_3
+2026-05-27,Baseload,31.03,NO_3
+2026-05-28,Baseload,36.65,NO_3
+2026-05-29,Baseload,52.43,NO_3
+2026-05-30,Baseload,50.83,NO_3
+2026-05-31,Baseload,59.4,NO_3
+2026-05-21,Solar Generation,0.0,NO_3
+2026-05-22,Solar Generation,0.0,NO_3
+2026-05-23,Solar Generation,0.0,NO_3
+2026-05-24,Solar Generation,0.0,NO_3
+2026-05-25,Solar Generation,0.0,NO_3
+2026-05-26,Solar Generation,0.0,NO_3
+2026-05-27,Solar Generation,0.0,NO_3
+2026-05-28,Solar Generation,0.0,NO_3
+2026-05-29,Solar Generation,0.0,NO_3
+2026-05-30,Solar Generation,0.0,NO_3
+2026-05-21,Wind Onshore Generation,18811.71,NO_3
+2026-05-22,Wind Onshore Generation,29951.3,NO_3
+2026-05-23,Wind Onshore Generation,77515.62,NO_3
+2026-05-24,Wind Onshore Generation,118730.89,NO_3
+2026-05-25,Wind Onshore Generation,99965.88,NO_3
+2026-05-26,Wind Onshore Generation,130079.39,NO_3
+2026-05-27,Wind Onshore Generation,92209.21,NO_3
+2026-05-28,Wind Onshore Generation,63336.57,NO_3
+2026-05-29,Wind Onshore Generation,38234.16,NO_3
+2026-05-30,Wind Onshore Generation,10176.71,NO_3
+2026-05-21,Wind Onshore Capture,72.99,NO_3
+2026-05-22,Wind Onshore Capture,62.89,NO_3
+2026-05-23,Wind Onshore Capture,31.39,NO_3
+2026-05-24,Wind Onshore Capture,19.12,NO_3
+2026-05-25,Wind Onshore Capture,26.52,NO_3
+2026-05-26,Wind Onshore Capture,24.94,NO_3
+2026-05-27,Wind Onshore Capture,30.25,NO_3
+2026-05-28,Wind Onshore Capture,35.79,NO_3
+2026-05-29,Wind Onshore Capture,55.57,NO_3
+2026-05-30,Wind Onshore Capture,51.64,NO_3
+2026-05-21,Solar Forecast,0.0,NO_3
+2026-05-22,Solar Forecast,0.0,NO_3
+2026-05-23,Solar Forecast,0.0,NO_3
+2026-05-24,Solar Forecast,0.0,NO_3
+2026-05-25,Solar Forecast,0.0,NO_3
+2026-05-26,Solar Forecast,0.0,NO_3
+2026-05-27,Solar Forecast,0.0,NO_3
+2026-05-28,Solar Forecast,0.0,NO_3
+2026-05-29,Solar Forecast,0.0,NO_3
+2026-05-30,Solar Forecast,0.0,NO_3
+2026-05-31,Solar Forecast,0.0,NO_3
+2026-05-21,Wind Onshore Forecast,17439.31,NO_3
+2026-05-22,Wind Onshore Forecast,30631.68,NO_3
+2026-05-23,Wind Onshore Forecast,71067.28,NO_3
+2026-05-24,Wind Onshore Forecast,125618.89,NO_3
+2026-05-25,Wind Onshore Forecast,102675.83,NO_3
+2026-05-26,Wind Onshore Forecast,131945.72,NO_3
+2026-05-27,Wind Onshore Forecast,91455.49,NO_3
+2026-05-28,Wind Onshore Forecast,62671.86,NO_3
+2026-05-29,Wind Onshore Forecast,30412.43,NO_3
+2026-05-30,Wind Onshore Forecast,11283.42,NO_3
+2026-05-31,Wind Onshore Forecast,0.0,NO_3
+2026-05-21,Baseload,109.84,NO_5
 2026-05-22,Baseload,101.0,NO_5
 2026-05-23,Baseload,62.43,NO_5
 2026-05-24,Baseload,53.7,NO_5
@@ -480117,8 +480407,8 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,78.57,NO_5
 2026-05-28,Baseload,84.33,NO_5
 2026-05-29,Baseload,83.11,NO_5
-2026-05-30,Baseload,56.52,NO_5
-2026-05-20,Solar Forecast,0.0,NO_5
+2026-05-30,Baseload,66.96,NO_5
+2026-05-31,Baseload,69.39,NO_5
 2026-05-21,Solar Forecast,0.0,NO_5
 2026-05-22,Solar Forecast,0.0,NO_5
 2026-05-23,Solar Forecast,0.0,NO_5
@@ -480129,7 +480419,7 @@ Date,Metric,Price,Country
 2026-05-28,Solar Forecast,0.0,NO_5
 2026-05-29,Solar Forecast,0.0,NO_5
 2026-05-30,Solar Forecast,0.0,NO_5
-2026-05-20,Wind Onshore Forecast,0.0,NO_5
+2026-05-31,Solar Forecast,0.0,NO_5
 2026-05-21,Wind Onshore Forecast,0.0,NO_5
 2026-05-22,Wind Onshore Forecast,0.0,NO_5
 2026-05-23,Wind Onshore Forecast,0.0,NO_5
@@ -480140,8 +480430,8 @@ Date,Metric,Price,Country
 2026-05-28,Wind Onshore Forecast,0.0,NO_5
 2026-05-29,Wind Onshore Forecast,0.0,NO_5
 2026-05-30,Wind Onshore Forecast,0.0,NO_5
-2026-05-20,Baseload,50.67,SE_1
-2026-05-21,Baseload,58.42,SE_1
+2026-05-31,Wind Onshore Forecast,0.0,NO_5
+2026-05-21,Baseload,70.56,SE_1
 2026-05-22,Baseload,52.11,SE_1
 2026-05-23,Baseload,9.61,SE_1
 2026-05-24,Baseload,0.18,SE_1
@@ -480150,9 +480440,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,3.67,SE_1
 2026-05-28,Baseload,5.53,SE_1
 2026-05-29,Baseload,27.66,SE_1
-2026-05-30,Baseload,29.45,SE_1
-2026-05-20,Solar Generation,24.69,SE_1
-2026-05-21,Solar Generation,577.28,SE_1
+2026-05-30,Baseload,36.79,SE_1
+2026-05-31,Baseload,54.56,SE_1
+2026-05-21,Solar Generation,166.72,SE_1
 2026-05-22,Solar Generation,530.97,SE_1
 2026-05-23,Solar Generation,518.5,SE_1
 2026-05-24,Solar Generation,353.11,SE_1
@@ -480161,8 +480451,7 @@ Date,Metric,Price,Country
 2026-05-27,Solar Generation,444.61,SE_1
 2026-05-28,Solar Generation,534.06,SE_1
 2026-05-29,Solar Generation,154.76,SE_1
-2026-05-20,Solar Capture,55.51,SE_1
-2026-05-21,Solar Capture,56.34,SE_1
+2026-05-21,Solar Capture,56.55,SE_1
 2026-05-22,Solar Capture,45.21,SE_1
 2026-05-23,Solar Capture,6.28,SE_1
 2026-05-24,Solar Capture,-3.85,SE_1
@@ -480171,8 +480460,7 @@ Date,Metric,Price,Country
 2026-05-27,Solar Capture,3.1,SE_1
 2026-05-28,Solar Capture,4.85,SE_1
 2026-05-29,Solar Capture,41.78,SE_1
-2026-05-20,Wind Onshore Generation,10121.55,SE_1
-2026-05-21,Wind Onshore Generation,23785.74,SE_1
+2026-05-21,Wind Onshore Generation,9017.7,SE_1
 2026-05-22,Wind Onshore Generation,13261.24,SE_1
 2026-05-23,Wind Onshore Generation,35973.64,SE_1
 2026-05-24,Wind Onshore Generation,85979.62,SE_1
@@ -480181,8 +480469,7 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Generation,108907.06,SE_1
 2026-05-28,Wind Onshore Generation,120772.08,SE_1
 2026-05-29,Wind Onshore Generation,32812.02,SE_1
-2026-05-20,Wind Onshore Capture,48.46,SE_1
-2026-05-21,Wind Onshore Capture,51.58,SE_1
+2026-05-21,Wind Onshore Capture,70.12,SE_1
 2026-05-22,Wind Onshore Capture,41.94,SE_1
 2026-05-23,Wind Onshore Capture,11.52,SE_1
 2026-05-24,Wind Onshore Capture,0.8,SE_1
@@ -480191,8 +480478,7 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Capture,3.72,SE_1
 2026-05-28,Wind Onshore Capture,5.08,SE_1
 2026-05-29,Wind Onshore Capture,20.61,SE_1
-2026-05-20,Solar Forecast,21.06,SE_1
-2026-05-21,Solar Forecast,571.16,SE_1
+2026-05-21,Solar Forecast,169.28,SE_1
 2026-05-22,Solar Forecast,528.72,SE_1
 2026-05-23,Solar Forecast,497.66,SE_1
 2026-05-24,Solar Forecast,344.33,SE_1
@@ -480201,8 +480487,7 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,449.57,SE_1
 2026-05-28,Solar Forecast,519.82,SE_1
 2026-05-29,Solar Forecast,647.26,SE_1
-2026-05-20,Wind Onshore Forecast,10274.03,SE_1
-2026-05-21,Wind Onshore Forecast,34621.04,SE_1
+2026-05-21,Wind Onshore Forecast,12279.56,SE_1
 2026-05-22,Wind Onshore Forecast,11412.04,SE_1
 2026-05-23,Wind Onshore Forecast,31776.04,SE_1
 2026-05-24,Wind Onshore Forecast,82381.6,SE_1
@@ -480211,8 +480496,7 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,107488.47,SE_1
 2026-05-28,Wind Onshore Forecast,117072.48,SE_1
 2026-05-29,Wind Onshore Forecast,50389.2,SE_1
-2026-05-20,Baseload,51.53,SE_2
-2026-05-21,Baseload,61.24,SE_2
+2026-05-21,Baseload,73.83,SE_2
 2026-05-22,Baseload,52.88,SE_2
 2026-05-23,Baseload,9.14,SE_2
 2026-05-24,Baseload,0.03,SE_2
@@ -480221,9 +480505,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,2.92,SE_2
 2026-05-28,Baseload,5.55,SE_2
 2026-05-29,Baseload,28.37,SE_2
-2026-05-30,Baseload,29.41,SE_2
-2026-05-20,Solar Generation,244.27,SE_2
-2026-05-21,Solar Generation,2185.64,SE_2
+2026-05-30,Baseload,37.18,SE_2
+2026-05-31,Baseload,54.9,SE_2
+2026-05-21,Solar Generation,587.67,SE_2
 2026-05-22,Solar Generation,2591.5,SE_2
 2026-05-23,Solar Generation,1927.52,SE_2
 2026-05-24,Solar Generation,2151.52,SE_2
@@ -480232,8 +480516,7 @@ Date,Metric,Price,Country
 2026-05-27,Solar Generation,2229.65,SE_2
 2026-05-28,Solar Generation,2323.92,SE_2
 2026-05-29,Solar Generation,480.02,SE_2
-2026-05-20,Solar Capture,56.34,SE_2
-2026-05-21,Solar Capture,59.53,SE_2
+2026-05-21,Solar Capture,58.96,SE_2
 2026-05-22,Solar Capture,45.69,SE_2
 2026-05-23,Solar Capture,5.25,SE_2
 2026-05-24,Solar Capture,-3.76,SE_2
@@ -480242,8 +480525,7 @@ Date,Metric,Price,Country
 2026-05-27,Solar Capture,2.23,SE_2
 2026-05-28,Solar Capture,4.38,SE_2
 2026-05-29,Solar Capture,41.61,SE_2
-2026-05-20,Wind Onshore Generation,38091.53,SE_2
-2026-05-21,Wind Onshore Generation,59713.18,SE_2
+2026-05-21,Wind Onshore Generation,16033.44,SE_2
 2026-05-22,Wind Onshore Generation,80455.33,SE_2
 2026-05-23,Wind Onshore Generation,148709.88,SE_2
 2026-05-24,Wind Onshore Generation,308993.99,SE_2
@@ -480252,8 +480534,7 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Generation,393428.46,SE_2
 2026-05-28,Wind Onshore Generation,328960.5,SE_2
 2026-05-29,Wind Onshore Generation,65277.18,SE_2
-2026-05-20,Wind Onshore Capture,47.67,SE_2
-2026-05-21,Wind Onshore Capture,48.55,SE_2
+2026-05-21,Wind Onshore Capture,72.64,SE_2
 2026-05-22,Wind Onshore Capture,52.91,SE_2
 2026-05-23,Wind Onshore Capture,7.97,SE_2
 2026-05-24,Wind Onshore Capture,0.96,SE_2
@@ -480262,8 +480543,7 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Capture,3.04,SE_2
 2026-05-28,Wind Onshore Capture,5.39,SE_2
 2026-05-29,Wind Onshore Capture,21.24,SE_2
-2026-05-20,Solar Forecast,239.95,SE_2
-2026-05-21,Solar Forecast,2075.98,SE_2
+2026-05-21,Solar Forecast,549.97,SE_2
 2026-05-22,Solar Forecast,2570.7,SE_2
 2026-05-23,Solar Forecast,1883.66,SE_2
 2026-05-24,Solar Forecast,2187.97,SE_2
@@ -480272,8 +480552,7 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,2200.11,SE_2
 2026-05-28,Solar Forecast,2326.81,SE_2
 2026-05-29,Solar Forecast,2716.91,SE_2
-2026-05-20,Wind Onshore Forecast,42936.12,SE_2
-2026-05-21,Wind Onshore Forecast,67212.3,SE_2
+2026-05-21,Wind Onshore Forecast,15348.68,SE_2
 2026-05-22,Wind Onshore Forecast,76226.01,SE_2
 2026-05-23,Wind Onshore Forecast,147386.16,SE_2
 2026-05-24,Wind Onshore Forecast,313564.97,SE_2
@@ -480282,8 +480561,7 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,403658.95,SE_2
 2026-05-28,Wind Onshore Forecast,335100.56,SE_2
 2026-05-29,Wind Onshore Forecast,118318.55,SE_2
-2026-05-20,Baseload,97.42,SE_3
-2026-05-21,Baseload,91.99,SE_3
+2026-05-21,Baseload,109.99,SE_3
 2026-05-22,Baseload,83.03,SE_3
 2026-05-23,Baseload,34.2,SE_3
 2026-05-24,Baseload,17.58,SE_3
@@ -480292,9 +480570,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,37.43,SE_3
 2026-05-28,Baseload,62.68,SE_3
 2026-05-29,Baseload,68.66,SE_3
-2026-05-30,Baseload,55.24,SE_3
-2026-05-20,Solar Generation,4125.24,SE_3
-2026-05-21,Solar Generation,27744.48,SE_3
+2026-05-30,Baseload,67.17,SE_3
+2026-05-31,Baseload,71.92,SE_3
+2026-05-21,Solar Generation,11188.77,SE_3
 2026-05-22,Solar Generation,52291.34,SE_3
 2026-05-23,Solar Generation,41123.66,SE_3
 2026-05-24,Solar Generation,54215.49,SE_3
@@ -480303,8 +480581,7 @@ Date,Metric,Price,Country
 2026-05-27,Solar Generation,52740.44,SE_3
 2026-05-28,Solar Generation,57840.35,SE_3
 2026-05-29,Solar Generation,10255.29,SE_3
-2026-05-20,Solar Capture,88.33,SE_3
-2026-05-21,Solar Capture,66.58,SE_3
+2026-05-21,Solar Capture,72.81,SE_3
 2026-05-22,Solar Capture,53.27,SE_3
 2026-05-23,Solar Capture,9.57,SE_3
 2026-05-24,Solar Capture,-0.95,SE_3
@@ -480313,8 +480590,7 @@ Date,Metric,Price,Country
 2026-05-27,Solar Capture,13.03,SE_3
 2026-05-28,Solar Capture,24.91,SE_3
 2026-05-29,Solar Capture,70.54,SE_3
-2026-05-20,Wind Onshore Generation,15322.84,SE_3
-2026-05-21,Wind Onshore Generation,59725.89,SE_3
+2026-05-21,Wind Onshore Generation,29808.76,SE_3
 2026-05-22,Wind Onshore Generation,80084.96,SE_3
 2026-05-23,Wind Onshore Generation,187533.51,SE_3
 2026-05-24,Wind Onshore Generation,142483.19,SE_3
@@ -480323,8 +480599,7 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Generation,199889.82,SE_3
 2026-05-28,Wind Onshore Generation,108020.82,SE_3
 2026-05-29,Wind Onshore Generation,30214.08,SE_3
-2026-05-20,Wind Onshore Capture,96.76,SE_3
-2026-05-21,Wind Onshore Capture,90.64,SE_3
+2026-05-21,Wind Onshore Capture,107.45,SE_3
 2026-05-22,Wind Onshore Capture,86.66,SE_3
 2026-05-23,Wind Onshore Capture,32.68,SE_3
 2026-05-24,Wind Onshore Capture,25.27,SE_3
@@ -480333,8 +480608,7 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Capture,37.68,SE_3
 2026-05-28,Wind Onshore Capture,62.36,SE_3
 2026-05-29,Wind Onshore Capture,73.33,SE_3
-2026-05-20,Solar Forecast,4222.63,SE_3
-2026-05-21,Solar Forecast,25950.89,SE_3
+2026-05-21,Solar Forecast,11100.64,SE_3
 2026-05-22,Solar Forecast,50636.09,SE_3
 2026-05-23,Solar Forecast,38746.9,SE_3
 2026-05-24,Solar Forecast,54768.74,SE_3
@@ -480343,8 +480617,7 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,52461.25,SE_3
 2026-05-28,Solar Forecast,57925.73,SE_3
 2026-05-29,Solar Forecast,57826.58,SE_3
-2026-05-20,Wind Onshore Forecast,15392.79,SE_3
-2026-05-21,Wind Onshore Forecast,64938.17,SE_3
+2026-05-21,Wind Onshore Forecast,33386.64,SE_3
 2026-05-22,Wind Onshore Forecast,79589.37,SE_3
 2026-05-23,Wind Onshore Forecast,190707.92,SE_3
 2026-05-24,Wind Onshore Forecast,145153.33,SE_3
@@ -480353,8 +480626,7 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,199590.65,SE_3
 2026-05-28,Wind Onshore Forecast,106559.93,SE_3
 2026-05-29,Wind Onshore Forecast,73576.27,SE_3
-2026-05-20,Baseload,146.95,BG
-2026-05-21,Baseload,99.42,BG
+2026-05-21,Baseload,131.61,BG
 2026-05-22,Baseload,103.94,BG
 2026-05-23,Baseload,80.11,BG
 2026-05-24,Baseload,74.66,BG
@@ -480363,9 +480635,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,108.15,BG
 2026-05-28,Baseload,94.53,BG
 2026-05-29,Baseload,90.03,BG
-2026-05-30,Baseload,78.94,BG
-2026-05-20,Solar Generation,4749.38,BG
-2026-05-21,Solar Generation,22092.46,BG
+2026-05-30,Baseload,97.04,BG
+2026-05-31,Baseload,79.7,BG
+2026-05-21,Solar Generation,7146.32,BG
 2026-05-22,Solar Generation,12097.38,BG
 2026-05-23,Solar Generation,14654.49,BG
 2026-05-24,Solar Generation,17028.85,BG
@@ -480373,9 +480645,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Generation,28884.68,BG
 2026-05-27,Solar Generation,32427.18,BG
 2026-05-28,Solar Generation,27101.95,BG
-2026-05-29,Solar Generation,6810.56,BG
-2026-05-20,Solar Capture,139.12,BG
-2026-05-21,Solar Capture,69.07,BG
+2026-05-29,Solar Generation,21590.23,BG
+2026-05-30,Solar Generation,7375.71,BG
+2026-05-21,Solar Capture,104.02,BG
 2026-05-22,Solar Capture,78.92,BG
 2026-05-23,Solar Capture,58.91,BG
 2026-05-24,Solar Capture,49.14,BG
@@ -480383,9 +480655,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Capture,59.3,BG
 2026-05-27,Solar Capture,65.29,BG
 2026-05-28,Solar Capture,69.58,BG
-2026-05-29,Solar Capture,73.29,BG
-2026-05-20,Wind Onshore Generation,2252.8,BG
-2026-05-21,Wind Onshore Generation,9416.39,BG
+2026-05-29,Solar Capture,54.61,BG
+2026-05-30,Solar Capture,69.31,BG
+2026-05-21,Wind Onshore Generation,2762.99,BG
 2026-05-22,Wind Onshore Generation,3066.35,BG
 2026-05-23,Wind Onshore Generation,3369.12,BG
 2026-05-24,Wind Onshore Generation,5566.27,BG
@@ -480393,9 +480665,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,3271.97,BG
 2026-05-27,Wind Onshore Generation,2346.45,BG
 2026-05-28,Wind Onshore Generation,3571.72,BG
-2026-05-29,Wind Onshore Generation,1116.56,BG
-2026-05-20,Wind Onshore Capture,143.78,BG
-2026-05-21,Wind Onshore Capture,102.4,BG
+2026-05-29,Wind Onshore Generation,1885.12,BG
+2026-05-30,Wind Onshore Generation,749.25,BG
+2026-05-21,Wind Onshore Capture,109.15,BG
 2026-05-22,Wind Onshore Capture,113.92,BG
 2026-05-23,Wind Onshore Capture,86.67,BG
 2026-05-24,Wind Onshore Capture,89.87,BG
@@ -480403,15 +480675,13 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,121.56,BG
 2026-05-27,Wind Onshore Capture,151.57,BG
 2026-05-28,Wind Onshore Capture,100.79,BG
-2026-05-29,Wind Onshore Capture,127.28,BG
-2026-05-20,Solar Forecast,1535.0,BG
-2026-05-21,Solar Forecast,30203.0,BG
+2026-05-29,Wind Onshore Capture,110.7,BG
+2026-05-30,Wind Onshore Capture,143.41,BG
+2026-05-21,Solar Forecast,5262.0,BG
 2026-05-22,Solar Forecast,0.0,BG
-2026-05-20,Wind Onshore Forecast,972.0,BG
-2026-05-21,Wind Onshore Forecast,10184.0,BG
+2026-05-21,Wind Onshore Forecast,2817.0,BG
 2026-05-22,Wind Onshore Forecast,138.0,BG
-2026-05-20,Baseload,141.44,SE_4
-2026-05-21,Baseload,109.19,SE_4
+2026-05-21,Baseload,121.47,SE_4
 2026-05-22,Baseload,95.29,SE_4
 2026-05-23,Baseload,43.02,SE_4
 2026-05-24,Baseload,29.55,SE_4
@@ -480420,9 +480690,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,58.86,SE_4
 2026-05-28,Baseload,110.52,SE_4
 2026-05-29,Baseload,95.92,SE_4
-2026-05-30,Baseload,67.34,SE_4
-2026-05-20,Solar Generation,905.68,SE_4
-2026-05-21,Solar Generation,14882.46,SE_4
+2026-05-30,Baseload,84.61,SE_4
+2026-05-31,Baseload,87.48,SE_4
+2026-05-21,Solar Generation,5496.99,SE_4
 2026-05-22,Solar Generation,19271.29,SE_4
 2026-05-23,Solar Generation,20926.91,SE_4
 2026-05-24,Solar Generation,24111.93,SE_4
@@ -480431,8 +480701,7 @@ Date,Metric,Price,Country
 2026-05-27,Solar Generation,26857.7,SE_4
 2026-05-28,Solar Generation,27013.43,SE_4
 2026-05-29,Solar Generation,4553.07,SE_4
-2026-05-20,Solar Capture,113.91,SE_4
-2026-05-21,Solar Capture,66.04,SE_4
+2026-05-21,Solar Capture,71.29,SE_4
 2026-05-22,Solar Capture,54.0,SE_4
 2026-05-23,Solar Capture,8.83,SE_4
 2026-05-24,Solar Capture,-0.1,SE_4
@@ -480441,8 +480710,7 @@ Date,Metric,Price,Country
 2026-05-27,Solar Capture,16.4,SE_4
 2026-05-28,Solar Capture,36.49,SE_4
 2026-05-29,Solar Capture,94.66,SE_4
-2026-05-20,Wind Onshore Generation,6996.22,SE_4
-2026-05-21,Wind Onshore Generation,36411.9,SE_4
+2026-05-21,Wind Onshore Generation,23192.36,SE_4
 2026-05-22,Wind Onshore Generation,50600.76,SE_4
 2026-05-23,Wind Onshore Generation,56840.24,SE_4
 2026-05-24,Wind Onshore Generation,69894.15,SE_4
@@ -480451,8 +480719,7 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Generation,85808.39,SE_4
 2026-05-28,Wind Onshore Generation,35806.09,SE_4
 2026-05-29,Wind Onshore Generation,9524.97,SE_4
-2026-05-20,Wind Onshore Capture,140.9,SE_4
-2026-05-21,Wind Onshore Capture,107.08,SE_4
+2026-05-21,Wind Onshore Capture,119.24,SE_4
 2026-05-22,Wind Onshore Capture,96.81,SE_4
 2026-05-23,Wind Onshore Capture,42.89,SE_4
 2026-05-24,Wind Onshore Capture,33.39,SE_4
@@ -480461,8 +480728,7 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Capture,54.63,SE_4
 2026-05-28,Wind Onshore Capture,103.7,SE_4
 2026-05-29,Wind Onshore Capture,118.76,SE_4
-2026-05-20,Solar Forecast,1212.88,SE_4
-2026-05-21,Solar Forecast,14778.74,SE_4
+2026-05-21,Solar Forecast,5960.74,SE_4
 2026-05-22,Solar Forecast,19827.86,SE_4
 2026-05-23,Solar Forecast,19234.33,SE_4
 2026-05-24,Solar Forecast,24144.33,SE_4
@@ -480471,8 +480737,7 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,26802.4,SE_4
 2026-05-28,Solar Forecast,26752.68,SE_4
 2026-05-29,Solar Forecast,26193.87,SE_4
-2026-05-20,Wind Onshore Forecast,7158.62,SE_4
-2026-05-21,Wind Onshore Forecast,35381.78,SE_4
+2026-05-21,Wind Onshore Forecast,22827.71,SE_4
 2026-05-22,Wind Onshore Forecast,49305.11,SE_4
 2026-05-23,Wind Onshore Forecast,59459.6,SE_4
 2026-05-24,Wind Onshore Forecast,68740.38,SE_4
@@ -480481,81 +480746,7 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,86996.74,SE_4
 2026-05-28,Wind Onshore Forecast,36534.21,SE_4
 2026-05-29,Wind Onshore Forecast,34657.69,SE_4
-2026-05-20,Baseload,146.87,GR
-2026-05-21,Baseload,90.04,GR
-2026-05-22,Baseload,92.43,GR
-2026-05-23,Baseload,73.84,GR
-2026-05-24,Baseload,60.28,GR
-2026-05-25,Baseload,72.3,GR
-2026-05-26,Baseload,83.69,GR
-2026-05-27,Baseload,96.63,GR
-2026-05-28,Baseload,90.69,GR
-2026-05-29,Baseload,83.41,GR
-2026-05-30,Baseload,72.33,GR
-2026-05-20,Solar Generation,15455.0,GR
-2026-05-21,Solar Generation,231012.0,GR
-2026-05-22,Solar Generation,186650.0,GR
-2026-05-23,Solar Generation,174879.0,GR
-2026-05-24,Solar Generation,164094.0,GR
-2026-05-25,Solar Generation,229505.0,GR
-2026-05-26,Solar Generation,232698.0,GR
-2026-05-27,Solar Generation,249219.0,GR
-2026-05-28,Solar Generation,251810.0,GR
-2026-05-29,Solar Generation,250241.0,GR
-2026-05-20,Solar Capture,114.0,GR
-2026-05-21,Solar Capture,19.24,GR
-2026-05-22,Solar Capture,24.51,GR
-2026-05-23,Solar Capture,8.77,GR
-2026-05-24,Solar Capture,-0.26,GR
-2026-05-25,Solar Capture,12.14,GR
-2026-05-26,Solar Capture,17.17,GR
-2026-05-27,Solar Capture,18.14,GR
-2026-05-28,Solar Capture,23.32,GR
-2026-05-29,Solar Capture,15.59,GR
-2026-05-20,Wind Onshore Generation,23569.0,GR
-2026-05-21,Wind Onshore Generation,67031.0,GR
-2026-05-22,Wind Onshore Generation,114901.0,GR
-2026-05-23,Wind Onshore Generation,158406.0,GR
-2026-05-24,Wind Onshore Generation,159759.0,GR
-2026-05-25,Wind Onshore Generation,163480.0,GR
-2026-05-26,Wind Onshore Generation,144422.0,GR
-2026-05-27,Wind Onshore Generation,95550.0,GR
-2026-05-28,Wind Onshore Generation,47563.0,GR
-2026-05-29,Wind Onshore Generation,103313.0,GR
-2026-05-20,Wind Onshore Capture,146.33,GR
-2026-05-21,Wind Onshore Capture,98.84,GR
-2026-05-22,Wind Onshore Capture,101.42,GR
-2026-05-23,Wind Onshore Capture,82.05,GR
-2026-05-24,Wind Onshore Capture,75.15,GR
-2026-05-25,Wind Onshore Capture,84.7,GR
-2026-05-26,Wind Onshore Capture,86.2,GR
-2026-05-27,Wind Onshore Capture,78.74,GR
-2026-05-28,Wind Onshore Capture,106.6,GR
-2026-05-29,Wind Onshore Capture,78.57,GR
-2026-05-20,Solar Forecast,13180.0,GR
-2026-05-21,Solar Forecast,245290.0,GR
-2026-05-22,Solar Forecast,188330.0,GR
-2026-05-23,Solar Forecast,197990.0,GR
-2026-05-24,Solar Forecast,211490.0,GR
-2026-05-25,Solar Forecast,245680.0,GR
-2026-05-26,Solar Forecast,256260.0,GR
-2026-05-27,Solar Forecast,261560.0,GR
-2026-05-28,Solar Forecast,254050.0,GR
-2026-05-29,Solar Forecast,264100.0,GR
-2026-05-30,Solar Forecast,252610.0,GR
-2026-05-20,Wind Onshore Forecast,23860.0,GR
-2026-05-21,Wind Onshore Forecast,76760.0,GR
-2026-05-22,Wind Onshore Forecast,93650.0,GR
-2026-05-23,Wind Onshore Forecast,162910.0,GR
-2026-05-24,Wind Onshore Forecast,171100.0,GR
-2026-05-25,Wind Onshore Forecast,181650.0,GR
-2026-05-26,Wind Onshore Forecast,172810.0,GR
-2026-05-27,Wind Onshore Forecast,115220.0,GR
-2026-05-28,Wind Onshore Forecast,35890.0,GR
-2026-05-29,Wind Onshore Forecast,116520.0,GR
-2026-05-30,Wind Onshore Forecast,27810.0,GR
-2026-05-20,Baseload,72.87,ES
-2026-05-21,Baseload,57.75,ES
+2026-05-21,Baseload,54.68,ES
 2026-05-22,Baseload,56.14,ES
 2026-05-23,Baseload,36.52,ES
 2026-05-24,Baseload,26.32,ES
@@ -480564,9 +480755,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,71.44,ES
 2026-05-28,Baseload,74.98,ES
 2026-05-29,Baseload,79.59,ES
-2026-05-30,Baseload,58.25,ES
-2026-05-20,Solar Generation,259412.0,ES
-2026-05-21,Solar Generation,942036.0,ES
+2026-05-30,Baseload,62.32,ES
+2026-05-31,Baseload,46.54,ES
+2026-05-21,Solar Generation,429600.0,ES
 2026-05-22,Solar Generation,959260.0,ES
 2026-05-23,Solar Generation,861700.0,ES
 2026-05-24,Solar Generation,718696.0,ES
@@ -480574,9 +480765,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Generation,1062936.0,ES
 2026-05-27,Solar Generation,1046984.0,ES
 2026-05-28,Solar Generation,1124816.0,ES
-2026-05-29,Solar Generation,1000904.0,ES
-2026-05-20,Solar Capture,25.09,ES
-2026-05-21,Solar Capture,15.88,ES
+2026-05-29,Solar Generation,1168092.0,ES
+2026-05-30,Solar Generation,706168.0,ES
+2026-05-21,Solar Capture,17.86,ES
 2026-05-22,Solar Capture,14.79,ES
 2026-05-23,Solar Capture,6.08,ES
 2026-05-24,Solar Capture,3.84,ES
@@ -480584,9 +480775,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Capture,15.97,ES
 2026-05-27,Solar Capture,20.95,ES
 2026-05-28,Solar Capture,27.47,ES
-2026-05-29,Solar Capture,21.18,ES
-2026-05-20,Wind Onshore Generation,109072.0,ES
-2026-05-21,Wind Onshore Generation,358128.0,ES
+2026-05-29,Solar Capture,31.07,ES
+2026-05-30,Solar Capture,10.45,ES
+2026-05-21,Wind Onshore Generation,136376.0,ES
 2026-05-22,Wind Onshore Generation,398440.0,ES
 2026-05-23,Wind Onshore Generation,420472.0,ES
 2026-05-24,Wind Onshore Generation,450356.0,ES
@@ -480594,9 +480785,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,414504.0,ES
 2026-05-27,Wind Onshore Generation,295704.0,ES
 2026-05-28,Wind Onshore Generation,259588.0,ES
-2026-05-29,Wind Onshore Generation,133732.0,ES
-2026-05-20,Wind Onshore Capture,83.79,ES
-2026-05-21,Wind Onshore Capture,66.27,ES
+2026-05-29,Wind Onshore Generation,207984.0,ES
+2026-05-30,Wind Onshore Generation,115240.0,ES
+2026-05-21,Wind Onshore Capture,63.0,ES
 2026-05-22,Wind Onshore Capture,65.19,ES
 2026-05-23,Wind Onshore Capture,53.62,ES
 2026-05-24,Wind Onshore Capture,39.73,ES
@@ -480604,8 +480795,8 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,73.17,ES
 2026-05-27,Wind Onshore Capture,87.19,ES
 2026-05-28,Wind Onshore Capture,99.15,ES
-2026-05-29,Wind Onshore Capture,90.81,ES
-2026-05-20,Wind Offshore Generation,0.0,ES
+2026-05-29,Wind Onshore Capture,102.4,ES
+2026-05-30,Wind Onshore Capture,94.15,ES
 2026-05-21,Wind Offshore Generation,0.0,ES
 2026-05-22,Wind Offshore Generation,0.0,ES
 2026-05-23,Wind Offshore Generation,0.0,ES
@@ -480615,8 +480806,8 @@ Date,Metric,Price,Country
 2026-05-27,Wind Offshore Generation,0.0,ES
 2026-05-28,Wind Offshore Generation,0.0,ES
 2026-05-29,Wind Offshore Generation,0.0,ES
-2026-05-20,Solar Forecast,233099.0,ES
-2026-05-21,Solar Forecast,912969.0,ES
+2026-05-30,Wind Offshore Generation,0.0,ES
+2026-05-21,Solar Forecast,426909.0,ES
 2026-05-22,Solar Forecast,899301.0,ES
 2026-05-23,Solar Forecast,1000318.0,ES
 2026-05-24,Solar Forecast,948813.0,ES
@@ -480625,9 +480816,8 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,924164.0,ES
 2026-05-28,Solar Forecast,1103607.0,ES
 2026-05-29,Solar Forecast,1124329.0,ES
-2026-05-30,Solar Forecast,726737.0,ES
-2026-05-20,Wind Onshore Forecast,119180.0,ES
-2026-05-21,Wind Onshore Forecast,425503.0,ES
+2026-05-30,Solar Forecast,947737.0,ES
+2026-05-21,Wind Onshore Forecast,173446.0,ES
 2026-05-22,Wind Onshore Forecast,468146.0,ES
 2026-05-23,Wind Onshore Forecast,475658.0,ES
 2026-05-24,Wind Onshore Forecast,566749.0,ES
@@ -480636,9 +480826,81 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,369582.0,ES
 2026-05-28,Wind Onshore Forecast,283763.0,ES
 2026-05-29,Wind Onshore Forecast,287216.0,ES
-2026-05-30,Wind Onshore Forecast,146209.0,ES
-2026-05-20,Baseload,145.54,HR
-2026-05-21,Baseload,102.77,HR
+2026-05-30,Wind Onshore Forecast,306078.0,ES
+2026-05-21,Baseload,125.97,GR
+2026-05-22,Baseload,92.43,GR
+2026-05-23,Baseload,73.84,GR
+2026-05-24,Baseload,60.28,GR
+2026-05-25,Baseload,72.3,GR
+2026-05-26,Baseload,83.69,GR
+2026-05-27,Baseload,96.63,GR
+2026-05-28,Baseload,90.69,GR
+2026-05-29,Baseload,83.41,GR
+2026-05-30,Baseload,92.15,GR
+2026-05-31,Baseload,78.54,GR
+2026-05-21,Solar Generation,12037.0,GR
+2026-05-22,Solar Generation,186650.0,GR
+2026-05-23,Solar Generation,174879.0,GR
+2026-05-24,Solar Generation,164094.0,GR
+2026-05-25,Solar Generation,229505.0,GR
+2026-05-26,Solar Generation,232698.0,GR
+2026-05-27,Solar Generation,249219.0,GR
+2026-05-28,Solar Generation,251810.0,GR
+2026-05-29,Solar Generation,253645.0,GR
+2026-05-30,Solar Generation,217189.0,GR
+2026-05-21,Solar Capture,43.27,GR
+2026-05-22,Solar Capture,24.51,GR
+2026-05-23,Solar Capture,8.77,GR
+2026-05-24,Solar Capture,-0.26,GR
+2026-05-25,Solar Capture,12.14,GR
+2026-05-26,Solar Capture,17.17,GR
+2026-05-27,Solar Capture,18.14,GR
+2026-05-28,Solar Capture,23.32,GR
+2026-05-29,Solar Capture,17.33,GR
+2026-05-30,Solar Capture,8.18,GR
+2026-05-21,Wind Onshore Generation,23933.0,GR
+2026-05-22,Wind Onshore Generation,114901.0,GR
+2026-05-23,Wind Onshore Generation,158406.0,GR
+2026-05-24,Wind Onshore Generation,159759.0,GR
+2026-05-25,Wind Onshore Generation,163480.0,GR
+2026-05-26,Wind Onshore Generation,144422.0,GR
+2026-05-27,Wind Onshore Generation,95550.0,GR
+2026-05-28,Wind Onshore Generation,47563.0,GR
+2026-05-29,Wind Onshore Generation,113280.0,GR
+2026-05-30,Wind Onshore Generation,18318.0,GR
+2026-05-21,Wind Onshore Capture,132.02,GR
+2026-05-22,Wind Onshore Capture,101.42,GR
+2026-05-23,Wind Onshore Capture,82.05,GR
+2026-05-24,Wind Onshore Capture,75.15,GR
+2026-05-25,Wind Onshore Capture,84.7,GR
+2026-05-26,Wind Onshore Capture,86.2,GR
+2026-05-27,Wind Onshore Capture,78.74,GR
+2026-05-28,Wind Onshore Capture,106.6,GR
+2026-05-29,Wind Onshore Capture,84.98,GR
+2026-05-30,Wind Onshore Capture,84.48,GR
+2026-05-21,Solar Forecast,59320.0,GR
+2026-05-22,Solar Forecast,188330.0,GR
+2026-05-23,Solar Forecast,197990.0,GR
+2026-05-24,Solar Forecast,211490.0,GR
+2026-05-25,Solar Forecast,245680.0,GR
+2026-05-26,Solar Forecast,256260.0,GR
+2026-05-27,Solar Forecast,261560.0,GR
+2026-05-28,Solar Forecast,254050.0,GR
+2026-05-29,Solar Forecast,264100.0,GR
+2026-05-30,Solar Forecast,271340.0,GR
+2026-05-31,Solar Forecast,180390.0,GR
+2026-05-21,Wind Onshore Forecast,21000.0,GR
+2026-05-22,Wind Onshore Forecast,93650.0,GR
+2026-05-23,Wind Onshore Forecast,162910.0,GR
+2026-05-24,Wind Onshore Forecast,171100.0,GR
+2026-05-25,Wind Onshore Forecast,181650.0,GR
+2026-05-26,Wind Onshore Forecast,172810.0,GR
+2026-05-27,Wind Onshore Forecast,115220.0,GR
+2026-05-28,Wind Onshore Forecast,35890.0,GR
+2026-05-29,Wind Onshore Forecast,116520.0,GR
+2026-05-30,Wind Onshore Forecast,42330.0,GR
+2026-05-31,Wind Onshore Forecast,18870.0,GR
+2026-05-21,Baseload,132.58,HR
 2026-05-22,Baseload,110.08,HR
 2026-05-23,Baseload,83.1,HR
 2026-05-24,Baseload,70.24,HR
@@ -480647,9 +480909,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,97.9,HR
 2026-05-28,Baseload,116.19,HR
 2026-05-29,Baseload,102.63,HR
-2026-05-30,Baseload,72.77,HR
-2026-05-20,Solar Generation,1182.4,HR
-2026-05-21,Solar Generation,12086.4,HR
+2026-05-30,Baseload,93.8,HR
+2026-05-31,Baseload,78.34,HR
+2026-05-21,Solar Generation,3694.0,HR
 2026-05-22,Solar Generation,13902.4,HR
 2026-05-23,Solar Generation,9949.2,HR
 2026-05-24,Solar Generation,10718.8,HR
@@ -480657,9 +480919,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Generation,14703.2,HR
 2026-05-27,Solar Generation,16151.6,HR
 2026-05-28,Solar Generation,14202.0,HR
-2026-05-29,Solar Generation,15333.2,HR
-2026-05-20,Solar Capture,113.17,HR
-2026-05-21,Solar Capture,40.99,HR
+2026-05-29,Solar Generation,15804.4,HR
+2026-05-30,Solar Generation,10315.6,HR
+2026-05-21,Solar Capture,66.94,HR
 2026-05-22,Solar Capture,50.91,HR
 2026-05-23,Solar Capture,20.42,HR
 2026-05-24,Solar Capture,0.72,HR
@@ -480667,9 +480929,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Capture,37.38,HR
 2026-05-27,Solar Capture,37.98,HR
 2026-05-28,Solar Capture,43.56,HR
-2026-05-29,Solar Capture,35.14,HR
-2026-05-20,Wind Onshore Generation,8820.4,HR
-2026-05-21,Wind Onshore Generation,66289.6,HR
+2026-05-29,Solar Capture,38.77,HR
+2026-05-30,Solar Capture,26.78,HR
+2026-05-21,Wind Onshore Generation,28751.6,HR
 2026-05-22,Wind Onshore Generation,80686.4,HR
 2026-05-23,Wind Onshore Generation,68220.4,HR
 2026-05-24,Wind Onshore Generation,52080.0,HR
@@ -480677,9 +480939,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,30340.0,HR
 2026-05-27,Wind Onshore Generation,25239.2,HR
 2026-05-28,Wind Onshore Generation,45711.2,HR
-2026-05-29,Wind Onshore Generation,37540.4,HR
-2026-05-20,Wind Onshore Capture,148.68,HR
-2026-05-21,Wind Onshore Capture,99.91,HR
+2026-05-29,Wind Onshore Generation,48049.6,HR
+2026-05-30,Wind Onshore Generation,19886.8,HR
+2026-05-21,Wind Onshore Capture,131.5,HR
 2026-05-22,Wind Onshore Capture,115.43,HR
 2026-05-23,Wind Onshore Capture,101.29,HR
 2026-05-24,Wind Onshore Capture,103.25,HR
@@ -480687,9 +480949,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,123.84,HR
 2026-05-27,Wind Onshore Capture,126.36,HR
 2026-05-28,Wind Onshore Capture,135.53,HR
-2026-05-29,Wind Onshore Capture,92.39,HR
-2026-05-20,Solar Forecast,1369.4,HR
-2026-05-21,Solar Forecast,13974.0,HR
+2026-05-29,Wind Onshore Capture,111.99,HR
+2026-05-30,Wind Onshore Capture,120.4,HR
+2026-05-21,Solar Forecast,4567.15,HR
 2026-05-22,Solar Forecast,13333.58,HR
 2026-05-23,Solar Forecast,10051.82,HR
 2026-05-24,Solar Forecast,10604.12,HR
@@ -480698,9 +480960,9 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,14829.75,HR
 2026-05-28,Solar Forecast,14209.4,HR
 2026-05-29,Solar Forecast,15636.27,HR
-2026-05-30,Solar Forecast,10166.9,HR
-2026-05-20,Wind Onshore Forecast,10511.63,HR
-2026-05-21,Wind Onshore Forecast,73598.73,HR
+2026-05-30,Solar Forecast,12091.2,HR
+2026-05-31,Solar Forecast,6578.82,HR
+2026-05-21,Wind Onshore Forecast,31994.75,HR
 2026-05-22,Wind Onshore Forecast,84408.8,HR
 2026-05-23,Wind Onshore Forecast,72211.13,HR
 2026-05-24,Wind Onshore Forecast,54693.48,HR
@@ -480709,9 +480971,9 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,20228.34,HR
 2026-05-28,Wind Onshore Forecast,54334.82,HR
 2026-05-29,Wind Onshore Forecast,59908.32,HR
-2026-05-30,Wind Onshore Forecast,16925.98,HR
-2026-05-20,Baseload,62.9,ME
-2026-05-21,Baseload,80.6,ME
+2026-05-30,Wind Onshore Forecast,20898.41,HR
+2026-05-31,Wind Onshore Forecast,1991.05,HR
+2026-05-21,Baseload,108.45,ME
 2026-05-22,Baseload,59.73,ME
 2026-05-23,Baseload,75.31,ME
 2026-05-24,Baseload,65.15,ME
@@ -480720,9 +480982,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,101.79,ME
 2026-05-28,Baseload,106.34,ME
 2026-05-29,Baseload,95.72,ME
-2026-05-30,Baseload,65.05,ME
-2026-05-20,Wind Onshore Generation,485.33,ME
-2026-05-21,Wind Onshore Generation,2921.08,ME
+2026-05-30,Baseload,85.4,ME
+2026-05-31,Baseload,73.72,ME
+2026-05-21,Wind Onshore Generation,1183.25,ME
 2026-05-22,Wind Onshore Generation,3195.64,ME
 2026-05-23,Wind Onshore Generation,2267.12,ME
 2026-05-24,Wind Onshore Generation,2247.58,ME
@@ -480730,9 +480992,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,1257.15,ME
 2026-05-27,Wind Onshore Generation,603.95,ME
 2026-05-28,Wind Onshore Generation,1701.16,ME
-2026-05-29,Wind Onshore Generation,1105.93,ME
-2026-05-20,Wind Onshore Capture,64.72,ME
-2026-05-21,Wind Onshore Capture,86.63,ME
+2026-05-29,Wind Onshore Generation,1357.65,ME
+2026-05-30,Wind Onshore Generation,328.67,ME
+2026-05-21,Wind Onshore Capture,116.14,ME
 2026-05-22,Wind Onshore Capture,60.66,ME
 2026-05-23,Wind Onshore Capture,79.17,ME
 2026-05-24,Wind Onshore Capture,69.55,ME
@@ -480740,9 +481002,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,125.44,ME
 2026-05-27,Wind Onshore Capture,123.63,ME
 2026-05-28,Wind Onshore Capture,120.67,ME
-2026-05-29,Wind Onshore Capture,94.39,ME
-2026-05-20,Solar Forecast,13.18,ME
-2026-05-21,Solar Forecast,215.74,ME
+2026-05-29,Wind Onshore Capture,107.54,ME
+2026-05-30,Wind Onshore Capture,120.25,ME
+2026-05-21,Solar Forecast,47.32,ME
 2026-05-22,Solar Forecast,189.14,ME
 2026-05-23,Solar Forecast,123.64,ME
 2026-05-24,Solar Forecast,127.04,ME
@@ -480751,9 +481013,8 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,225.55,ME
 2026-05-28,Solar Forecast,195.29,ME
 2026-05-29,Solar Forecast,229.04,ME
-2026-05-30,Solar Forecast,215.09,ME
-2026-05-20,Wind Onshore Forecast,637.17,ME
-2026-05-21,Wind Onshore Forecast,2953.11,ME
+2026-05-30,Solar Forecast,229.3,ME
+2026-05-21,Wind Onshore Forecast,1173.9,ME
 2026-05-22,Wind Onshore Forecast,3178.74,ME
 2026-05-23,Wind Onshore Forecast,2903.3,ME
 2026-05-24,Wind Onshore Forecast,2270.69,ME
@@ -480762,9 +481023,8 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,563.03,ME
 2026-05-28,Wind Onshore Forecast,1480.16,ME
 2026-05-29,Wind Onshore Forecast,1885.4,ME
-2026-05-30,Wind Onshore Forecast,590.31,ME
-2026-05-20,Baseload,107.42,MK
-2026-05-21,Baseload,65.57,MK
+2026-05-30,Wind Onshore Forecast,701.92,ME
+2026-05-21,Baseload,98.69,MK
 2026-05-22,Baseload,67.02,MK
 2026-05-23,Baseload,80.22,MK
 2026-05-25,Baseload,68.62,MK
@@ -480772,9 +481032,8 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,102.02,MK
 2026-05-28,Baseload,106.25,MK
 2026-05-29,Baseload,88.69,MK
-2026-05-30,Baseload,60.13,MK
-2026-05-20,Wind Onshore Generation,246.2,MK
-2026-05-21,Wind Onshore Generation,832.21,MK
+2026-05-30,Baseload,84.92,MK
+2026-05-21,Wind Onshore Generation,302.26,MK
 2026-05-22,Wind Onshore Generation,824.95,MK
 2026-05-23,Wind Onshore Generation,0.0,MK
 2026-05-24,Wind Onshore Generation,0.0,MK
@@ -480782,15 +481041,15 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,326.24,MK
 2026-05-27,Wind Onshore Generation,224.03,MK
 2026-05-28,Wind Onshore Generation,597.05,MK
-2026-05-20,Wind Onshore Capture,107.42,MK
-2026-05-21,Wind Onshore Capture,65.32,MK
+2026-05-29,Wind Onshore Generation,486.43,MK
+2026-05-21,Wind Onshore Capture,99.09,MK
 2026-05-22,Wind Onshore Capture,67.12,MK
 2026-05-25,Wind Onshore Capture,64.62,MK
 2026-05-26,Wind Onshore Capture,98.78,MK
 2026-05-27,Wind Onshore Capture,133.86,MK
 2026-05-28,Wind Onshore Capture,115.27,MK
-2026-05-20,Solar Forecast,108.6,MK
-2026-05-21,Solar Forecast,738.9,MK
+2026-05-29,Wind Onshore Capture,80.92,MK
+2026-05-21,Solar Forecast,226.8,MK
 2026-05-22,Solar Forecast,370.8,MK
 2026-05-23,Solar Forecast,192.1,MK
 2026-05-24,Solar Forecast,256.6,MK
@@ -480799,9 +481058,8 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,755.9,MK
 2026-05-28,Solar Forecast,497.3,MK
 2026-05-29,Solar Forecast,638.0,MK
-2026-05-30,Solar Forecast,352.3,MK
-2026-05-20,Wind Onshore Forecast,422.27,MK
-2026-05-21,Wind Onshore Forecast,1383.53,MK
+2026-05-30,Solar Forecast,480.6,MK
+2026-05-21,Wind Onshore Forecast,486.84,MK
 2026-05-22,Wind Onshore Forecast,1425.56,MK
 2026-05-23,Wind Onshore Forecast,919.84,MK
 2026-05-24,Wind Onshore Forecast,655.28,MK
@@ -480810,8 +481068,7 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,252.9,MK
 2026-05-28,Wind Onshore Forecast,880.09,MK
 2026-05-29,Wind Onshore Forecast,832.76,MK
-2026-05-30,Wind Onshore Forecast,530.02,MK
-2026-05-20,Wind Offshore Forecast,0.0,MK
+2026-05-30,Wind Onshore Forecast,642.26,MK
 2026-05-21,Wind Offshore Forecast,0.0,MK
 2026-05-22,Wind Offshore Forecast,0.0,MK
 2026-05-23,Wind Offshore Forecast,0.0,MK
@@ -480822,112 +481079,7 @@ Date,Metric,Price,Country
 2026-05-28,Wind Offshore Forecast,0.0,MK
 2026-05-29,Wind Offshore Forecast,0.0,MK
 2026-05-30,Wind Offshore Forecast,0.0,MK
-2026-05-20,Baseload,77.64,PT
-2026-05-21,Baseload,57.75,PT
-2026-05-22,Baseload,55.85,PT
-2026-05-23,Baseload,34.93,PT
-2026-05-24,Baseload,25.23,PT
-2026-05-25,Baseload,34.01,PT
-2026-05-26,Baseload,62.09,PT
-2026-05-27,Baseload,70.44,PT
-2026-05-28,Baseload,75.93,PT
-2026-05-29,Baseload,79.21,PT
-2026-05-30,Baseload,54.13,PT
-2026-05-20,Solar Generation,6930.2,PT
-2026-05-21,Solar Generation,26319.6,PT
-2026-05-22,Solar Generation,26065.7,PT
-2026-05-23,Solar Generation,18679.9,PT
-2026-05-24,Solar Generation,13692.0,PT
-2026-05-25,Solar Generation,23552.5,PT
-2026-05-26,Solar Generation,25913.8,PT
-2026-05-27,Solar Generation,28624.9,PT
-2026-05-28,Solar Generation,29403.3,PT
-2026-05-29,Solar Generation,26266.4,PT
-2026-05-20,Solar Capture,6.99,PT
-2026-05-21,Solar Capture,7.6,PT
-2026-05-22,Solar Capture,7.28,PT
-2026-05-23,Solar Capture,1.63,PT
-2026-05-24,Solar Capture,1.25,PT
-2026-05-25,Solar Capture,3.54,PT
-2026-05-26,Solar Capture,8.64,PT
-2026-05-27,Solar Capture,13.04,PT
-2026-05-28,Solar Capture,18.75,PT
-2026-05-29,Solar Capture,15.84,PT
-2026-05-20,Wind Onshore Generation,1758.9,PT
-2026-05-21,Wind Onshore Generation,19049.9,PT
-2026-05-22,Wind Onshore Generation,29608.5,PT
-2026-05-23,Wind Onshore Generation,35759.4,PT
-2026-05-24,Wind Onshore Generation,30700.7,PT
-2026-05-25,Wind Onshore Generation,25527.4,PT
-2026-05-26,Wind Onshore Generation,21935.7,PT
-2026-05-27,Wind Onshore Generation,26531.4,PT
-2026-05-28,Wind Onshore Generation,25632.5,PT
-2026-05-29,Wind Onshore Generation,6173.0,PT
-2026-05-20,Wind Onshore Capture,85.11,PT
-2026-05-21,Wind Onshore Capture,57.67,PT
-2026-05-22,Wind Onshore Capture,59.04,PT
-2026-05-23,Wind Onshore Capture,33.94,PT
-2026-05-24,Wind Onshore Capture,20.8,PT
-2026-05-25,Wind Onshore Capture,23.8,PT
-2026-05-26,Wind Onshore Capture,63.66,PT
-2026-05-27,Wind Onshore Capture,78.23,PT
-2026-05-28,Wind Onshore Capture,94.52,PT
-2026-05-29,Wind Onshore Capture,73.56,PT
-2026-05-20,Wind Offshore Generation,37.7,PT
-2026-05-21,Wind Offshore Generation,28.2,PT
-2026-05-22,Wind Offshore Generation,74.2,PT
-2026-05-23,Wind Offshore Generation,84.4,PT
-2026-05-24,Wind Offshore Generation,37.0,PT
-2026-05-25,Wind Offshore Generation,2.3,PT
-2026-05-26,Wind Offshore Generation,0.1,PT
-2026-05-27,Wind Offshore Generation,6.1,PT
-2026-05-28,Wind Offshore Generation,147.3,PT
-2026-05-29,Wind Offshore Generation,17.0,PT
-2026-05-20,Wind Offshore Capture,87.93,PT
-2026-05-21,Wind Offshore Capture,93.4,PT
-2026-05-22,Wind Offshore Capture,50.2,PT
-2026-05-23,Wind Offshore Capture,76.73,PT
-2026-05-24,Wind Offshore Capture,37.78,PT
-2026-05-25,Wind Offshore Capture,24.48,PT
-2026-05-26,Wind Offshore Capture,140.52,PT
-2026-05-27,Wind Offshore Capture,114.71,PT
-2026-05-28,Wind Offshore Capture,75.46,PT
-2026-05-29,Wind Offshore Capture,66.28,PT
-2026-05-20,Solar Forecast,6634.1,PT
-2026-05-21,Solar Forecast,25560.7,PT
-2026-05-22,Solar Forecast,26346.0,PT
-2026-05-23,Solar Forecast,21683.3,PT
-2026-05-24,Solar Forecast,22550.7,PT
-2026-05-25,Solar Forecast,24398.7,PT
-2026-05-26,Solar Forecast,26618.3,PT
-2026-05-27,Solar Forecast,29005.2,PT
-2026-05-28,Solar Forecast,28422.6,PT
-2026-05-29,Solar Forecast,29459.1,PT
-2026-05-30,Solar Forecast,20139.2,PT
-2026-05-20,Wind Onshore Forecast,1987.7,PT
-2026-05-21,Wind Onshore Forecast,17689.8,PT
-2026-05-22,Wind Onshore Forecast,25772.4,PT
-2026-05-23,Wind Onshore Forecast,21240.3,PT
-2026-05-24,Wind Onshore Forecast,28647.5,PT
-2026-05-25,Wind Onshore Forecast,28551.1,PT
-2026-05-26,Wind Onshore Forecast,19475.9,PT
-2026-05-27,Wind Onshore Forecast,21848.4,PT
-2026-05-28,Wind Onshore Forecast,17475.1,PT
-2026-05-29,Wind Onshore Forecast,14424.9,PT
-2026-05-30,Wind Onshore Forecast,10503.6,PT
-2026-05-20,Wind Offshore Forecast,41.5,PT
-2026-05-21,Wind Offshore Forecast,13.0,PT
-2026-05-22,Wind Offshore Forecast,90.2,PT
-2026-05-23,Wind Offshore Forecast,78.6,PT
-2026-05-24,Wind Offshore Forecast,24.2,PT
-2026-05-25,Wind Offshore Forecast,29.6,PT
-2026-05-26,Wind Offshore Forecast,7.9,PT
-2026-05-27,Wind Offshore Forecast,25.6,PT
-2026-05-28,Wind Offshore Forecast,208.5,PT
-2026-05-29,Wind Offshore Forecast,194.3,PT
-2026-05-30,Wind Offshore Forecast,223.6,PT
-2026-05-20,Baseload,152.35,HU
-2026-05-21,Baseload,106.68,HU
+2026-05-21,Baseload,137.14,HU
 2026-05-22,Baseload,116.02,HU
 2026-05-23,Baseload,81.81,HU
 2026-05-24,Baseload,67.46,HU
@@ -480936,29 +481088,29 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,114.74,HU
 2026-05-28,Baseload,118.21,HU
 2026-05-29,Baseload,105.09,HU
-2026-05-30,Baseload,81.62,HU
-2026-05-20,Solar Generation,12535.48,HU
-2026-05-21,Solar Generation,140191.5,HU
+2026-05-30,Baseload,103.04,HU
+2026-05-31,Baseload,77.29,HU
+2026-05-21,Solar Generation,40042.81,HU
 2026-05-22,Solar Generation,138611.56,HU
-2026-05-23,Solar Generation,124900.5,HU
-2026-05-24,Solar Generation,118279.77,HU
-2026-05-25,Solar Generation,127975.46,HU
-2026-05-26,Solar Generation,143509.04,HU
-2026-05-27,Solar Generation,137899.29,HU
-2026-05-28,Solar Generation,147821.92,HU
-2026-05-29,Solar Generation,144586.43,HU
-2026-05-20,Solar Capture,117.9,HU
-2026-05-21,Solar Capture,50.38,HU
+2026-05-23,Solar Generation,124905.94,HU
+2026-05-24,Solar Generation,118333.84,HU
+2026-05-25,Solar Generation,128016.36,HU
+2026-05-26,Solar Generation,143585.88,HU
+2026-05-27,Solar Generation,138001.48,HU
+2026-05-28,Solar Generation,147998.63,HU
+2026-05-29,Solar Generation,151813.79,HU
+2026-05-30,Solar Generation,69339.68,HU
+2026-05-21,Solar Capture,67.8,HU
 2026-05-22,Solar Capture,54.6,HU
 2026-05-23,Solar Capture,11.97,HU
-2026-05-24,Solar Capture,-14.08,HU
+2026-05-24,Solar Capture,-14.06,HU
 2026-05-25,Solar Capture,27.43,HU
-2026-05-26,Solar Capture,41.14,HU
-2026-05-27,Solar Capture,41.94,HU
+2026-05-26,Solar Capture,41.15,HU
+2026-05-27,Solar Capture,41.93,HU
 2026-05-28,Solar Capture,44.38,HU
-2026-05-29,Solar Capture,38.53,HU
-2026-05-20,Wind Onshore Generation,3714.92,HU
-2026-05-21,Wind Onshore Generation,17927.94,HU
+2026-05-29,Solar Capture,41.13,HU
+2026-05-30,Solar Capture,29.31,HU
+2026-05-21,Wind Onshore Generation,7004.38,HU
 2026-05-22,Wind Onshore Generation,11025.34,HU
 2026-05-23,Wind Onshore Generation,4388.02,HU
 2026-05-24,Wind Onshore Generation,2334.23,HU
@@ -480966,9 +481118,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,3199.81,HU
 2026-05-27,Wind Onshore Generation,3359.03,HU
 2026-05-28,Wind Onshore Generation,9295.12,HU
-2026-05-29,Wind Onshore Generation,460.17,HU
-2026-05-20,Wind Onshore Capture,155.91,HU
-2026-05-21,Wind Onshore Capture,101.55,HU
+2026-05-29,Wind Onshore Generation,884.23,HU
+2026-05-30,Wind Onshore Generation,1497.81,HU
+2026-05-21,Wind Onshore Capture,128.02,HU
 2026-05-22,Wind Onshore Capture,133.86,HU
 2026-05-23,Wind Onshore Capture,128.25,HU
 2026-05-24,Wind Onshore Capture,118.43,HU
@@ -480976,9 +481128,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,148.38,HU
 2026-05-27,Wind Onshore Capture,171.68,HU
 2026-05-28,Wind Onshore Capture,111.43,HU
-2026-05-29,Wind Onshore Capture,85.3,HU
-2026-05-20,Solar Forecast,10853.17,HU
-2026-05-21,Solar Forecast,128642.62,HU
+2026-05-29,Wind Onshore Capture,117.45,HU
+2026-05-30,Wind Onshore Capture,134.78,HU
+2026-05-21,Solar Forecast,36712.95,HU
 2026-05-22,Solar Forecast,137911.9,HU
 2026-05-23,Solar Forecast,142537.12,HU
 2026-05-24,Solar Forecast,144398.11,HU
@@ -480987,9 +481139,9 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,144041.32,HU
 2026-05-28,Solar Forecast,147482.06,HU
 2026-05-29,Solar Forecast,148630.07,HU
-2026-05-30,Solar Forecast,95005.55,HU
-2026-05-20,Wind Onshore Forecast,3246.01,HU
-2026-05-21,Wind Onshore Forecast,15426.89,HU
+2026-05-30,Solar Forecast,105653.67,HU
+2026-05-31,Solar Forecast,86263.34,HU
+2026-05-21,Wind Onshore Forecast,5984.92,HU
 2026-05-22,Wind Onshore Forecast,12213.78,HU
 2026-05-23,Wind Onshore Forecast,4177.3,HU
 2026-05-24,Wind Onshore Forecast,3153.93,HU
@@ -480998,9 +481150,112 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,4633.34,HU
 2026-05-28,Wind Onshore Forecast,9736.69,HU
 2026-05-29,Wind Onshore Forecast,1472.17,HU
-2026-05-30,Wind Onshore Forecast,2491.38,HU
-2026-05-20,Baseload,105.02,RS
-2026-05-21,Baseload,66.56,RS
+2026-05-30,Wind Onshore Forecast,3825.48,HU
+2026-05-31,Wind Onshore Forecast,3118.0,HU
+2026-05-21,Baseload,60.08,PT
+2026-05-22,Baseload,55.85,PT
+2026-05-23,Baseload,34.93,PT
+2026-05-24,Baseload,25.23,PT
+2026-05-25,Baseload,34.01,PT
+2026-05-26,Baseload,62.09,PT
+2026-05-27,Baseload,70.44,PT
+2026-05-28,Baseload,75.93,PT
+2026-05-29,Baseload,79.21,PT
+2026-05-30,Baseload,61.37,PT
+2026-05-31,Baseload,42.55,PT
+2026-05-21,Solar Generation,11561.6,PT
+2026-05-22,Solar Generation,26212.6,PT
+2026-05-23,Solar Generation,17836.1,PT
+2026-05-24,Solar Generation,14380.8,PT
+2026-05-25,Solar Generation,23665.1,PT
+2026-05-26,Solar Generation,26245.3,PT
+2026-05-27,Solar Generation,28631.0,PT
+2026-05-28,Solar Generation,30037.9,PT
+2026-05-29,Solar Generation,31465.1,PT
+2026-05-30,Solar Generation,16289.6,PT
+2026-05-21,Solar Capture,6.92,PT
+2026-05-22,Solar Capture,7.27,PT
+2026-05-23,Solar Capture,1.67,PT
+2026-05-24,Solar Capture,1.13,PT
+2026-05-25,Solar Capture,3.53,PT
+2026-05-26,Solar Capture,8.97,PT
+2026-05-27,Solar Capture,13.04,PT
+2026-05-28,Solar Capture,19.16,PT
+2026-05-29,Solar Capture,23.55,PT
+2026-05-30,Solar Capture,7.76,PT
+2026-05-21,Wind Onshore Generation,4193.9,PT
+2026-05-22,Wind Onshore Generation,29630.7,PT
+2026-05-23,Wind Onshore Generation,35777.0,PT
+2026-05-24,Wind Onshore Generation,30714.9,PT
+2026-05-25,Wind Onshore Generation,25568.0,PT
+2026-05-26,Wind Onshore Generation,21836.8,PT
+2026-05-27,Wind Onshore Generation,26447.7,PT
+2026-05-28,Wind Onshore Generation,25627.6,PT
+2026-05-29,Wind Onshore Generation,12410.7,PT
+2026-05-30,Wind Onshore Generation,7595.9,PT
+2026-05-21,Wind Onshore Capture,42.24,PT
+2026-05-22,Wind Onshore Capture,59.04,PT
+2026-05-23,Wind Onshore Capture,33.94,PT
+2026-05-24,Wind Onshore Capture,20.8,PT
+2026-05-25,Wind Onshore Capture,23.8,PT
+2026-05-26,Wind Onshore Capture,63.71,PT
+2026-05-27,Wind Onshore Capture,78.27,PT
+2026-05-28,Wind Onshore Capture,94.53,PT
+2026-05-29,Wind Onshore Capture,95.58,PT
+2026-05-30,Wind Onshore Capture,70.66,PT
+2026-05-21,Wind Offshore Generation,0.0,PT
+2026-05-22,Wind Offshore Generation,74.2,PT
+2026-05-23,Wind Offshore Generation,84.4,PT
+2026-05-24,Wind Offshore Generation,37.0,PT
+2026-05-25,Wind Offshore Generation,2.3,PT
+2026-05-26,Wind Offshore Generation,0.1,PT
+2026-05-27,Wind Offshore Generation,6.1,PT
+2026-05-28,Wind Offshore Generation,147.3,PT
+2026-05-29,Wind Offshore Generation,78.4,PT
+2026-05-30,Wind Offshore Generation,112.4,PT
+2026-05-22,Wind Offshore Capture,50.2,PT
+2026-05-23,Wind Offshore Capture,76.73,PT
+2026-05-24,Wind Offshore Capture,37.78,PT
+2026-05-25,Wind Offshore Capture,24.48,PT
+2026-05-26,Wind Offshore Capture,140.52,PT
+2026-05-27,Wind Offshore Capture,114.71,PT
+2026-05-28,Wind Offshore Capture,75.46,PT
+2026-05-29,Wind Offshore Capture,109.61,PT
+2026-05-30,Wind Offshore Capture,51.44,PT
+2026-05-21,Solar Forecast,10946.3,PT
+2026-05-22,Solar Forecast,26346.0,PT
+2026-05-23,Solar Forecast,21683.3,PT
+2026-05-24,Solar Forecast,22550.7,PT
+2026-05-25,Solar Forecast,24398.7,PT
+2026-05-26,Solar Forecast,26618.3,PT
+2026-05-27,Solar Forecast,29005.2,PT
+2026-05-28,Solar Forecast,28422.6,PT
+2026-05-29,Solar Forecast,29459.1,PT
+2026-05-30,Solar Forecast,26782.7,PT
+2026-05-31,Solar Forecast,11970.4,PT
+2026-05-21,Wind Onshore Forecast,4578.8,PT
+2026-05-22,Wind Onshore Forecast,25772.4,PT
+2026-05-23,Wind Onshore Forecast,21240.3,PT
+2026-05-24,Wind Onshore Forecast,28647.5,PT
+2026-05-25,Wind Onshore Forecast,28551.1,PT
+2026-05-26,Wind Onshore Forecast,19475.9,PT
+2026-05-27,Wind Onshore Forecast,21848.4,PT
+2026-05-28,Wind Onshore Forecast,17475.1,PT
+2026-05-29,Wind Onshore Forecast,14424.9,PT
+2026-05-30,Wind Onshore Forecast,22764.2,PT
+2026-05-31,Wind Onshore Forecast,12907.2,PT
+2026-05-21,Wind Offshore Forecast,3.1,PT
+2026-05-22,Wind Offshore Forecast,90.2,PT
+2026-05-23,Wind Offshore Forecast,78.6,PT
+2026-05-24,Wind Offshore Forecast,24.2,PT
+2026-05-25,Wind Offshore Forecast,29.6,PT
+2026-05-26,Wind Offshore Forecast,7.9,PT
+2026-05-27,Wind Offshore Forecast,25.6,PT
+2026-05-28,Wind Offshore Forecast,208.5,PT
+2026-05-29,Wind Offshore Forecast,194.3,PT
+2026-05-30,Wind Offshore Forecast,410.0,PT
+2026-05-31,Wind Offshore Forecast,302.7,PT
+2026-05-21,Baseload,95.4,RS
 2026-05-22,Baseload,68.6,RS
 2026-05-23,Baseload,88.1,RS
 2026-05-24,Baseload,76.1,RS
@@ -481009,9 +481264,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,117.11,RS
 2026-05-28,Baseload,109.42,RS
 2026-05-29,Baseload,101.36,RS
-2026-05-30,Baseload,67.1,RS
-2026-05-20,Wind Onshore Generation,1793.66,RS
-2026-05-21,Wind Onshore Generation,10656.47,RS
+2026-05-30,Baseload,89.45,RS
+2026-05-31,Baseload,84.26,RS
+2026-05-21,Wind Onshore Generation,4454.25,RS
 2026-05-22,Wind Onshore Generation,11805.26,RS
 2026-05-23,Wind Onshore Generation,5446.26,RS
 2026-05-24,Wind Onshore Generation,4883.43,RS
@@ -481019,9 +481274,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,2443.07,RS
 2026-05-27,Wind Onshore Generation,2644.52,RS
 2026-05-28,Wind Onshore Generation,7816.97,RS
-2026-05-29,Wind Onshore Generation,3918.16,RS
-2026-05-20,Wind Onshore Capture,105.97,RS
-2026-05-21,Wind Onshore Capture,62.78,RS
+2026-05-29,Wind Onshore Generation,4528.58,RS
+2026-05-30,Wind Onshore Generation,2596.69,RS
+2026-05-21,Wind Onshore Capture,92.67,RS
 2026-05-22,Wind Onshore Capture,68.99,RS
 2026-05-23,Wind Onshore Capture,119.03,RS
 2026-05-24,Wind Onshore Capture,93.64,RS
@@ -481029,9 +481284,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,119.55,RS
 2026-05-27,Wind Onshore Capture,162.09,RS
 2026-05-28,Wind Onshore Capture,110.43,RS
-2026-05-29,Wind Onshore Capture,96.34,RS
-2026-05-20,Wind Onshore Forecast,1973.34,RS
-2026-05-21,Wind Onshore Forecast,10289.97,RS
+2026-05-29,Wind Onshore Capture,103.55,RS
+2026-05-30,Wind Onshore Capture,51.27,RS
+2026-05-21,Wind Onshore Forecast,4497.13,RS
 2026-05-22,Wind Onshore Forecast,11050.4,RS
 2026-05-23,Wind Onshore Forecast,5515.05,RS
 2026-05-24,Wind Onshore Forecast,4383.97,RS
@@ -481040,9 +481295,8 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,2425.3,RS
 2026-05-28,Wind Onshore Forecast,7364.44,RS
 2026-05-29,Wind Onshore Forecast,4772.8,RS
-2026-05-30,Wind Onshore Forecast,4014.94,RS
-2026-05-20,Baseload,146.95,RO
-2026-05-21,Baseload,102.9,RO
+2026-05-30,Wind Onshore Forecast,5755.49,RS
+2026-05-21,Baseload,131.9,RO
 2026-05-22,Baseload,112.01,RO
 2026-05-23,Baseload,83.37,RO
 2026-05-24,Baseload,76.43,RO
@@ -481051,9 +481305,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,111.64,RO
 2026-05-28,Baseload,114.43,RO
 2026-05-29,Baseload,102.68,RO
-2026-05-30,Baseload,86.24,RO
-2026-05-20,Solar Generation,3568.0,RO
-2026-05-21,Solar Generation,45859.0,RO
+2026-05-30,Baseload,104.01,RO
+2026-05-31,Baseload,82.15,RO
+2026-05-21,Solar Generation,9739.0,RO
 2026-05-22,Solar Generation,49712.0,RO
 2026-05-23,Solar Generation,46828.0,RO
 2026-05-24,Solar Generation,43583.0,RO
@@ -481061,9 +481315,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Generation,88028.0,RO
 2026-05-27,Solar Generation,91239.0,RO
 2026-05-28,Solar Generation,77293.0,RO
-2026-05-29,Solar Generation,90766.0,RO
-2026-05-20,Solar Capture,114.23,RO
-2026-05-21,Solar Capture,43.6,RO
+2026-05-29,Solar Generation,92032.0,RO
+2026-05-30,Solar Generation,45261.0,RO
+2026-05-21,Solar Capture,59.9,RO
 2026-05-22,Solar Capture,45.37,RO
 2026-05-23,Solar Capture,17.89,RO
 2026-05-24,Solar Capture,12.08,RO
@@ -481071,9 +481325,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Capture,36.43,RO
 2026-05-27,Solar Capture,38.5,RO
 2026-05-28,Solar Capture,40.93,RO
-2026-05-29,Solar Capture,36.76,RO
-2026-05-20,Wind Onshore Generation,51841.0,RO
-2026-05-21,Wind Onshore Generation,169859.0,RO
+2026-05-29,Solar Capture,38.28,RO
+2026-05-30,Solar Capture,30.13,RO
+2026-05-21,Wind Onshore Generation,50747.0,RO
 2026-05-22,Wind Onshore Generation,63654.0,RO
 2026-05-23,Wind Onshore Generation,126920.0,RO
 2026-05-24,Wind Onshore Generation,125055.0,RO
@@ -481081,9 +481335,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,106450.0,RO
 2026-05-27,Wind Onshore Generation,55736.0,RO
 2026-05-28,Wind Onshore Generation,72276.0,RO
-2026-05-29,Wind Onshore Generation,69596.0,RO
-2026-05-20,Wind Onshore Capture,147.91,RO
-2026-05-21,Wind Onshore Capture,105.4,RO
+2026-05-29,Wind Onshore Generation,84647.0,RO
+2026-05-30,Wind Onshore Generation,45273.0,RO
+2026-05-21,Wind Onshore Capture,128.15,RO
 2026-05-22,Wind Onshore Capture,122.36,RO
 2026-05-23,Wind Onshore Capture,82.67,RO
 2026-05-24,Wind Onshore Capture,75.53,RO
@@ -481091,9 +481345,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,126.92,RO
 2026-05-27,Wind Onshore Capture,143.91,RO
 2026-05-28,Wind Onshore Capture,139.13,RO
-2026-05-29,Wind Onshore Capture,76.13,RO
-2026-05-20,Solar Forecast,5094.77,RO
-2026-05-21,Solar Forecast,68226.34,RO
+2026-05-29,Wind Onshore Capture,96.96,RO
+2026-05-30,Wind Onshore Capture,64.22,RO
+2026-05-21,Solar Forecast,16093.31,RO
 2026-05-22,Solar Forecast,69468.21,RO
 2026-05-23,Solar Forecast,69820.61,RO
 2026-05-24,Solar Forecast,72829.86,RO
@@ -481102,9 +481356,9 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,126047.12,RO
 2026-05-28,Solar Forecast,106606.32,RO
 2026-05-29,Solar Forecast,116636.4,RO
-2026-05-30,Solar Forecast,69812.36,RO
-2026-05-20,Wind Onshore Forecast,34502.13,RO
-2026-05-21,Wind Onshore Forecast,161599.24,RO
+2026-05-30,Solar Forecast,74858.18,RO
+2026-05-31,Solar Forecast,57092.0,RO
+2026-05-21,Wind Onshore Forecast,42284.74,RO
 2026-05-22,Wind Onshore Forecast,67472.68,RO
 2026-05-23,Wind Onshore Forecast,145082.8,RO
 2026-05-24,Wind Onshore Forecast,141539.68,RO
@@ -481113,141 +481367,9 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,59346.68,RO
 2026-05-28,Wind Onshore Forecast,99046.39,RO
 2026-05-29,Wind Onshore Forecast,104524.78,RO
-2026-05-30,Wind Onshore Forecast,65545.07,RO
-2026-05-20,Baseload,149.22,SI
-2026-05-21,Baseload,102.64,SI
-2026-05-22,Baseload,109.28,SI
-2026-05-23,Baseload,83.35,SI
-2026-05-24,Baseload,69.32,SI
-2026-05-25,Baseload,103.38,SI
-2026-05-26,Baseload,102.54,SI
-2026-05-27,Baseload,95.88,SI
-2026-05-28,Baseload,116.29,SI
-2026-05-29,Baseload,101.87,SI
-2026-05-30,Baseload,71.19,SI
-2026-05-20,Solar Generation,2091.3,SI
-2026-05-21,Solar Generation,28716.94,SI
-2026-05-22,Solar Generation,36860.69,SI
-2026-05-23,Solar Generation,34597.06,SI
-2026-05-24,Solar Generation,33053.54,SI
-2026-05-25,Solar Generation,34607.1,SI
-2026-05-26,Solar Generation,36357.72,SI
-2026-05-27,Solar Generation,28450.68,SI
-2026-05-28,Solar Generation,36029.19,SI
-2026-05-29,Solar Generation,35620.38,SI
-2026-05-20,Solar Capture,129.54,SI
-2026-05-21,Solar Capture,43.29,SI
-2026-05-22,Solar Capture,49.24,SI
-2026-05-23,Solar Capture,9.75,SI
-2026-05-24,Solar Capture,-9.62,SI
-2026-05-25,Solar Capture,48.83,SI
-2026-05-26,Solar Capture,32.56,SI
-2026-05-27,Solar Capture,31.7,SI
-2026-05-28,Solar Capture,52.79,SI
-2026-05-29,Solar Capture,30.24,SI
-2026-05-20,Wind Onshore Generation,10.77,SI
-2026-05-21,Wind Onshore Generation,31.46,SI
-2026-05-22,Wind Onshore Generation,57.19,SI
-2026-05-23,Wind Onshore Generation,87.09,SI
-2026-05-24,Wind Onshore Generation,41.57,SI
-2026-05-25,Wind Onshore Generation,5.27,SI
-2026-05-26,Wind Onshore Generation,0.96,SI
-2026-05-27,Wind Onshore Generation,0.0,SI
-2026-05-28,Wind Onshore Generation,121.96,SI
-2026-05-29,Wind Onshore Generation,148.58,SI
-2026-05-20,Wind Onshore Capture,147.31,SI
-2026-05-21,Wind Onshore Capture,115.12,SI
-2026-05-22,Wind Onshore Capture,95.88,SI
-2026-05-23,Wind Onshore Capture,79.43,SI
-2026-05-24,Wind Onshore Capture,69.61,SI
-2026-05-25,Wind Onshore Capture,104.45,SI
-2026-05-26,Wind Onshore Capture,130.61,SI
-2026-05-28,Wind Onshore Capture,111.72,SI
-2026-05-29,Wind Onshore Capture,86.6,SI
-2026-05-20,Solar Forecast,2070.72,SI
-2026-05-21,Solar Forecast,27846.15,SI
-2026-05-22,Solar Forecast,32872.69,SI
-2026-05-23,Solar Forecast,33553.27,SI
-2026-05-24,Solar Forecast,33701.72,SI
-2026-05-25,Solar Forecast,31712.75,SI
-2026-05-26,Solar Forecast,34561.5,SI
-2026-05-27,Solar Forecast,34914.72,SI
-2026-05-28,Solar Forecast,34228.56,SI
-2026-05-20,Baseload,144.98,SK
-2026-05-21,Baseload,106.51,SK
-2026-05-22,Baseload,107.99,SK
-2026-05-23,Baseload,81.93,SK
-2026-05-24,Baseload,67.03,SK
-2026-05-25,Baseload,86.99,SK
-2026-05-26,Baseload,99.8,SK
-2026-05-27,Baseload,89.83,SK
-2026-05-28,Baseload,118.18,SK
-2026-05-29,Baseload,100.29,SK
-2026-05-30,Baseload,65.38,SK
-2026-05-20,Solar Generation,701.2,SK
-2026-05-21,Solar Generation,10884.1,SK
-2026-05-22,Solar Generation,12916.8,SK
-2026-05-23,Solar Generation,13186.6,SK
-2026-05-24,Solar Generation,12814.1,SK
-2026-05-25,Solar Generation,12577.6,SK
-2026-05-26,Solar Generation,13007.2,SK
-2026-05-27,Solar Generation,11686.4,SK
-2026-05-28,Solar Generation,13670.8,SK
-2026-05-29,Solar Generation,13129.5,SK
-2026-05-20,Solar Capture,114.71,SK
-2026-05-21,Solar Capture,50.44,SK
-2026-05-22,Solar Capture,43.05,SK
-2026-05-23,Solar Capture,3.83,SK
-2026-05-24,Solar Capture,-18.68,SK
-2026-05-25,Solar Capture,11.3,SK
-2026-05-26,Solar Capture,27.67,SK
-2026-05-27,Solar Capture,30.88,SK
-2026-05-28,Solar Capture,32.85,SK
-2026-05-29,Solar Capture,28.66,SK
-2026-05-20,Wind Onshore Generation,10.3,SK
-2026-05-21,Wind Onshore Generation,51.2,SK
-2026-05-22,Wind Onshore Generation,46.2,SK
-2026-05-23,Wind Onshore Generation,45.3,SK
-2026-05-24,Wind Onshore Generation,13.1,SK
-2026-05-25,Wind Onshore Generation,29.3,SK
-2026-05-26,Wind Onshore Generation,18.9,SK
-2026-05-27,Wind Onshore Generation,26.1,SK
-2026-05-28,Wind Onshore Generation,39.2,SK
-2026-05-29,Wind Onshore Generation,6.9,SK
-2026-05-20,Wind Onshore Capture,152.59,SK
-2026-05-21,Wind Onshore Capture,108.79,SK
-2026-05-22,Wind Onshore Capture,88.78,SK
-2026-05-23,Wind Onshore Capture,48.28,SK
-2026-05-24,Wind Onshore Capture,63.64,SK
-2026-05-25,Wind Onshore Capture,57.95,SK
-2026-05-26,Wind Onshore Capture,94.94,SK
-2026-05-27,Wind Onshore Capture,99.85,SK
-2026-05-28,Wind Onshore Capture,91.7,SK
-2026-05-29,Wind Onshore Capture,45.6,SK
-2026-05-20,Solar Forecast,425.0,SK
-2026-05-21,Solar Forecast,10253.0,SK
-2026-05-22,Solar Forecast,11990.0,SK
-2026-05-23,Solar Forecast,11990.0,SK
-2026-05-24,Solar Forecast,11990.0,SK
-2026-05-25,Solar Forecast,11990.0,SK
-2026-05-26,Solar Forecast,11990.0,SK
-2026-05-27,Solar Forecast,12715.0,SK
-2026-05-28,Solar Forecast,12807.0,SK
-2026-05-29,Solar Forecast,11990.0,SK
-2026-05-30,Solar Forecast,6975.0,SK
-2026-05-20,Wind Onshore Forecast,28.0,SK
-2026-05-21,Wind Onshore Forecast,96.0,SK
-2026-05-22,Wind Onshore Forecast,96.0,SK
-2026-05-23,Wind Onshore Forecast,96.0,SK
-2026-05-24,Wind Onshore Forecast,96.0,SK
-2026-05-25,Wind Onshore Forecast,96.0,SK
-2026-05-26,Wind Onshore Forecast,96.0,SK
-2026-05-27,Wind Onshore Forecast,96.0,SK
-2026-05-28,Wind Onshore Forecast,96.0,SK
-2026-05-29,Wind Onshore Forecast,96.0,SK
-2026-05-30,Wind Onshore Forecast,67.0,SK
-2026-05-20,Baseload,157.71,IT_NORD
-2026-05-21,Baseload,127.54,IT_NORD
+2026-05-30,Wind Onshore Forecast,74793.15,RO
+2026-05-31,Wind Onshore Forecast,37862.36,RO
+2026-05-21,Baseload,142.28,IT_NORD
 2026-05-22,Baseload,121.45,IT_NORD
 2026-05-23,Baseload,103.88,IT_NORD
 2026-05-24,Baseload,92.48,IT_NORD
@@ -481256,9 +481378,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,134.89,IT_NORD
 2026-05-28,Baseload,131.95,IT_NORD
 2026-05-29,Baseload,134.99,IT_NORD
-2026-05-30,Baseload,94.97,IT_NORD
-2026-05-20,Solar Generation,22927.0,IT_NORD
-2026-05-21,Solar Generation,245892.0,IT_NORD
+2026-05-30,Baseload,112.91,IT_NORD
+2026-05-31,Baseload,105.34,IT_NORD
+2026-05-21,Solar Generation,85641.0,IT_NORD
 2026-05-22,Solar Generation,238819.0,IT_NORD
 2026-05-23,Solar Generation,232642.0,IT_NORD
 2026-05-24,Solar Generation,227104.0,IT_NORD
@@ -481266,9 +481388,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Generation,229017.0,IT_NORD
 2026-05-27,Solar Generation,203499.0,IT_NORD
 2026-05-28,Solar Generation,196375.0,IT_NORD
-2026-05-29,Solar Generation,207016.0,IT_NORD
-2026-05-20,Solar Capture,134.76,IT_NORD
-2026-05-21,Solar Capture,92.94,IT_NORD
+2026-05-29,Solar Generation,216994.0,IT_NORD
+2026-05-30,Solar Generation,170666.0,IT_NORD
+2026-05-21,Solar Capture,107.73,IT_NORD
 2026-05-22,Solar Capture,75.74,IT_NORD
 2026-05-23,Solar Capture,43.38,IT_NORD
 2026-05-24,Solar Capture,25.28,IT_NORD
@@ -481276,9 +481398,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Capture,86.2,IT_NORD
 2026-05-27,Solar Capture,111.81,IT_NORD
 2026-05-28,Solar Capture,99.95,IT_NORD
-2026-05-29,Solar Capture,102.92,IT_NORD
-2026-05-20,Wind Onshore Generation,81.0,IT_NORD
-2026-05-21,Wind Onshore Generation,941.0,IT_NORD
+2026-05-29,Solar Capture,106.33,IT_NORD
+2026-05-30,Solar Capture,53.76,IT_NORD
+2026-05-21,Wind Onshore Generation,175.0,IT_NORD
 2026-05-22,Wind Onshore Generation,248.0,IT_NORD
 2026-05-23,Wind Onshore Generation,1280.0,IT_NORD
 2026-05-24,Wind Onshore Generation,2495.0,IT_NORD
@@ -481286,9 +481408,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,750.0,IT_NORD
 2026-05-27,Wind Onshore Generation,1824.0,IT_NORD
 2026-05-28,Wind Onshore Generation,1144.0,IT_NORD
-2026-05-29,Wind Onshore Generation,2094.0,IT_NORD
-2026-05-20,Wind Onshore Capture,151.71,IT_NORD
-2026-05-21,Wind Onshore Capture,142.05,IT_NORD
+2026-05-29,Wind Onshore Generation,2125.0,IT_NORD
+2026-05-30,Wind Onshore Generation,209.0,IT_NORD
+2026-05-21,Wind Onshore Capture,146.11,IT_NORD
 2026-05-22,Wind Onshore Capture,136.44,IT_NORD
 2026-05-23,Wind Onshore Capture,107.88,IT_NORD
 2026-05-24,Wind Onshore Capture,85.51,IT_NORD
@@ -481296,9 +481418,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,159.43,IT_NORD
 2026-05-27,Wind Onshore Capture,150.52,IT_NORD
 2026-05-28,Wind Onshore Capture,143.77,IT_NORD
-2026-05-29,Wind Onshore Capture,120.79,IT_NORD
-2026-05-20,Solar Forecast,24097.0,IT_NORD
-2026-05-21,Solar Forecast,227212.0,IT_NORD
+2026-05-29,Wind Onshore Capture,121.42,IT_NORD
+2026-05-30,Wind Onshore Capture,95.81,IT_NORD
+2026-05-21,Solar Forecast,77779.0,IT_NORD
 2026-05-22,Solar Forecast,229699.0,IT_NORD
 2026-05-23,Solar Forecast,225937.0,IT_NORD
 2026-05-24,Solar Forecast,222267.0,IT_NORD
@@ -481307,9 +481429,8 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,206817.0,IT_NORD
 2026-05-28,Solar Forecast,210898.0,IT_NORD
 2026-05-29,Solar Forecast,221501.0,IT_NORD
-2026-05-30,Solar Forecast,187670.0,IT_NORD
-2026-05-20,Wind Onshore Forecast,254.0,IT_NORD
-2026-05-21,Wind Onshore Forecast,1697.0,IT_NORD
+2026-05-30,Solar Forecast,213629.0,IT_NORD
+2026-05-21,Wind Onshore Forecast,524.0,IT_NORD
 2026-05-22,Wind Onshore Forecast,1355.0,IT_NORD
 2026-05-23,Wind Onshore Forecast,1428.0,IT_NORD
 2026-05-24,Wind Onshore Forecast,2038.0,IT_NORD
@@ -481318,9 +481439,139 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,1546.0,IT_NORD
 2026-05-28,Wind Onshore Forecast,1230.0,IT_NORD
 2026-05-29,Wind Onshore Forecast,2624.0,IT_NORD
-2026-05-30,Wind Onshore Forecast,672.0,IT_NORD
-2026-05-20,Baseload,157.71,IT_CNOR
-2026-05-21,Baseload,127.54,IT_CNOR
+2026-05-30,Wind Onshore Forecast,1102.0,IT_NORD
+2026-05-21,Baseload,134.16,SI
+2026-05-22,Baseload,109.28,SI
+2026-05-23,Baseload,83.35,SI
+2026-05-24,Baseload,69.32,SI
+2026-05-25,Baseload,103.38,SI
+2026-05-26,Baseload,102.54,SI
+2026-05-27,Baseload,95.88,SI
+2026-05-28,Baseload,116.29,SI
+2026-05-29,Baseload,101.87,SI
+2026-05-30,Baseload,91.56,SI
+2026-05-31,Baseload,78.27,SI
+2026-05-21,Solar Generation,9865.17,SI
+2026-05-22,Solar Generation,36860.69,SI
+2026-05-23,Solar Generation,34597.06,SI
+2026-05-24,Solar Generation,33053.54,SI
+2026-05-25,Solar Generation,34607.1,SI
+2026-05-26,Solar Generation,36601.21,SI
+2026-05-27,Solar Generation,29583.97,SI
+2026-05-28,Solar Generation,34800.57,SI
+2026-05-29,Solar Generation,38476.5,SI
+2026-05-30,Solar Generation,25587.73,SI
+2026-05-21,Solar Capture,75.9,SI
+2026-05-22,Solar Capture,49.24,SI
+2026-05-23,Solar Capture,9.75,SI
+2026-05-24,Solar Capture,-9.62,SI
+2026-05-25,Solar Capture,48.83,SI
+2026-05-26,Solar Capture,32.52,SI
+2026-05-27,Solar Capture,30.39,SI
+2026-05-28,Solar Capture,39.92,SI
+2026-05-29,Solar Capture,41.76,SI
+2026-05-30,Solar Capture,20.04,SI
+2026-05-21,Wind Onshore Generation,22.57,SI
+2026-05-22,Wind Onshore Generation,57.19,SI
+2026-05-23,Wind Onshore Generation,87.09,SI
+2026-05-24,Wind Onshore Generation,41.57,SI
+2026-05-25,Wind Onshore Generation,5.27,SI
+2026-05-26,Wind Onshore Generation,8.08,SI
+2026-05-27,Wind Onshore Generation,14.67,SI
+2026-05-28,Wind Onshore Generation,114.38,SI
+2026-05-29,Wind Onshore Generation,151.27,SI
+2026-05-30,Wind Onshore Generation,44.26,SI
+2026-05-21,Wind Onshore Capture,141.02,SI
+2026-05-22,Wind Onshore Capture,95.88,SI
+2026-05-23,Wind Onshore Capture,79.43,SI
+2026-05-24,Wind Onshore Capture,69.61,SI
+2026-05-25,Wind Onshore Capture,104.45,SI
+2026-05-26,Wind Onshore Capture,114.44,SI
+2026-05-27,Wind Onshore Capture,97.97,SI
+2026-05-28,Wind Onshore Capture,121.29,SI
+2026-05-29,Wind Onshore Capture,88.08,SI
+2026-05-30,Wind Onshore Capture,23.18,SI
+2026-05-21,Solar Forecast,8595.72,SI
+2026-05-22,Solar Forecast,32872.69,SI
+2026-05-23,Solar Forecast,33553.27,SI
+2026-05-24,Solar Forecast,33701.72,SI
+2026-05-25,Solar Forecast,31712.75,SI
+2026-05-26,Solar Forecast,34561.5,SI
+2026-05-27,Solar Forecast,34914.72,SI
+2026-05-28,Solar Forecast,34228.56,SI
+2026-05-29,Solar Forecast,36334.99,SI
+2026-05-21,Baseload,131.57,SK
+2026-05-22,Baseload,107.99,SK
+2026-05-23,Baseload,81.93,SK
+2026-05-24,Baseload,67.03,SK
+2026-05-25,Baseload,86.99,SK
+2026-05-26,Baseload,99.8,SK
+2026-05-27,Baseload,89.83,SK
+2026-05-28,Baseload,118.18,SK
+2026-05-29,Baseload,100.29,SK
+2026-05-30,Baseload,86.02,SK
+2026-05-31,Baseload,77.39,SK
+2026-05-21,Solar Generation,3092.7,SK
+2026-05-22,Solar Generation,12916.8,SK
+2026-05-23,Solar Generation,13186.6,SK
+2026-05-24,Solar Generation,12814.1,SK
+2026-05-25,Solar Generation,12577.6,SK
+2026-05-26,Solar Generation,13007.2,SK
+2026-05-27,Solar Generation,11686.4,SK
+2026-05-28,Solar Generation,13670.8,SK
+2026-05-29,Solar Generation,13436.3,SK
+2026-05-30,Solar Generation,5329.3,SK
+2026-05-21,Solar Capture,62.72,SK
+2026-05-22,Solar Capture,43.05,SK
+2026-05-23,Solar Capture,3.83,SK
+2026-05-24,Solar Capture,-18.68,SK
+2026-05-25,Solar Capture,11.3,SK
+2026-05-26,Solar Capture,27.67,SK
+2026-05-27,Solar Capture,30.88,SK
+2026-05-28,Solar Capture,32.85,SK
+2026-05-29,Solar Capture,31.26,SK
+2026-05-30,Solar Capture,21.79,SK
+2026-05-21,Wind Onshore Generation,23.0,SK
+2026-05-22,Wind Onshore Generation,46.2,SK
+2026-05-23,Wind Onshore Generation,45.3,SK
+2026-05-24,Wind Onshore Generation,13.1,SK
+2026-05-25,Wind Onshore Generation,29.3,SK
+2026-05-26,Wind Onshore Generation,18.9,SK
+2026-05-27,Wind Onshore Generation,26.1,SK
+2026-05-28,Wind Onshore Generation,39.2,SK
+2026-05-29,Wind Onshore Generation,12.1,SK
+2026-05-30,Wind Onshore Generation,12.6,SK
+2026-05-21,Wind Onshore Capture,132.35,SK
+2026-05-22,Wind Onshore Capture,88.78,SK
+2026-05-23,Wind Onshore Capture,48.28,SK
+2026-05-24,Wind Onshore Capture,63.64,SK
+2026-05-25,Wind Onshore Capture,57.95,SK
+2026-05-26,Wind Onshore Capture,94.94,SK
+2026-05-27,Wind Onshore Capture,99.85,SK
+2026-05-28,Wind Onshore Capture,91.7,SK
+2026-05-29,Wind Onshore Capture,96.87,SK
+2026-05-30,Wind Onshore Capture,114.73,SK
+2026-05-21,Solar Forecast,2507.0,SK
+2026-05-22,Solar Forecast,11990.0,SK
+2026-05-23,Solar Forecast,11990.0,SK
+2026-05-24,Solar Forecast,11990.0,SK
+2026-05-25,Solar Forecast,11990.0,SK
+2026-05-26,Solar Forecast,11990.0,SK
+2026-05-27,Solar Forecast,12715.0,SK
+2026-05-28,Solar Forecast,12807.0,SK
+2026-05-29,Solar Forecast,11990.0,SK
+2026-05-30,Solar Forecast,7541.0,SK
+2026-05-21,Wind Onshore Forecast,38.0,SK
+2026-05-22,Wind Onshore Forecast,96.0,SK
+2026-05-23,Wind Onshore Forecast,96.0,SK
+2026-05-24,Wind Onshore Forecast,96.0,SK
+2026-05-25,Wind Onshore Forecast,96.0,SK
+2026-05-26,Wind Onshore Forecast,96.0,SK
+2026-05-27,Wind Onshore Forecast,96.0,SK
+2026-05-28,Wind Onshore Forecast,96.0,SK
+2026-05-29,Wind Onshore Forecast,96.0,SK
+2026-05-30,Wind Onshore Forecast,96.0,SK
+2026-05-21,Baseload,142.28,IT_CNOR
 2026-05-22,Baseload,121.45,IT_CNOR
 2026-05-23,Baseload,103.88,IT_CNOR
 2026-05-24,Baseload,92.48,IT_CNOR
@@ -481329,9 +481580,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,134.89,IT_CNOR
 2026-05-28,Baseload,131.95,IT_CNOR
 2026-05-29,Baseload,134.99,IT_CNOR
-2026-05-30,Baseload,94.97,IT_CNOR
-2026-05-20,Solar Generation,4831.0,IT_CNOR
-2026-05-21,Solar Generation,46883.0,IT_CNOR
+2026-05-30,Baseload,112.91,IT_CNOR
+2026-05-31,Baseload,105.34,IT_CNOR
+2026-05-21,Solar Generation,15978.0,IT_CNOR
 2026-05-22,Solar Generation,47524.0,IT_CNOR
 2026-05-23,Solar Generation,45131.0,IT_CNOR
 2026-05-24,Solar Generation,45688.0,IT_CNOR
@@ -481339,9 +481590,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Generation,44768.0,IT_CNOR
 2026-05-27,Solar Generation,44395.0,IT_CNOR
 2026-05-28,Solar Generation,35816.0,IT_CNOR
-2026-05-29,Solar Generation,33899.0,IT_CNOR
-2026-05-20,Solar Capture,133.99,IT_CNOR
-2026-05-21,Solar Capture,93.12,IT_CNOR
+2026-05-29,Solar Generation,35385.0,IT_CNOR
+2026-05-30,Solar Generation,35751.0,IT_CNOR
+2026-05-21,Solar Capture,107.19,IT_CNOR
 2026-05-22,Solar Capture,75.85,IT_CNOR
 2026-05-23,Solar Capture,41.96,IT_CNOR
 2026-05-24,Solar Capture,24.57,IT_CNOR
@@ -481349,9 +481600,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Capture,86.55,IT_CNOR
 2026-05-27,Solar Capture,112.78,IT_CNOR
 2026-05-28,Solar Capture,101.08,IT_CNOR
-2026-05-29,Solar Capture,102.36,IT_CNOR
-2026-05-20,Wind Onshore Generation,517.0,IT_CNOR
-2026-05-21,Wind Onshore Generation,1390.0,IT_CNOR
+2026-05-29,Solar Capture,104.53,IT_CNOR
+2026-05-30,Solar Capture,54.21,IT_CNOR
+2026-05-21,Wind Onshore Generation,602.0,IT_CNOR
 2026-05-22,Wind Onshore Generation,1665.0,IT_CNOR
 2026-05-23,Wind Onshore Generation,4451.0,IT_CNOR
 2026-05-24,Wind Onshore Generation,5432.0,IT_CNOR
@@ -481359,9 +481610,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,1422.0,IT_CNOR
 2026-05-27,Wind Onshore Generation,2064.0,IT_CNOR
 2026-05-28,Wind Onshore Generation,1453.0,IT_CNOR
-2026-05-29,Wind Onshore Generation,1120.0,IT_CNOR
-2026-05-20,Wind Onshore Capture,155.72,IT_CNOR
-2026-05-21,Wind Onshore Capture,141.71,IT_CNOR
+2026-05-29,Wind Onshore Generation,1272.0,IT_CNOR
+2026-05-30,Wind Onshore Generation,324.0,IT_CNOR
+2026-05-21,Wind Onshore Capture,150.56,IT_CNOR
 2026-05-22,Wind Onshore Capture,122.23,IT_CNOR
 2026-05-23,Wind Onshore Capture,109.04,IT_CNOR
 2026-05-24,Wind Onshore Capture,92.03,IT_CNOR
@@ -481369,9 +481620,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,142.61,IT_CNOR
 2026-05-27,Wind Onshore Capture,144.33,IT_CNOR
 2026-05-28,Wind Onshore Capture,132.83,IT_CNOR
-2026-05-29,Wind Onshore Capture,138.37,IT_CNOR
-2026-05-20,Solar Forecast,4459.0,IT_CNOR
-2026-05-21,Solar Forecast,45760.0,IT_CNOR
+2026-05-29,Wind Onshore Capture,143.61,IT_CNOR
+2026-05-30,Wind Onshore Capture,102.83,IT_CNOR
+2026-05-21,Solar Forecast,14953.0,IT_CNOR
 2026-05-22,Solar Forecast,47388.0,IT_CNOR
 2026-05-23,Solar Forecast,46692.0,IT_CNOR
 2026-05-24,Solar Forecast,46634.0,IT_CNOR
@@ -481380,9 +481631,8 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,44467.0,IT_CNOR
 2026-05-28,Solar Forecast,41151.0,IT_CNOR
 2026-05-29,Solar Forecast,42053.0,IT_CNOR
-2026-05-30,Solar Forecast,39650.0,IT_CNOR
-2026-05-20,Wind Onshore Forecast,348.0,IT_CNOR
-2026-05-21,Wind Onshore Forecast,1008.0,IT_CNOR
+2026-05-30,Solar Forecast,44770.0,IT_CNOR
+2026-05-21,Wind Onshore Forecast,412.0,IT_CNOR
 2026-05-22,Wind Onshore Forecast,1145.0,IT_CNOR
 2026-05-23,Wind Onshore Forecast,2161.0,IT_CNOR
 2026-05-24,Wind Onshore Forecast,3507.0,IT_CNOR
@@ -481391,9 +481641,8 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,1259.0,IT_CNOR
 2026-05-28,Wind Onshore Forecast,671.0,IT_CNOR
 2026-05-29,Wind Onshore Forecast,728.0,IT_CNOR
-2026-05-30,Wind Onshore Forecast,242.0,IT_CNOR
-2026-05-20,Baseload,157.71,IT_CSUD
-2026-05-21,Baseload,90.47,IT_CSUD
+2026-05-30,Wind Onshore Forecast,576.0,IT_CNOR
+2026-05-21,Baseload,101.62,IT_CSUD
 2026-05-22,Baseload,90.69,IT_CSUD
 2026-05-23,Baseload,93.25,IT_CSUD
 2026-05-24,Baseload,91.94,IT_CSUD
@@ -481402,9 +481651,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,134.89,IT_CSUD
 2026-05-28,Baseload,131.88,IT_CSUD
 2026-05-29,Baseload,134.9,IT_CSUD
-2026-05-30,Baseload,94.97,IT_CSUD
-2026-05-20,Solar Generation,13275.0,IT_CSUD
-2026-05-21,Solar Generation,128748.0,IT_CSUD
+2026-05-30,Baseload,112.91,IT_CSUD
+2026-05-31,Baseload,105.34,IT_CSUD
+2026-05-21,Solar Generation,45964.0,IT_CSUD
 2026-05-22,Solar Generation,109232.0,IT_CSUD
 2026-05-23,Solar Generation,111157.0,IT_CSUD
 2026-05-24,Solar Generation,120659.0,IT_CSUD
@@ -481412,9 +481661,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Generation,147521.0,IT_CSUD
 2026-05-27,Solar Generation,142151.0,IT_CSUD
 2026-05-28,Solar Generation,119119.0,IT_CSUD
-2026-05-29,Solar Generation,93732.0,IT_CSUD
-2026-05-20,Solar Capture,134.82,IT_CSUD
-2026-05-21,Solar Capture,19.96,IT_CSUD
+2026-05-29,Solar Generation,98026.0,IT_CSUD
+2026-05-30,Solar Generation,113200.0,IT_CSUD
+2026-05-21,Solar Capture,19.91,IT_CSUD
 2026-05-22,Solar Capture,24.29,IT_CSUD
 2026-05-23,Solar Capture,29.12,IT_CSUD
 2026-05-24,Solar Capture,30.29,IT_CSUD
@@ -481422,9 +481671,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Capture,87.23,IT_CSUD
 2026-05-27,Solar Capture,114.37,IT_CSUD
 2026-05-28,Solar Capture,100.56,IT_CSUD
-2026-05-29,Solar Capture,102.99,IT_CSUD
-2026-05-20,Wind Onshore Generation,11679.0,IT_CSUD
-2026-05-21,Wind Onshore Generation,97976.0,IT_CSUD
+2026-05-29,Solar Capture,104.81,IT_CSUD
+2026-05-30,Solar Capture,55.48,IT_CSUD
+2026-05-21,Wind Onshore Generation,46033.0,IT_CSUD
 2026-05-22,Wind Onshore Generation,120697.0,IT_CSUD
 2026-05-23,Wind Onshore Generation,87197.0,IT_CSUD
 2026-05-24,Wind Onshore Generation,62267.0,IT_CSUD
@@ -481432,9 +481681,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,38219.0,IT_CSUD
 2026-05-27,Wind Onshore Generation,9819.0,IT_CSUD
 2026-05-28,Wind Onshore Generation,16786.0,IT_CSUD
-2026-05-29,Wind Onshore Generation,28907.0,IT_CSUD
-2026-05-20,Wind Onshore Capture,156.7,IT_CSUD
-2026-05-21,Wind Onshore Capture,96.68,IT_CSUD
+2026-05-29,Wind Onshore Generation,41071.0,IT_CSUD
+2026-05-30,Wind Onshore Generation,23947.0,IT_CSUD
+2026-05-21,Wind Onshore Capture,115.43,IT_CSUD
 2026-05-22,Wind Onshore Capture,94.54,IT_CSUD
 2026-05-23,Wind Onshore Capture,101.0,IT_CSUD
 2026-05-24,Wind Onshore Capture,107.91,IT_CSUD
@@ -481442,9 +481691,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,127.06,IT_CSUD
 2026-05-27,Wind Onshore Capture,143.61,IT_CSUD
 2026-05-28,Wind Onshore Capture,141.65,IT_CSUD
-2026-05-29,Wind Onshore Capture,116.64,IT_CSUD
-2026-05-20,Solar Forecast,14384.0,IT_CSUD
-2026-05-21,Solar Forecast,129729.0,IT_CSUD
+2026-05-29,Wind Onshore Capture,132.36,IT_CSUD
+2026-05-30,Wind Onshore Capture,98.18,IT_CSUD
+2026-05-21,Solar Forecast,41632.0,IT_CSUD
 2026-05-22,Solar Forecast,138907.0,IT_CSUD
 2026-05-23,Solar Forecast,137385.0,IT_CSUD
 2026-05-24,Solar Forecast,136745.0,IT_CSUD
@@ -481453,9 +481702,8 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,129749.0,IT_CSUD
 2026-05-28,Solar Forecast,110273.0,IT_CSUD
 2026-05-29,Solar Forecast,103432.0,IT_CSUD
-2026-05-30,Solar Forecast,116679.0,IT_CSUD
-2026-05-20,Wind Onshore Forecast,6652.0,IT_CSUD
-2026-05-21,Wind Onshore Forecast,93119.0,IT_CSUD
+2026-05-30,Solar Forecast,134554.0,IT_CSUD
+2026-05-21,Wind Onshore Forecast,43269.0,IT_CSUD
 2026-05-22,Wind Onshore Forecast,116827.0,IT_CSUD
 2026-05-23,Wind Onshore Forecast,94714.0,IT_CSUD
 2026-05-24,Wind Onshore Forecast,75091.0,IT_CSUD
@@ -481464,9 +481712,8 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,18207.0,IT_CSUD
 2026-05-28,Wind Onshore Forecast,29642.0,IT_CSUD
 2026-05-29,Wind Onshore Forecast,50978.0,IT_CSUD
-2026-05-30,Wind Onshore Forecast,25367.0,IT_CSUD
-2026-05-20,Baseload,153.88,IT_SUD
-2026-05-21,Baseload,89.74,IT_SUD
+2026-05-30,Wind Onshore Forecast,33886.0,IT_CSUD
+2026-05-21,Baseload,100.91,IT_SUD
 2026-05-22,Baseload,89.52,IT_SUD
 2026-05-23,Baseload,93.25,IT_SUD
 2026-05-24,Baseload,91.94,IT_SUD
@@ -481475,9 +481722,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,134.89,IT_SUD
 2026-05-28,Baseload,131.2,IT_SUD
 2026-05-29,Baseload,134.9,IT_SUD
-2026-05-30,Baseload,94.97,IT_SUD
-2026-05-20,Solar Generation,8369.0,IT_SUD
-2026-05-21,Solar Generation,86614.0,IT_SUD
+2026-05-30,Baseload,112.91,IT_SUD
+2026-05-31,Baseload,105.34,IT_SUD
+2026-05-21,Solar Generation,26827.0,IT_SUD
 2026-05-22,Solar Generation,80962.0,IT_SUD
 2026-05-23,Solar Generation,81824.0,IT_SUD
 2026-05-24,Solar Generation,85218.0,IT_SUD
@@ -481485,9 +481732,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Generation,95068.0,IT_SUD
 2026-05-27,Solar Generation,95008.0,IT_SUD
 2026-05-28,Solar Generation,84423.0,IT_SUD
-2026-05-29,Solar Generation,97643.0,IT_SUD
-2026-05-20,Solar Capture,130.99,IT_SUD
-2026-05-21,Solar Capture,17.87,IT_SUD
+2026-05-29,Solar Generation,100576.0,IT_SUD
+2026-05-30,Solar Generation,84350.0,IT_SUD
+2026-05-21,Solar Capture,13.29,IT_SUD
 2026-05-22,Solar Capture,16.5,IT_SUD
 2026-05-23,Solar Capture,20.82,IT_SUD
 2026-05-24,Solar Capture,22.14,IT_SUD
@@ -481495,9 +481742,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Capture,86.64,IT_SUD
 2026-05-27,Solar Capture,111.92,IT_SUD
 2026-05-28,Solar Capture,101.7,IT_SUD
-2026-05-29,Solar Capture,106.15,IT_SUD
-2026-05-20,Wind Onshore Generation,56100.0,IT_SUD
-2026-05-21,Wind Onshore Generation,288153.0,IT_SUD
+2026-05-29,Solar Capture,107.79,IT_SUD
+2026-05-30,Solar Capture,55.2,IT_SUD
+2026-05-21,Wind Onshore Generation,129431.0,IT_SUD
 2026-05-22,Wind Onshore Generation,298676.0,IT_SUD
 2026-05-23,Wind Onshore Generation,270057.0,IT_SUD
 2026-05-24,Wind Onshore Generation,175656.0,IT_SUD
@@ -481505,9 +481752,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,99310.0,IT_SUD
 2026-05-27,Wind Onshore Generation,73714.0,IT_SUD
 2026-05-28,Wind Onshore Generation,111422.0,IT_SUD
-2026-05-29,Wind Onshore Generation,71573.0,IT_SUD
-2026-05-20,Wind Onshore Capture,157.92,IT_SUD
-2026-05-21,Wind Onshore Capture,98.53,IT_SUD
+2026-05-29,Wind Onshore Generation,102912.0,IT_SUD
+2026-05-30,Wind Onshore Generation,80530.0,IT_SUD
+2026-05-21,Wind Onshore Capture,113.84,IT_SUD
 2026-05-22,Wind Onshore Capture,100.35,IT_SUD
 2026-05-23,Wind Onshore Capture,97.73,IT_SUD
 2026-05-24,Wind Onshore Capture,111.98,IT_SUD
@@ -481515,9 +481762,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,129.82,IT_SUD
 2026-05-27,Wind Onshore Capture,134.11,IT_SUD
 2026-05-28,Wind Onshore Capture,132.82,IT_SUD
-2026-05-29,Wind Onshore Capture,115.75,IT_SUD
-2026-05-20,Wind Offshore Generation,703.0,IT_SUD
-2026-05-21,Wind Offshore Generation,2342.0,IT_SUD
+2026-05-29,Wind Onshore Capture,132.1,IT_SUD
+2026-05-30,Wind Onshore Capture,97.6,IT_SUD
+2026-05-21,Wind Offshore Generation,1004.0,IT_SUD
 2026-05-22,Wind Offshore Generation,2344.0,IT_SUD
 2026-05-23,Wind Offshore Generation,1735.0,IT_SUD
 2026-05-24,Wind Offshore Generation,811.0,IT_SUD
@@ -481525,9 +481772,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Offshore Generation,335.0,IT_SUD
 2026-05-27,Wind Offshore Generation,448.0,IT_SUD
 2026-05-28,Wind Offshore Generation,552.0,IT_SUD
-2026-05-29,Wind Offshore Generation,606.0,IT_SUD
-2026-05-20,Wind Offshore Capture,159.48,IT_SUD
-2026-05-21,Wind Offshore Capture,83.11,IT_SUD
+2026-05-29,Wind Offshore Generation,808.0,IT_SUD
+2026-05-30,Wind Offshore Generation,158.0,IT_SUD
+2026-05-21,Wind Offshore Capture,95.19,IT_SUD
 2026-05-22,Wind Offshore Capture,96.01,IT_SUD
 2026-05-23,Wind Offshore Capture,92.12,IT_SUD
 2026-05-24,Wind Offshore Capture,93.7,IT_SUD
@@ -481535,9 +481782,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Offshore Capture,135.35,IT_SUD
 2026-05-27,Wind Offshore Capture,131.24,IT_SUD
 2026-05-28,Wind Offshore Capture,143.02,IT_SUD
-2026-05-29,Wind Offshore Capture,115.06,IT_SUD
-2026-05-20,Solar Forecast,8061.0,IT_SUD
-2026-05-21,Solar Forecast,99559.0,IT_SUD
+2026-05-29,Wind Offshore Capture,127.86,IT_SUD
+2026-05-30,Wind Offshore Capture,132.03,IT_SUD
+2026-05-21,Solar Forecast,30803.0,IT_SUD
 2026-05-22,Solar Forecast,98944.0,IT_SUD
 2026-05-23,Solar Forecast,97374.0,IT_SUD
 2026-05-24,Solar Forecast,95958.0,IT_SUD
@@ -481546,9 +481793,8 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,92905.0,IT_SUD
 2026-05-28,Solar Forecast,87710.0,IT_SUD
 2026-05-29,Solar Forecast,98439.0,IT_SUD
-2026-05-30,Solar Forecast,88722.0,IT_SUD
-2026-05-20,Wind Onshore Forecast,40056.0,IT_SUD
-2026-05-21,Wind Onshore Forecast,269936.0,IT_SUD
+2026-05-30,Solar Forecast,98944.0,IT_SUD
+2026-05-21,Wind Onshore Forecast,114228.0,IT_SUD
 2026-05-22,Wind Onshore Forecast,304061.0,IT_SUD
 2026-05-23,Wind Onshore Forecast,280022.0,IT_SUD
 2026-05-24,Wind Onshore Forecast,224467.0,IT_SUD
@@ -481557,9 +481803,8 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,91860.0,IT_SUD
 2026-05-28,Wind Onshore Forecast,158460.0,IT_SUD
 2026-05-29,Wind Onshore Forecast,135526.0,IT_SUD
-2026-05-30,Wind Onshore Forecast,77330.0,IT_SUD
-2026-05-20,Baseload,153.88,IT_SICI
-2026-05-21,Baseload,89.74,IT_SICI
+2026-05-30,Wind Onshore Forecast,97358.0,IT_SUD
+2026-05-21,Baseload,100.91,IT_SICI
 2026-05-22,Baseload,89.52,IT_SICI
 2026-05-23,Baseload,93.25,IT_SICI
 2026-05-24,Baseload,91.94,IT_SICI
@@ -481568,9 +481813,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,134.86,IT_SICI
 2026-05-28,Baseload,131.1,IT_SICI
 2026-05-29,Baseload,134.35,IT_SICI
-2026-05-30,Baseload,94.97,IT_SICI
-2026-05-20,Solar Generation,8438.0,IT_SICI
-2026-05-21,Solar Generation,62338.0,IT_SICI
+2026-05-30,Baseload,112.91,IT_SICI
+2026-05-31,Baseload,105.34,IT_SICI
+2026-05-21,Solar Generation,19157.0,IT_SICI
 2026-05-22,Solar Generation,58706.0,IT_SICI
 2026-05-23,Solar Generation,58481.0,IT_SICI
 2026-05-24,Solar Generation,54940.0,IT_SICI
@@ -481578,9 +481823,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Generation,75559.0,IT_SICI
 2026-05-27,Solar Generation,72185.0,IT_SICI
 2026-05-28,Solar Generation,80956.0,IT_SICI
-2026-05-29,Solar Generation,62028.0,IT_SICI
-2026-05-20,Solar Capture,132.32,IT_SICI
-2026-05-21,Solar Capture,20.47,IT_SICI
+2026-05-29,Solar Generation,64571.0,IT_SICI
+2026-05-30,Solar Generation,55820.0,IT_SICI
+2026-05-21,Solar Capture,21.29,IT_SICI
 2026-05-22,Solar Capture,20.62,IT_SICI
 2026-05-23,Solar Capture,25.66,IT_SICI
 2026-05-24,Solar Capture,27.81,IT_SICI
@@ -481588,9 +481833,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Capture,86.01,IT_SICI
 2026-05-27,Solar Capture,113.77,IT_SICI
 2026-05-28,Solar Capture,102.53,IT_SICI
-2026-05-29,Solar Capture,108.64,IT_SICI
-2026-05-20,Wind Onshore Generation,19392.0,IT_SICI
-2026-05-21,Wind Onshore Generation,50332.0,IT_SICI
+2026-05-29,Solar Capture,110.45,IT_SICI
+2026-05-30,Solar Capture,52.45,IT_SICI
+2026-05-21,Wind Onshore Generation,20530.0,IT_SICI
 2026-05-22,Wind Onshore Generation,44088.0,IT_SICI
 2026-05-23,Wind Onshore Generation,33265.0,IT_SICI
 2026-05-24,Wind Onshore Generation,14004.0,IT_SICI
@@ -481598,9 +481843,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,21366.0,IT_SICI
 2026-05-27,Wind Onshore Generation,29525.0,IT_SICI
 2026-05-28,Wind Onshore Generation,42857.0,IT_SICI
-2026-05-29,Wind Onshore Generation,15246.0,IT_SICI
-2026-05-20,Wind Onshore Capture,156.91,IT_SICI
-2026-05-21,Wind Onshore Capture,102.4,IT_SICI
+2026-05-29,Wind Onshore Generation,19101.0,IT_SICI
+2026-05-30,Wind Onshore Generation,5607.0,IT_SICI
+2026-05-21,Wind Onshore Capture,114.99,IT_SICI
 2026-05-22,Wind Onshore Capture,112.81,IT_SICI
 2026-05-23,Wind Onshore Capture,121.15,IT_SICI
 2026-05-24,Wind Onshore Capture,114.57,IT_SICI
@@ -481608,9 +481853,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,121.41,IT_SICI
 2026-05-27,Wind Onshore Capture,137.95,IT_SICI
 2026-05-28,Wind Onshore Capture,134.73,IT_SICI
-2026-05-29,Wind Onshore Capture,114.15,IT_SICI
-2026-05-20,Solar Forecast,6808.0,IT_SICI
-2026-05-21,Solar Forecast,68849.0,IT_SICI
+2026-05-29,Wind Onshore Capture,125.16,IT_SICI
+2026-05-30,Wind Onshore Capture,87.27,IT_SICI
+2026-05-21,Solar Forecast,22741.0,IT_SICI
 2026-05-22,Solar Forecast,67568.0,IT_SICI
 2026-05-23,Solar Forecast,65527.0,IT_SICI
 2026-05-24,Solar Forecast,67487.0,IT_SICI
@@ -481619,9 +481864,8 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,67067.0,IT_SICI
 2026-05-28,Solar Forecast,67065.0,IT_SICI
 2026-05-29,Solar Forecast,65021.0,IT_SICI
-2026-05-30,Solar Forecast,55839.0,IT_SICI
-2026-05-20,Wind Onshore Forecast,13238.0,IT_SICI
-2026-05-21,Wind Onshore Forecast,50087.0,IT_SICI
+2026-05-30,Solar Forecast,61396.0,IT_SICI
+2026-05-21,Wind Onshore Forecast,23515.0,IT_SICI
 2026-05-22,Wind Onshore Forecast,52633.0,IT_SICI
 2026-05-23,Wind Onshore Forecast,41569.0,IT_SICI
 2026-05-24,Wind Onshore Forecast,19812.0,IT_SICI
@@ -481630,9 +481874,8 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,21699.0,IT_SICI
 2026-05-28,Wind Onshore Forecast,31382.0,IT_SICI
 2026-05-29,Wind Onshore Forecast,18138.0,IT_SICI
-2026-05-30,Wind Onshore Forecast,5696.0,IT_SICI
-2026-05-20,Baseload,153.88,IT_CALA
-2026-05-21,Baseload,89.74,IT_CALA
+2026-05-30,Wind Onshore Forecast,8274.0,IT_SICI
+2026-05-21,Baseload,100.91,IT_CALA
 2026-05-22,Baseload,89.52,IT_CALA
 2026-05-23,Baseload,93.25,IT_CALA
 2026-05-24,Baseload,91.94,IT_CALA
@@ -481641,9 +481884,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,134.86,IT_CALA
 2026-05-28,Baseload,131.18,IT_CALA
 2026-05-29,Baseload,134.35,IT_CALA
-2026-05-30,Baseload,94.97,IT_CALA
-2026-05-20,Solar Generation,1022.0,IT_CALA
-2026-05-21,Solar Generation,12396.0,IT_CALA
+2026-05-30,Baseload,112.91,IT_CALA
+2026-05-31,Baseload,105.34,IT_CALA
+2026-05-21,Solar Generation,3356.0,IT_CALA
 2026-05-22,Solar Generation,11929.0,IT_CALA
 2026-05-23,Solar Generation,12085.0,IT_CALA
 2026-05-24,Solar Generation,12821.0,IT_CALA
@@ -481651,9 +481894,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Generation,13783.0,IT_CALA
 2026-05-27,Solar Generation,13568.0,IT_CALA
 2026-05-28,Solar Generation,12433.0,IT_CALA
-2026-05-29,Solar Generation,13851.0,IT_CALA
-2026-05-20,Solar Capture,129.49,IT_CALA
-2026-05-21,Solar Capture,14.87,IT_CALA
+2026-05-29,Solar Generation,14375.0,IT_CALA
+2026-05-30,Solar Generation,11878.0,IT_CALA
+2026-05-21,Solar Capture,10.39,IT_CALA
 2026-05-22,Solar Capture,15.67,IT_CALA
 2026-05-23,Solar Capture,20.98,IT_CALA
 2026-05-24,Solar Capture,20.16,IT_CALA
@@ -481661,9 +481904,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Capture,84.98,IT_CALA
 2026-05-27,Solar Capture,110.07,IT_CALA
 2026-05-28,Solar Capture,99.83,IT_CALA
-2026-05-29,Solar Capture,104.38,IT_CALA
-2026-05-20,Wind Onshore Generation,11673.0,IT_CALA
-2026-05-21,Wind Onshore Generation,43549.0,IT_CALA
+2026-05-29,Solar Capture,105.96,IT_CALA
+2026-05-30,Solar Capture,54.19,IT_CALA
+2026-05-21,Wind Onshore Generation,19484.0,IT_CALA
 2026-05-22,Wind Onshore Generation,46981.0,IT_CALA
 2026-05-23,Wind Onshore Generation,33869.0,IT_CALA
 2026-05-24,Wind Onshore Generation,19963.0,IT_CALA
@@ -481671,9 +481914,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,15141.0,IT_CALA
 2026-05-27,Wind Onshore Generation,23137.0,IT_CALA
 2026-05-28,Wind Onshore Generation,32909.0,IT_CALA
-2026-05-29,Wind Onshore Generation,22742.0,IT_CALA
-2026-05-20,Wind Onshore Capture,158.31,IT_CALA
-2026-05-21,Wind Onshore Capture,90.26,IT_CALA
+2026-05-29,Wind Onshore Generation,26592.0,IT_CALA
+2026-05-30,Wind Onshore Generation,5021.0,IT_CALA
+2026-05-21,Wind Onshore Capture,103.97,IT_CALA
 2026-05-22,Wind Onshore Capture,93.55,IT_CALA
 2026-05-23,Wind Onshore Capture,100.33,IT_CALA
 2026-05-24,Wind Onshore Capture,106.45,IT_CALA
@@ -481681,9 +481924,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,118.05,IT_CALA
 2026-05-27,Wind Onshore Capture,138.85,IT_CALA
 2026-05-28,Wind Onshore Capture,132.47,IT_CALA
-2026-05-29,Wind Onshore Capture,120.26,IT_CALA
-2026-05-20,Solar Forecast,922.0,IT_CALA
-2026-05-21,Solar Forecast,12201.0,IT_CALA
+2026-05-29,Wind Onshore Capture,128.2,IT_CALA
+2026-05-30,Wind Onshore Capture,94.72,IT_CALA
+2026-05-21,Solar Forecast,3505.0,IT_CALA
 2026-05-22,Solar Forecast,12781.0,IT_CALA
 2026-05-23,Solar Forecast,12379.0,IT_CALA
 2026-05-24,Solar Forecast,12848.0,IT_CALA
@@ -481692,9 +481935,8 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,12886.0,IT_CALA
 2026-05-28,Solar Forecast,11900.0,IT_CALA
 2026-05-29,Solar Forecast,12499.0,IT_CALA
-2026-05-30,Solar Forecast,12531.0,IT_CALA
-2026-05-20,Wind Onshore Forecast,11125.0,IT_CALA
-2026-05-21,Wind Onshore Forecast,46215.0,IT_CALA
+2026-05-30,Solar Forecast,13870.0,IT_CALA
+2026-05-21,Wind Onshore Forecast,19632.0,IT_CALA
 2026-05-22,Wind Onshore Forecast,46586.0,IT_CALA
 2026-05-23,Wind Onshore Forecast,39252.0,IT_CALA
 2026-05-24,Wind Onshore Forecast,25483.0,IT_CALA
@@ -481703,9 +481945,8 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,22917.0,IT_CALA
 2026-05-28,Wind Onshore Forecast,28535.0,IT_CALA
 2026-05-29,Wind Onshore Forecast,20798.0,IT_CALA
-2026-05-30,Wind Onshore Forecast,5424.0,IT_CALA
-2026-05-20,Baseload,154.14,IT_SARD
-2026-05-21,Baseload,90.47,IT_SARD
+2026-05-30,Wind Onshore Forecast,8327.0,IT_CALA
+2026-05-21,Baseload,101.62,IT_SARD
 2026-05-22,Baseload,90.69,IT_SARD
 2026-05-23,Baseload,93.25,IT_SARD
 2026-05-24,Baseload,91.94,IT_SARD
@@ -481714,9 +481955,9 @@ Date,Metric,Price,Country
 2026-05-27,Baseload,121.01,IT_SARD
 2026-05-28,Baseload,112.01,IT_SARD
 2026-05-29,Baseload,113.79,IT_SARD
-2026-05-30,Baseload,94.97,IT_SARD
-2026-05-20,Solar Generation,5102.0,IT_SARD
-2026-05-21,Solar Generation,36560.0,IT_SARD
+2026-05-30,Baseload,112.91,IT_SARD
+2026-05-31,Baseload,105.34,IT_SARD
+2026-05-21,Solar Generation,13197.0,IT_SARD
 2026-05-22,Solar Generation,33707.0,IT_SARD
 2026-05-23,Solar Generation,36826.0,IT_SARD
 2026-05-24,Solar Generation,34054.0,IT_SARD
@@ -481724,9 +481965,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Generation,35880.0,IT_SARD
 2026-05-27,Solar Generation,38997.0,IT_SARD
 2026-05-28,Solar Generation,39878.0,IT_SARD
-2026-05-29,Solar Generation,38823.0,IT_SARD
-2026-05-20,Solar Capture,136.26,IT_SARD
-2026-05-21,Solar Capture,17.78,IT_SARD
+2026-05-29,Solar Generation,40285.0,IT_SARD
+2026-05-30,Solar Generation,30373.0,IT_SARD
+2026-05-21,Solar Capture,23.04,IT_SARD
 2026-05-22,Solar Capture,19.05,IT_SARD
 2026-05-23,Solar Capture,24.43,IT_SARD
 2026-05-24,Solar Capture,28.44,IT_SARD
@@ -481734,9 +481975,9 @@ Date,Metric,Price,Country
 2026-05-26,Solar Capture,80.06,IT_SARD
 2026-05-27,Solar Capture,82.74,IT_SARD
 2026-05-28,Solar Capture,64.03,IT_SARD
-2026-05-29,Solar Capture,54.48,IT_SARD
-2026-05-20,Wind Onshore Generation,6349.0,IT_SARD
-2026-05-21,Wind Onshore Generation,5303.0,IT_SARD
+2026-05-29,Solar Capture,62.19,IT_SARD
+2026-05-30,Solar Capture,53.7,IT_SARD
+2026-05-21,Wind Onshore Generation,2707.0,IT_SARD
 2026-05-22,Wind Onshore Generation,8663.0,IT_SARD
 2026-05-23,Wind Onshore Generation,14065.0,IT_SARD
 2026-05-24,Wind Onshore Generation,10158.0,IT_SARD
@@ -481744,9 +481985,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Generation,4404.0,IT_SARD
 2026-05-27,Wind Onshore Generation,7079.0,IT_SARD
 2026-05-28,Wind Onshore Generation,8599.0,IT_SARD
-2026-05-29,Wind Onshore Generation,4338.0,IT_SARD
-2026-05-20,Wind Onshore Capture,156.02,IT_SARD
-2026-05-21,Wind Onshore Capture,85.31,IT_SARD
+2026-05-29,Wind Onshore Generation,4970.0,IT_SARD
+2026-05-30,Wind Onshore Generation,1939.0,IT_SARD
+2026-05-21,Wind Onshore Capture,61.23,IT_SARD
 2026-05-22,Wind Onshore Capture,73.65,IT_SARD
 2026-05-23,Wind Onshore Capture,62.26,IT_SARD
 2026-05-24,Wind Onshore Capture,82.84,IT_SARD
@@ -481754,9 +481995,9 @@ Date,Metric,Price,Country
 2026-05-26,Wind Onshore Capture,108.35,IT_SARD
 2026-05-27,Wind Onshore Capture,110.1,IT_SARD
 2026-05-28,Wind Onshore Capture,96.09,IT_SARD
-2026-05-29,Wind Onshore Capture,63.69,IT_SARD
-2026-05-20,Solar Forecast,4521.0,IT_SARD
-2026-05-21,Solar Forecast,34470.0,IT_SARD
+2026-05-29,Wind Onshore Capture,77.26,IT_SARD
+2026-05-30,Wind Onshore Capture,53.02,IT_SARD
+2026-05-21,Solar Forecast,12663.0,IT_SARD
 2026-05-22,Solar Forecast,37181.0,IT_SARD
 2026-05-23,Solar Forecast,37033.0,IT_SARD
 2026-05-24,Solar Forecast,36757.0,IT_SARD
@@ -481765,9 +482006,8 @@ Date,Metric,Price,Country
 2026-05-27,Solar Forecast,36710.0,IT_SARD
 2026-05-28,Solar Forecast,36781.0,IT_SARD
 2026-05-29,Solar Forecast,36838.0,IT_SARD
-2026-05-30,Solar Forecast,28523.0,IT_SARD
-2026-05-20,Wind Onshore Forecast,6105.0,IT_SARD
-2026-05-21,Wind Onshore Forecast,5582.0,IT_SARD
+2026-05-30,Solar Forecast,33307.0,IT_SARD
+2026-05-21,Wind Onshore Forecast,2915.0,IT_SARD
 2026-05-22,Wind Onshore Forecast,8733.0,IT_SARD
 2026-05-23,Wind Onshore Forecast,12385.0,IT_SARD
 2026-05-24,Wind Onshore Forecast,10063.0,IT_SARD
@@ -481776,4 +482016,4 @@ Date,Metric,Price,Country
 2026-05-27,Wind Onshore Forecast,7329.0,IT_SARD
 2026-05-28,Wind Onshore Forecast,8034.0,IT_SARD
 2026-05-29,Wind Onshore Forecast,6153.0,IT_SARD
-2026-05-30,Wind Onshore Forecast,3062.0,IT_SARD
+2026-05-30,Wind Onshore Forecast,4110.0,IT_SARD
