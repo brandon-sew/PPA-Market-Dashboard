@@ -174,7 +174,7 @@ def fetch_weather_data(codes, start_date, end_date, overrides=None):
                 "Time": pd.date_range(
                     start=pd.to_datetime(hourly.Time(), unit="s", utc=True),
                     periods=len(solar_values),
-                    freq=pd.Timedelta(seconds=hourly.Interval()),
+                    freq=pd.Timedelta(seconds=hourly.Interval())
                 ),
                 "Solar Radiation": solar_values,
                 "Wind Speed (100m)": wind_values,
@@ -217,9 +217,7 @@ def fetch_data(codes, start_date, end_date):
     start = pd.Timestamp(start_date, tz='Europe/Brussels')
 
     end = pd.Timestamp(end_date, tz='Europe/Brussels') + pd.Timedelta(days=1)
-
     
-
     def get_price(code):
 
         try:
@@ -253,9 +251,7 @@ def fetch_data(codes, start_date, end_date):
             res_data = future.result()
 
             if res_data is not None: all_data.append(res_data)
-
             
-
     return pd.concat(all_data) if all_data else pd.DataFrame()
 
 
@@ -311,9 +307,7 @@ def fetch_gen_data(codes, start_date, end_date):
             res_data = future.result()
 
             if res_data is not None: all_gen.append(res_data)
-
             
-
     return pd.concat(all_gen) if all_gen else pd.DataFrame()
 
 
@@ -327,9 +321,7 @@ def fetch_forecast_data(codes, start_date, end_date):
     start = pd.Timestamp(start_date, tz='Europe/Brussels')
 
     end = pd.Timestamp(end_date, tz='Europe/Brussels') + pd.Timedelta(days=1)
-
     
-
     def get_forecast(code):
 
         try:
@@ -369,9 +361,7 @@ def fetch_forecast_data(codes, start_date, end_date):
             res_data = future.result()
 
             if res_data is not None: all_forecast.append(res_data)
-
             
-
     return pd.concat(all_forecast) if all_forecast else pd.DataFrame()
 
 
@@ -419,9 +409,7 @@ if len(d_range) == 2:
             mask = (csv_raw['Date'] >= d_range[0]) & (csv_raw['Date'] <= d_range[1])
 
             data_subset = csv_raw[mask].copy()
-
             
-
             full_price_df = data_subset[data_subset['Metric'] == 'Baseload'].copy()
 
             if not full_price_df.empty:
@@ -429,9 +417,7 @@ if len(d_range) == 2:
                 full_price_df = full_price_df.rename(columns={'Date': 'Time', 'Country': 'Zone', val_col: 'Price'})
 
                 full_price_df['Time'] = pd.to_datetime(full_price_df['Time']).dt.tz_localize('Europe/Brussels', ambiguous='infer')
-
             
-
             gen_subset = data_subset[data_subset['Metric'].str.contains(' Generation', na=False)].copy()
 
             if not gen_subset.empty:
@@ -445,9 +431,7 @@ if len(d_range) == 2:
                 gen_pivot['Time'] = pd.to_datetime(gen_pivot['Time']).dt.tz_localize('Europe/Brussels', ambiguous='infer')
 
                 gen_df = gen_pivot[gen_pivot['Zone'].isin(selected_codes)]
-
                 
-
             forecast_subset = data_subset[data_subset['Metric'].str.contains(' Forecast', na=False)].copy()
 
             if not forecast_subset.empty:
@@ -497,9 +481,7 @@ if len(d_range) == 2:
         # FIX: Filter out timezone-induced extra days
 
         plot_df = plot_df[plot_df['Time'].dt.date <= d_range[1]]
-
         
-
     if not forecast_df_raw.empty:
 
         forecast_df = forecast_df_raw.groupby('Zone').apply(
@@ -511,9 +493,7 @@ if len(d_range) == 2:
         # FIX: Filter out timezone-induced extra days
 
         forecast_df = forecast_df[forecast_df['Time'].dt.date <= d_range[1]]
-
             
-
     if selected_weather_types and not weather_df_raw.empty:
 
         weather_df = weather_df_raw.groupby('Zone').apply(
@@ -1003,20 +983,13 @@ with col_met:
 
                     offshore_cap = f"{(zone_m['Price'] * zone_m['Wind Offshore']).sum() / total_offshore:.2f}"
 
-            
-
+        
             metrics_list.append({
-
                 "Zone": code, "Baseload": f"{baseload:.2f}", 
-
                 "Solar Capture": sol_cap, 
-
                 "Wind Onshore": onshore_cap,
-
                 "Wind Offshore": offshore_cap, 
-
                 "Unit": f"{currency}/MWh"
-
             })
 
         st.table(pd.DataFrame(metrics_list))
