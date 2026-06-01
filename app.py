@@ -127,6 +127,7 @@ with st.sidebar:
         # Get current lat/lon (either custom or default)
         current_coords = st.session_state.custom_coords.get(config_zone_code, ZONE_COORDS.get(config_zone_code, [0.0, 0.0]))
         
+        # Forcing float conversion to avoid downstream select errors
         new_lat = st.number_input("Latitude", value=float(current_coords[0]), format="%.2f")
         new_lon = st.number_input("Longitude", value=float(current_coords[1]), format="%.2f")
         
@@ -157,7 +158,7 @@ def fetch_weather_data(codes, start_date, end_date, overrides=None):
 
         params = {
             "latitude": lat, "longitude": lon,
-            "hourly": ["shortwave_radiation", "wind_speed_100m"],
+            "hourly": "shortwave_radiation,wind_speed_100m",
             "start_date": start_date.strftime('%Y-%m-%d'),
             "end_date": end_date.strftime('%Y-%m-%d'),
             "timezone": "Europe/Berlin"
