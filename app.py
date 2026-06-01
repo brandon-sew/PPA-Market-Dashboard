@@ -175,7 +175,6 @@ def fetch_weather_data(codes, start_date, end_date, overrides=None):
                     start=pd.to_datetime(hourly.Time(), unit="s", utc=True),
                     periods=len(solar_values),
                     freq=pd.Timedelta(seconds=hourly.Interval()),
-                    inclusive="left"
                 ),
                 "Solar Radiation": solar_values,
                 "Wind Speed (100m)": wind_values,
