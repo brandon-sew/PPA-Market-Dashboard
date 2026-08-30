@@ -508480,57 +508480,13 @@ Date,Metric,Price,Country
 2026-08-29,Wind Onshore Forecast,54508.98,RO
 2026-08-19,Baseload,186.55,IT_CNOR
 2026-08-20,Baseload,179.56,IT_CNOR
-2026-08-21,Baseload,178.11,IT_CNOR
-2026-08-22,Baseload,165.35,IT_CNOR
-2026-08-23,Baseload,132.76,IT_CNOR
-2026-08-24,Baseload,192.58,IT_CNOR
-2026-08-25,Baseload,189.11,IT_CNOR
-2026-08-26,Baseload,197.35,IT_CNOR
-2026-08-27,Baseload,204.01,IT_CNOR
-2026-08-28,Baseload,206.08,IT_CNOR
-2026-08-29,Baseload,190.39,IT_CNOR
 2026-08-19,Solar Generation,0.0,IT_CNOR
 2026-08-20,Solar Generation,39216.0,IT_CNOR
-2026-08-21,Solar Generation,24299.0,IT_CNOR
-2026-08-22,Solar Generation,43695.0,IT_CNOR
-2026-08-23,Solar Generation,42082.0,IT_CNOR
-2026-08-24,Solar Generation,43766.0,IT_CNOR
-2026-08-25,Solar Generation,29145.0,IT_CNOR
-2026-08-26,Solar Generation,41384.0,IT_CNOR
-2026-08-27,Solar Generation,36093.0,IT_CNOR
-2026-08-28,Solar Generation,34505.0,IT_CNOR
-2026-08-29,Solar Generation,0.0,IT_CNOR
 2026-08-20,Solar Capture,163.76,IT_CNOR
-2026-08-21,Solar Capture,169.38,IT_CNOR
-2026-08-22,Solar Capture,116.52,IT_CNOR
-2026-08-23,Solar Capture,37.99,IT_CNOR
-2026-08-24,Solar Capture,169.49,IT_CNOR
-2026-08-25,Solar Capture,174.77,IT_CNOR
-2026-08-26,Solar Capture,176.64,IT_CNOR
-2026-08-27,Solar Capture,189.91,IT_CNOR
-2026-08-28,Solar Capture,194.39,IT_CNOR
 2026-08-19,Wind Onshore Generation,113.0,IT_CNOR
 2026-08-20,Wind Onshore Generation,5421.0,IT_CNOR
-2026-08-21,Wind Onshore Generation,6441.0,IT_CNOR
-2026-08-22,Wind Onshore Generation,4322.0,IT_CNOR
-2026-08-23,Wind Onshore Generation,309.0,IT_CNOR
-2026-08-24,Wind Onshore Generation,1228.0,IT_CNOR
-2026-08-25,Wind Onshore Generation,3014.0,IT_CNOR
-2026-08-26,Wind Onshore Generation,468.0,IT_CNOR
-2026-08-27,Wind Onshore Generation,2520.0,IT_CNOR
-2026-08-28,Wind Onshore Generation,3154.0,IT_CNOR
-2026-08-29,Wind Onshore Generation,26.0,IT_CNOR
 2026-08-19,Wind Onshore Capture,186.45,IT_CNOR
 2026-08-20,Wind Onshore Capture,181.79,IT_CNOR
-2026-08-21,Wind Onshore Capture,180.07,IT_CNOR
-2026-08-22,Wind Onshore Capture,149.43,IT_CNOR
-2026-08-23,Wind Onshore Capture,131.31,IT_CNOR
-2026-08-24,Wind Onshore Capture,207.89,IT_CNOR
-2026-08-25,Wind Onshore Capture,186.89,IT_CNOR
-2026-08-26,Wind Onshore Capture,198.54,IT_CNOR
-2026-08-27,Wind Onshore Capture,208.29,IT_CNOR
-2026-08-28,Wind Onshore Capture,204.49,IT_CNOR
-2026-08-29,Wind Onshore Capture,211.8,IT_CNOR
 2026-08-19,Solar Forecast,0.0,IT_CNOR
 2026-08-20,Solar Forecast,40120.0,IT_CNOR
 2026-08-21,Solar Forecast,22838.0,IT_CNOR
@@ -508555,15 +508511,6 @@ Date,Metric,Price,Country
 2026-08-29,Wind Onshore Forecast,4989.0,IT_CNOR
 2026-08-19,Baseload,186.55,IT_NORD
 2026-08-20,Baseload,175.8,IT_NORD
-2026-08-21,Baseload,177.31,IT_NORD
-2026-08-22,Baseload,151.59,IT_NORD
-2026-08-23,Baseload,120.83,IT_NORD
-2026-08-24,Baseload,189.36,IT_NORD
-2026-08-25,Baseload,188.17,IT_NORD
-2026-08-26,Baseload,195.93,IT_NORD
-2026-08-27,Baseload,202.08,IT_NORD
-2026-08-28,Baseload,201.65,IT_NORD
-2026-08-29,Baseload,187.13,IT_NORD
 2026-08-19,Solar Generation,0.0,IT_NORD
 2026-08-20,Solar Generation,117228.0,IT_NORD
 2026-08-21,Solar Generation,89202.0,IT_NORD
@@ -508726,57 +508673,13 @@ Date,Metric,Price,Country
 2026-08-29,Wind Onshore Forecast,164410.0,IT_SUD
 2026-08-19,Baseload,186.55,IT_CSUD
 2026-08-20,Baseload,179.56,IT_CSUD
-2026-08-21,Baseload,178.11,IT_CSUD
-2026-08-22,Baseload,165.35,IT_CSUD
-2026-08-23,Baseload,132.76,IT_CSUD
-2026-08-24,Baseload,192.58,IT_CSUD
-2026-08-25,Baseload,189.11,IT_CSUD
-2026-08-26,Baseload,197.35,IT_CSUD
-2026-08-27,Baseload,204.01,IT_CSUD
-2026-08-28,Baseload,206.08,IT_CSUD
-2026-08-29,Baseload,190.39,IT_CSUD
 2026-08-19,Solar Generation,0.0,IT_CSUD
 2026-08-20,Solar Generation,121636.0,IT_CSUD
-2026-08-21,Solar Generation,94438.0,IT_CSUD
-2026-08-22,Solar Generation,129031.0,IT_CSUD
-2026-08-23,Solar Generation,114690.0,IT_CSUD
-2026-08-24,Solar Generation,129998.0,IT_CSUD
-2026-08-25,Solar Generation,93937.0,IT_CSUD
-2026-08-26,Solar Generation,123837.0,IT_CSUD
-2026-08-27,Solar Generation,101768.0,IT_CSUD
-2026-08-28,Solar Generation,105994.0,IT_CSUD
-2026-08-29,Solar Generation,0.0,IT_CSUD
 2026-08-20,Solar Capture,164.94,IT_CSUD
-2026-08-21,Solar Capture,170.46,IT_CSUD
-2026-08-22,Solar Capture,116.63,IT_CSUD
-2026-08-23,Solar Capture,43.0,IT_CSUD
-2026-08-24,Solar Capture,169.99,IT_CSUD
-2026-08-25,Solar Capture,177.81,IT_CSUD
-2026-08-26,Solar Capture,177.66,IT_CSUD
-2026-08-27,Solar Capture,190.24,IT_CSUD
-2026-08-28,Solar Capture,195.8,IT_CSUD
 2026-08-19,Wind Onshore Generation,1295.0,IT_CSUD
 2026-08-20,Wind Onshore Generation,62918.0,IT_CSUD
-2026-08-21,Wind Onshore Generation,94636.0,IT_CSUD
-2026-08-22,Wind Onshore Generation,49604.0,IT_CSUD
-2026-08-23,Wind Onshore Generation,6747.0,IT_CSUD
-2026-08-24,Wind Onshore Generation,7372.0,IT_CSUD
-2026-08-25,Wind Onshore Generation,83326.0,IT_CSUD
-2026-08-26,Wind Onshore Generation,15084.0,IT_CSUD
-2026-08-27,Wind Onshore Generation,19326.0,IT_CSUD
-2026-08-28,Wind Onshore Generation,42689.0,IT_CSUD
-2026-08-29,Wind Onshore Generation,797.0,IT_CSUD
 2026-08-19,Wind Onshore Capture,186.56,IT_CSUD
 2026-08-20,Wind Onshore Capture,182.82,IT_CSUD
-2026-08-21,Wind Onshore Capture,176.52,IT_CSUD
-2026-08-22,Wind Onshore Capture,161.99,IT_CSUD
-2026-08-23,Wind Onshore Capture,165.42,IT_CSUD
-2026-08-24,Wind Onshore Capture,199.78,IT_CSUD
-2026-08-25,Wind Onshore Capture,187.67,IT_CSUD
-2026-08-26,Wind Onshore Capture,188.83,IT_CSUD
-2026-08-27,Wind Onshore Capture,222.08,IT_CSUD
-2026-08-28,Wind Onshore Capture,216.61,IT_CSUD
-2026-08-29,Wind Onshore Capture,211.8,IT_CSUD
 2026-08-19,Solar Forecast,0.0,IT_CSUD
 2026-08-20,Solar Forecast,114981.0,IT_CSUD
 2026-08-21,Solar Forecast,74413.0,IT_CSUD
@@ -510117,3 +510020,115 @@ Date,Metric,Price,Country
 2026-08-27,Wind Onshore Forecast,1613.78,EE
 2026-08-28,Wind Onshore Forecast,1615.08,EE
 2026-08-29,Wind Onshore Forecast,5549.62,EE
+2026-08-21,Baseload,192.93,IT_NORD
+2026-08-22,Baseload,151.59,IT_NORD
+2026-08-23,Baseload,120.83,IT_NORD
+2026-08-24,Baseload,189.36,IT_NORD
+2026-08-25,Baseload,188.17,IT_NORD
+2026-08-26,Baseload,195.93,IT_NORD
+2026-08-27,Baseload,202.08,IT_NORD
+2026-08-28,Baseload,201.65,IT_NORD
+2026-08-29,Baseload,187.88,IT_NORD
+2026-08-30,Baseload,163.62,IT_NORD
+2026-08-31,Baseload,182.38,IT_NORD
+2026-08-21,Baseload,194.48,IT_CNOR
+2026-08-22,Baseload,165.35,IT_CNOR
+2026-08-23,Baseload,132.76,IT_CNOR
+2026-08-24,Baseload,192.58,IT_CNOR
+2026-08-25,Baseload,189.11,IT_CNOR
+2026-08-26,Baseload,197.35,IT_CNOR
+2026-08-27,Baseload,204.01,IT_CNOR
+2026-08-28,Baseload,206.08,IT_CNOR
+2026-08-29,Baseload,190.99,IT_CNOR
+2026-08-30,Baseload,175.76,IT_CNOR
+2026-08-31,Baseload,182.38,IT_CNOR
+2026-08-21,Solar Generation,2175.0,IT_CNOR
+2026-08-22,Solar Generation,43695.0,IT_CNOR
+2026-08-23,Solar Generation,42082.0,IT_CNOR
+2026-08-24,Solar Generation,43766.0,IT_CNOR
+2026-08-25,Solar Generation,29145.0,IT_CNOR
+2026-08-26,Solar Generation,41384.0,IT_CNOR
+2026-08-27,Solar Generation,36093.0,IT_CNOR
+2026-08-28,Solar Generation,34441.0,IT_CNOR
+2026-08-29,Solar Generation,33396.0,IT_CNOR
+2026-08-30,Solar Generation,0.0,IT_CNOR
+2026-08-21,Solar Capture,190.05,IT_CNOR
+2026-08-22,Solar Capture,116.52,IT_CNOR
+2026-08-23,Solar Capture,37.99,IT_CNOR
+2026-08-24,Solar Capture,169.49,IT_CNOR
+2026-08-25,Solar Capture,174.77,IT_CNOR
+2026-08-26,Solar Capture,176.64,IT_CNOR
+2026-08-27,Solar Capture,189.91,IT_CNOR
+2026-08-28,Solar Capture,194.32,IT_CNOR
+2026-08-29,Solar Capture,145.29,IT_CNOR
+2026-08-21,Wind Onshore Generation,2136.0,IT_CNOR
+2026-08-22,Wind Onshore Generation,4322.0,IT_CNOR
+2026-08-23,Wind Onshore Generation,309.0,IT_CNOR
+2026-08-24,Wind Onshore Generation,1228.0,IT_CNOR
+2026-08-25,Wind Onshore Generation,3014.0,IT_CNOR
+2026-08-26,Wind Onshore Generation,468.0,IT_CNOR
+2026-08-27,Wind Onshore Generation,2520.0,IT_CNOR
+2026-08-28,Wind Onshore Generation,3746.0,IT_CNOR
+2026-08-29,Wind Onshore Generation,4200.0,IT_CNOR
+2026-08-30,Wind Onshore Generation,243.0,IT_CNOR
+2026-08-21,Wind Onshore Capture,196.44,IT_CNOR
+2026-08-22,Wind Onshore Capture,149.43,IT_CNOR
+2026-08-23,Wind Onshore Capture,131.31,IT_CNOR
+2026-08-24,Wind Onshore Capture,207.89,IT_CNOR
+2026-08-25,Wind Onshore Capture,186.89,IT_CNOR
+2026-08-26,Wind Onshore Capture,198.54,IT_CNOR
+2026-08-27,Wind Onshore Capture,208.29,IT_CNOR
+2026-08-28,Wind Onshore Capture,208.74,IT_CNOR
+2026-08-29,Wind Onshore Capture,186.86,IT_CNOR
+2026-08-30,Wind Onshore Capture,206.33,IT_CNOR
+2026-08-21,Baseload,194.48,IT_CSUD
+2026-08-22,Baseload,165.35,IT_CSUD
+2026-08-23,Baseload,132.76,IT_CSUD
+2026-08-24,Baseload,192.58,IT_CSUD
+2026-08-25,Baseload,189.11,IT_CSUD
+2026-08-26,Baseload,197.35,IT_CSUD
+2026-08-27,Baseload,204.01,IT_CSUD
+2026-08-28,Baseload,206.08,IT_CSUD
+2026-08-29,Baseload,190.99,IT_CSUD
+2026-08-30,Baseload,175.76,IT_CSUD
+2026-08-31,Baseload,182.38,IT_CSUD
+2026-08-21,Solar Generation,7024.0,IT_CSUD
+2026-08-22,Solar Generation,129031.0,IT_CSUD
+2026-08-23,Solar Generation,114690.0,IT_CSUD
+2026-08-24,Solar Generation,129998.0,IT_CSUD
+2026-08-25,Solar Generation,93937.0,IT_CSUD
+2026-08-26,Solar Generation,123837.0,IT_CSUD
+2026-08-27,Solar Generation,101768.0,IT_CSUD
+2026-08-28,Solar Generation,103440.0,IT_CSUD
+2026-08-29,Solar Generation,97842.0,IT_CSUD
+2026-08-30,Solar Generation,443.0,IT_CSUD
+2026-08-21,Solar Capture,190.75,IT_CSUD
+2026-08-22,Solar Capture,116.63,IT_CSUD
+2026-08-23,Solar Capture,43.0,IT_CSUD
+2026-08-24,Solar Capture,169.99,IT_CSUD
+2026-08-25,Solar Capture,177.81,IT_CSUD
+2026-08-26,Solar Capture,177.66,IT_CSUD
+2026-08-27,Solar Capture,190.24,IT_CSUD
+2026-08-28,Solar Capture,194.55,IT_CSUD
+2026-08-29,Solar Capture,147.87,IT_CSUD
+2026-08-30,Solar Capture,221.88,IT_CSUD
+2026-08-21,Wind Onshore Generation,25918.0,IT_CSUD
+2026-08-22,Wind Onshore Generation,49604.0,IT_CSUD
+2026-08-23,Wind Onshore Generation,6747.0,IT_CSUD
+2026-08-24,Wind Onshore Generation,7372.0,IT_CSUD
+2026-08-25,Wind Onshore Generation,83326.0,IT_CSUD
+2026-08-26,Wind Onshore Generation,15084.0,IT_CSUD
+2026-08-27,Wind Onshore Generation,19326.0,IT_CSUD
+2026-08-28,Wind Onshore Generation,44778.0,IT_CSUD
+2026-08-29,Wind Onshore Generation,63877.0,IT_CSUD
+2026-08-30,Wind Onshore Generation,9934.0,IT_CSUD
+2026-08-21,Wind Onshore Capture,195.31,IT_CSUD
+2026-08-22,Wind Onshore Capture,161.99,IT_CSUD
+2026-08-23,Wind Onshore Capture,165.42,IT_CSUD
+2026-08-24,Wind Onshore Capture,199.78,IT_CSUD
+2026-08-25,Wind Onshore Capture,187.67,IT_CSUD
+2026-08-26,Wind Onshore Capture,188.83,IT_CSUD
+2026-08-27,Wind Onshore Capture,222.08,IT_CSUD
+2026-08-28,Wind Onshore Capture,217.07,IT_CSUD
+2026-08-29,Wind Onshore Capture,181.21,IT_CSUD
+2026-08-30,Wind Onshore Capture,205.03,IT_CSUD
